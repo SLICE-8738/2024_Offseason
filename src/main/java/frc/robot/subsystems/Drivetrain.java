@@ -55,26 +55,6 @@ public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
   public Drivetrain() {
 
-    // The angle offset arguments for these swerve modules are placeholders for now
-    /*
-     * leftModuleFront = new
-     * SparkMaxSwerveModule(Constants.kDrivetrain.Mod0.DRIVE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod0.ANGLE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod0.ANGLE_OFFSET.getRadians());
-     * leftModuleBack = new
-     * SparkMaxSwerveModule(Constants.kDrivetrain.Mod1.DRIVE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod1.ANGLE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod1.ANGLE_OFFSET.getRadians());
-     * rightModuleFront = new
-     * SparkMaxSwerveModule(Constants.kDrivetrain.Mod2.DRIVE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod2.ANGLE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod2.ANGLE_OFFSET.getRadians());
-     * rightModuleBack = new
-     * SparkMaxSwerveModule(Constants.kDrivetrain.Mod3.DRIVE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod3.ANGLE_MOTOR_ID,
-     * Constants.kDrivetrain.Mod3.ANGLE_OFFSET.getRadians());
-     */
-
     swerveMods = new SwerveModule[] {
       new SwerveModule(0, Constants.kDrivetrain.Mod0.CONSTANTS),
       new SwerveModule(1, Constants.kDrivetrain.Mod1.CONSTANTS),

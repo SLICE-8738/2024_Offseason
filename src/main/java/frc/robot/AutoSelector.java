@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.robot.subsystems.Drivetrain;
@@ -85,6 +87,7 @@ public class AutoSelector {
                 Constants.kAutonomous.kMaxVelocityMetersPerSecond,
                 Constants.kDrivetrain.DRIVE_BASE_RADIUS,
                 new ReplanningConfig(false, false)),
+            () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
         //Add custom commands to use in PathPlanner autos here with NamedCommands.registerCommand()
