@@ -13,7 +13,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 /** Class for interfacing with a Limelight connected to NetworkTables. */
 public class Limelight {
 
-  //Creates Network table table
   private final NetworkTable table;
   
   private double targetDetected;
@@ -44,11 +43,8 @@ public class Limelight {
     
     table = NetworkTableInstance.getDefault().getTable(tableKey);
 
-    //adds diffrent modes for the robot to be in
     ledMode = table.getEntry("ledMode");
-    //camera mode lets limelight function as a cammera instead of seach8ing for april tags 
     cameraMode = table.getEntry("cameraMode");
-    
     pipeline = table.getEntry("pipeline");
 
   }
@@ -131,8 +127,8 @@ public class Limelight {
   }
 
   /**
-   * @return The last received non-empty robot pose with the origin 
-   *         at the right-hand side of the blue alliance driverstation 
+   * @return The last received non-empty robot pose with the origin at the right-hand side of the blue alliance driverstation
+   *         if any. Returns the pose of the center of the field if none has been received yet.
    */
   public Pose2d getLastBotPoseBlue() {
 

@@ -16,11 +16,11 @@ import frc.robot.subsystems.Drivetrain;
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
 public class ShuffleboardData {
 
-    private final ShuffleboardTab /*driverTab,*/ debugTab, modulesTab, autoTab;
+    private final ShuffleboardTab driverTab, debugTab, modulesTab, autoTab;
 
     public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
 
-        //driverTab = Shuffleboard.getTab("Driver Tab");
+        driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
         modulesTab = Shuffleboard.getTab("Modules Tab");
         autoTab = Shuffleboard.getTab("Auto Tab");
@@ -118,9 +118,9 @@ public class ShuffleboardData {
             withSize(3, 3);*/
 
             //Displays the feed from the Limelight on Shuffleboard
-            /*driverTab.addCamera("Limelight", "limelight-slice-1", "http://10.87.38.73:5800").
+            driverTab.addCamera("Limelight", "limelight-slice-1", "http://10.87.38.73:5800").
             withPosition(5, 0).
-            withSize(3, 3);*/
+            withSize(3, 3);
 
         }
 

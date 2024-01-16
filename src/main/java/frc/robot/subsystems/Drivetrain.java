@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.math.VecBuilder;
-//import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -30,11 +28,9 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class Drivetrain extends SubsystemBase {
 
-  // private final SparkMaxSwerveModule leftModuleFront, leftModuleBack,
-  // rightModuleFront, rightModuleBack;
   private final SwerveModule[] swerveMods;
 
-  private final SwerveDriveOdometry m_swerveDrivetrainOdometry;
+  private final SwerveDrivePoseEstimator m_swerveDrivetrainOdometry;
 
   private final AHRS navXGyro;
 
@@ -51,6 +47,8 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d angle = new Rotation2d();
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
+
+  private final Limelight drivetrainLimelight;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -75,22 +73,11 @@ public class Drivetrain extends SubsystemBase {
     // Creates and pushes Field2d to SmartDashboard.
     SmartDashboard.putData(m_field2d);
 
-    m_swerveDrivetrainOdometry = new SwerveDriveOdometry(
-        Constants.kDrivetrain.kSwerveKinematics,
-        getRotation2d(),
-        getPositions(),
-        new Pose2d(8.28, 4, Rotation2d.fromDegrees(0)));
-
-    /*m_swerveDrivetrainOdometry = new SwerveDrivePoseEstimator(
+    m_swerveDrivetrainOdometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getRotation2d(), 
       getPositions(), 
-      new Pose2d(8.28, 4, Rotation2d.fromDegrees(180)),
-      VecBuilder.fill(
-        0.5, 
-        0.5, 
-        0.5),
-      VecBuilder.fill(0.9, 0.9, 0.9));*/
+      new Pose2d(8.28, 4, Rotation2d.fromDegrees(0)));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -103,6 +90,8 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Left Back", swerveMods[1]);
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
+
+    drivetrainLimelight = new Limelight("limelight-slice");
 
   }
 
@@ -285,7 +274,22 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d updateOdometry() {
 
-    return m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
+    Pose2d odometryPose = m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
+    Pose2d visionPose = drivetrainLimelight.getCurrentBotPoseBlue();
+
+    if(visionPose != null) {
+
+      Transform2d difference = odometryPose.minus(visionPose);
+    
+      if(Math.hypot(difference.getX(), difference.getY()) <= 1) {
+
+        m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+
+      }
+
+    }
+
+    return m_swerveDrivetrainOdometry.getEstimatedPosition();
 
   }
 
@@ -296,7 +300,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The current estimated pose of the robot.
    */
   public Pose2d getPose() {
-    return m_swerveDrivetrainOdometry.getPoseMeters();
+    return m_swerveDrivetrainOdometry.getEstimatedPosition();
   }
 
   /**
