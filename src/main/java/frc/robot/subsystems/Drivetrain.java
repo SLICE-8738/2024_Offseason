@@ -536,20 +536,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public ChassisSpeeds getChassisSpeeds() {
 
-    double forwardVelocity = 0;
-    double sidewaysVelocity = 0;
-
-    for(SwerveModule mod : swerveMods) {
-
-      forwardVelocity += mod.getState().speedMetersPerSecond * mod.getState().angle.getSin();
-      sidewaysVelocity += mod.getState().speedMetersPerSecond * mod.getState().angle.getCos();
-
-    }
-
-    forwardVelocity /= 4;
-    sidewaysVelocity /= 4;
-
-    return new ChassisSpeeds(forwardVelocity, sidewaysVelocity, getRotationalVelocity().getRadians());
+    return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getStates());
 
   }
 

@@ -31,15 +31,31 @@ public class AutoSelector {
 
     public enum StartingPosition {
 
-        LEFT,
-        MIDDLE,
-        RIGHT
+        LEFT("Left"),
+        MIDDLE("Middle"),
+        RIGHT("Right");
+
+        public final String value;
+
+        StartingPosition(String value) {
+
+            this.value = value;
+
+        }
 
     }
 
     public enum DesiredMode {
 
-        TEST_PATH_MODE
+        TEST_PATH_MODE("Test Path Mode");
+
+        public final String value;
+
+        DesiredMode(String value) {
+
+            this.value = value;
+
+        }
 
     }
 
@@ -91,7 +107,7 @@ public class AutoSelector {
             m_drivetrain);
 
         //Add custom commands to use in PathPlanner autos here with NamedCommands.registerCommand()
-
+        
     }
 
     public void updateAutoSelector() {
