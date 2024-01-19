@@ -31,9 +31,9 @@ public class AutoSelector {
 
     public enum StartingPosition {
 
-        LEFT("Left"),
+        AMP_SIDE("Amp Side"),
         MIDDLE("Middle"),
-        RIGHT("Right");
+        SOURCE_SIDE("Source Side");
 
         public final String value;
 
@@ -47,7 +47,7 @@ public class AutoSelector {
 
     public enum DesiredMode {
 
-        TEST_PATH_MODE("Test Path Mode");
+        TEST_PATH_MODE("Test Path");
 
         public final String value;
 
@@ -65,7 +65,7 @@ public class AutoSelector {
     public SendableChooser<StartingPosition> startingPositionChooser;
     public SendableChooser<DesiredMode> modeChooser;
 
-    private Optional<PathPlannerAuto> autoMode = Optional.empty();
+    private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
     private String autoName;
 
     private Pose2d initialAutoPose;
@@ -82,10 +82,10 @@ public class AutoSelector {
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
-        startingPositionChooser.setDefaultOption("Left", StartingPosition.LEFT);
+        startingPositionChooser.setDefaultOption("Amp Side", StartingPosition.AMP_SIDE);
 
         startingPositionChooser.addOption("Middle", StartingPosition.MIDDLE);
-        startingPositionChooser.addOption("Right", StartingPosition.RIGHT);
+        startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
 
         modeChooser = new SendableChooser<DesiredMode>();
 
@@ -120,7 +120,7 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + startingPosition.name()
                     + ", Desired Mode: " + desiredMode.name());
 
-            autoMode = getAutoModeForParams(startingPosition, desiredMode);
+            autoRoutine = getAutoRoutineForParams(startingPosition, desiredMode);
 
             updateInitialAutoPoseOffset();
 
@@ -131,43 +131,20 @@ public class AutoSelector {
 
     }
 
-    private Optional<PathPlannerAuto> getAutoModeForParams(StartingPosition position, DesiredMode mode) {
+    private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        switch (mode) {
+        try {
 
-            //Uncomment and replace this code with autonomous mode names
-            /*case SCORE_ONE_HIGH_ROW:
-                autoName = "Score One High Row";
-                break;
-            case SCORE_ONE_HIGH_ROW_AND_MOBILITY:
-                autoName = "Score One High Row And Mobility";
-                break;
-            case SCORE_ONE_HIGH_ROW_AND_ENGAGE:
-                autoName = "Score One High Row And Engage";
-                break;
-            case SCORE_ONE_HIGH_ROW_MOBILITY_AND_ENGAGE:
-                autoName = "Score One High Row Mobility And Engage";
-                break;
-            case SCORE_ONE_HIGH_ROW_PICK_UP_AND_ENGAGE:
-                autoName = "Score One High Row Pick Up And Engage";
-                break;
-            case SCORE_TWO_HIGH_AND_MID_ROW:
-                autoName = "Score Two High And Mid Row";
-                break;
-            case SCORE_TWO_HIGH_AND_MID_ROW_AND_ENGAGE:
-                autoName = "Score Two High And Mid Row And Engage";
-                break;*/
-            case TEST_PATH_MODE:
-                autoName = "Test Auto";
-                break;
-            default:
-                System.err.println("No valid auto mode found for " + mode);
-                return Optional.empty();
+            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
 
         }
+        catch(Exception e) {
 
-        return Optional.of(new PathPlannerAuto(autoName));
+            DriverStation.reportError(e.getMessage(), true);
+            return Optional.empty();
 
+        }
+ 
     }
 
     public void updateInitialAutoPoseOffset() {
@@ -188,16 +165,16 @@ public class AutoSelector {
 
     public void reset() {
 
-        autoMode = Optional.empty();
+        autoRoutine = Optional.empty();
         storedDesiredMode = null;
 
         initialAutoPose = null;
 
     }
 
-    public PathPlannerAuto getAutoMode() {
+    public PathPlannerAuto getAutoRoutine() {
 
-        return autoMode.get();
+        return autoRoutine.get();
 
     }
 
