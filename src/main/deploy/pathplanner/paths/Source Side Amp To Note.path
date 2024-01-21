@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Amp To Note",
   "previewStartingState": {
     "rotation": 90.0,
     "velocity": 0

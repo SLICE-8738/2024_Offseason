@@ -3,50 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.84,
-        "y": 7.67
+        "x": 0.95,
+        "y": 4.05
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9416364767753094,
-        "y": 7.443011868541063
+        "x": 1.6775001047036502,
+        "y": 4.469830434322791
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.14,
-        "y": 7.0
+        "x": 1.33,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 2.0236026327997703,
-        "y": 7.259954120073733
+        "x": 1.7164528753731296,
+        "y": 4.761976214343888
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp To Note",
-  "previewStartingState": {
-    "rotation": 90.0,
-    "velocity": 0
-  },
+  "folder": "Starting Zone To Speaker",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }
