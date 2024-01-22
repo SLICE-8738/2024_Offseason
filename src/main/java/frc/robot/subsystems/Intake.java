@@ -8,7 +8,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+/**
+ * An intake pulls in the ring (or "note") that will later be launched.
+ */
 public class Intake extends SubsystemBase {
   private CANSparkMax intakeEntrance, intakeRamp;
   /** Creates a new Intake. */
@@ -17,6 +19,10 @@ public class Intake extends SubsystemBase {
     this.intakeRamp = new CANSparkMax(0, MotorType.kBrushless);
   }
 
+  /**
+   * Sets the spinning speed of the intake motors.
+   * @param speed
+   */
   public void intakeOn(double speed) {
     intakeEntrance.set(speed);
     intakeRamp.set(speed);

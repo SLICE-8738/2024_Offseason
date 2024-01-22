@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import frc.slicelibs.PositionalSubsystem;
 
+/**
+ * The elevator (or climber) is to pull the robot up onto a chain towards the end of the match.
+ */
 public class Elevator extends PositionalSubsystem {
   /** Creates a new Elevator. */
   public Elevator() {
