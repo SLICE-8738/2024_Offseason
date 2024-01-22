@@ -41,6 +41,15 @@ public final class Constants {
 
   }
 
+  public static final class kShooter {
+    public static final double PGainFly = 0.1;
+    public static final double IGainFly = 0;
+    public static final double DGainFly = 0;
+    public static final double PGainAim = 0.1;
+    public static final double IGainAim = 0;
+    public static final double DGainAim = 0;
+  }
+
   public static final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;
