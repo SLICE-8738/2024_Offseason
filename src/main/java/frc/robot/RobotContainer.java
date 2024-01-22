@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Drivetrain.PathfindCommand;
+import frc.robot.commands.Drivetrain.SetPercentOutputCommand;
+import frc.robot.commands.Drivetrain.SwerveDriveCommand;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,10 +23,36 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  private static final GenericHID driverController = Button.controller1;
+
+  // ==========================
+  // Subsystems
+  // ==========================
+
+  public final Drivetrain m_drivetrain = new Drivetrain();
+
+  public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain);
+  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_autoSelector);
+
+  // ==========================
+  // Commands
+  // ==========================
+
+  /* Drivetrain */
+  public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true, true);
+  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false, true);
+  public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
+  public final PathfindCommand m_pathfindToSource = new PathfindCommand(m_drivetrain, new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)));
+  public final PathfindCommand m_pathfindToAmp = new PathfindCommand(m_drivetrain, new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)));
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     // Configure the trigger bindings
     configureBindings();
+
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+
   }
 
   /**
@@ -33,6 +66,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    /* Drivetrain Bindings */
+    Button.pathfindToSource.whileTrue(m_pathfindToSource);
+    Button.pathfindToAmp.whileTrue(m_pathfindToAmp);
+
   }
 
   /**
@@ -41,6 +78,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+
+    return m_autoSelector.getAutoRoutine();
+    
   }
+
 }

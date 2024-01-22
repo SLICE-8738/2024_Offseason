@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.33,
-        "y": 5.55
+        "x": 1.4,
+        "y": 5.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6300000000000001,
-        "y": 5.55
+        "x": 1.7,
+        "y": 5.53
       },
       "isLocked": false,
       "linkedName": null
@@ -40,12 +40,12 @@
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Speaker To Note",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

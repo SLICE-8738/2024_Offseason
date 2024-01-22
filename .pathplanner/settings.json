@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.7112,
-  "robotLength": 0.8128,
+  "robotWidth": 0.9525,
+  "robotLength": 0.9525,
   "holonomicMode": true,
   "pathFolders": [
     "Amp To Note",
@@ -8,7 +8,10 @@
     "Starting Zone To Speaker",
     "Startzing Zone To Amp"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Score 1 Speaker And Intake Note",
+    "Score 1 Amp And Intake Note"
+  ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 2.5,
   "defaultMaxAngVel": 540.0,

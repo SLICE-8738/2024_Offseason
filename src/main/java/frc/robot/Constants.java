@@ -111,6 +111,7 @@ public final class Constants {
         / 60.0;
 
     /* Swerve Profiling Values */
+    //TODO: Find maximum velocities
     public static final double MAX_LINEAR_VELOCITY = 4.5; // meters per second
     public static final double MAX_ANGULAR_VELOCITY = 7; // radians per second
 
@@ -124,27 +125,6 @@ public final class Constants {
 
     /* Angle Encoder Invert */
     public static final SensorDirectionValue CANCODER_INVERT = SensorDirectionValue.CounterClockwise_Positive;
-    // Charge Station Board and Balance Speeds (-1 - 1)
-    // public static final double CHARGE_STATION_BALANCE_SPEED = 0.3;
-    // public static final double BOARD_CHARGE_SPEED = -0.55;
-
-    /*
-     * Charge Station Board and Balance Speeds (meters/second)
-     * THESE SPEEDS WERE CALCULATED BASED ON THE CURRENT MAXIMUM VELOCITY
-     * CONSTANT AND ARE PLACEHOLDERS FOR NOW
-     */
-    public static final double CHARGE_STATION_BALANCE_SPEED = 1.35;
-    public static final double BOARD_CHARGE_SPEED = 2.475;
-
-    // The minimum angle the drivetrain must be at to stop when boarding the charge
-    // station
-    public static final double BOARD_CHARGE_MINIMUM_STOP_ANGLE = 6;
-    // The amount the angle should drop below the maximum angle to stop boarding the
-    // charge station and begin balancing
-    public static final double BOARD_CHARGE_ANGLE_CHANGE_THRESHOLD = 3.8;
-
-    // Autnomous Tolerances
-    public static final double AUTO_DISTANCE_ERROR_TOLERANCE = 0.35;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */

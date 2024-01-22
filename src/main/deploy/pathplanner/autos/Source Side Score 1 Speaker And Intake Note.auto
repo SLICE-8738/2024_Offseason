@@ -8,18 +8,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side Starting Zone To Amp"
+            "pathName": "Source Side Starting Zone To Speaker"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side Amp To Note"
+            "pathName": "Source Side Speaker To Note"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Score 1 Speaker And Intake Note",
   "choreoAuto": false
 }

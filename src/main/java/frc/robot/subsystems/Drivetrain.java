@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 
 import java.util.List;
 
@@ -35,10 +34,6 @@ public class Drivetrain extends SubsystemBase {
   private final AHRS navXGyro;
 
   public final Field2d m_field2d;
-
-  private final Timer autoTrajectoryTimer;
-
-  private Trajectory currentAutoTrajectory;
 
   private Rotation2d fieldOrientedOffset;
 
@@ -67,8 +62,6 @@ public class Drivetrain extends SubsystemBase {
     resetHeading();
 
     m_field2d = new Field2d();
-
-    autoTrajectoryTimer = new Timer();
 
     // Creates and pushes Field2d to SmartDashboard.
     SmartDashboard.putData(m_field2d);
@@ -228,41 +221,6 @@ public class Drivetrain extends SubsystemBase {
 
     // Pushes the trajectory to Field2d.
     m_field2d.getObject("Trajectory").setPoses(poses);
-
-  }
-
-  /**
-   * Resets and starts a timer in order to provide a time
-   * since the beginning of the trajectory to sample from.
-   */
-  public void startAutoTrajectoryTimer() {
-
-    autoTrajectoryTimer.reset();
-    autoTrajectoryTimer.start();
-
-  }
-
-  /**
-   * Sets the auto trajectory used to sample the state at each time step from.
-   * 
-   * @param trajectory The current auto trajectory to sample from.
-   */
-  public void setCurrentAutoTrajectory(Trajectory trajectory) {
-
-    currentAutoTrajectory = trajectory;
-
-  }
-
-  /**
-   * Samples and obtains the rotation at the current time step of the current auto
-   * trajectory.
-   * 
-   * @return The rotation of the robot of at the current time step of the current
-   *         auto trajectory.
-   */
-  public Rotation2d getAutoTrajectoryRotation() {
-
-    return currentAutoTrajectory.sample(autoTrajectoryTimer.get()).poseMeters.getRotation();
 
   }
 

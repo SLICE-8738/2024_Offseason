@@ -23,7 +23,7 @@ public class ShuffleboardData {
         driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
         modulesTab = Shuffleboard.getTab("Modules Tab");
-        autoTab = Shuffleboard.getTab("Auto Tab");
+        autoTab = Shuffleboard.getTab("Autonomous");
 
         new DrivetrainData(drivetrain);
         new AutoData(autoSelector);
@@ -140,7 +140,7 @@ public class ShuffleboardData {
             withPosition(2, 1).
             withSize(2, 1);
             //Displays the robot starting position selected on the sendable chooser on Shuffleboard
-            autoTab.addString("Selected Starting Position", autoSelector::getStoredStartingPositionName).
+            autoTab.addString("Selected Starting Position", autoSelector::getStoredStartingPosition).
             withPosition(5, 1).
             withSize(2, 1);
 

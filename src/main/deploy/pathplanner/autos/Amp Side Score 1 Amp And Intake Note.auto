@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side Starting Zone To Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side Amp To Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Score 1 Amp And Intake Note",
+  "choreoAuto": false
+}

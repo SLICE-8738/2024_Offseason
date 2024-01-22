@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -47,7 +48,9 @@ public class AutoSelector {
 
     public enum DesiredMode {
 
-        TEST_PATH_MODE("Test Path");
+        TEST_PATH_MODE("Test Path"),
+        SCORE_1_AMP_AND_INTAKE_NOTE("Score 1 Amp And Intake Note"),
+        SCORE_1_SPEAKER_AND_INTAKE_NOTE("Score 1 Speaker And Intake Note");
 
         public final String value;
 
@@ -66,7 +69,6 @@ public class AutoSelector {
     public SendableChooser<DesiredMode> modeChooser;
 
     private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
-    private String autoName;
 
     private Pose2d initialAutoPose;
 
@@ -89,8 +91,10 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        //Add autonomous modes here with modeChooser.setDefaultOption() and modeChooser.addOption()
-        modeChooser.setDefaultOption("Test Path", DesiredMode.TEST_PATH_MODE);
+        modeChooser.setDefaultOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
+
+        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_INTAKE_NOTE.value, DesiredMode.SCORE_1_AMP_AND_INTAKE_NOTE);
+        modeChooser.addOption(DesiredMode.SCORE_1_SPEAKER_AND_INTAKE_NOTE.value, DesiredMode.SCORE_1_SPEAKER_AND_INTAKE_NOTE);
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,
@@ -122,7 +126,7 @@ public class AutoSelector {
 
             autoRoutine = getAutoRoutineForParams(startingPosition, desiredMode);
 
-            updateInitialAutoPoseOffset();
+            updateInitialAutoPoseOffset(desiredMode);
 
         }
 
@@ -140,24 +144,27 @@ public class AutoSelector {
         }
         catch(Exception e) {
 
-            DriverStation.reportError(e.getMessage(), true);
+            DriverStation.reportError(
+                "Could not construct a valid PathPlannerauto for selected starting position and mode. Error: " + e.toString() + " " + e.getMessage(), true);
             return Optional.empty();
 
         }
  
     }
 
-    public void updateInitialAutoPoseOffset() {
+    public void updateInitialAutoPoseOffset(DesiredMode mode) {
 
         Pose2d botPose = m_drivetrain.getPose();
 
-        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName);
+        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.value);
 
         if (botPose != null && initialAutoPose != null) {
 
-            initialAutoPoseXOffset = Math.abs(initialAutoPose.getX() - botPose.getX());
-            initialAutoPoseYOffset = Math.abs(initialAutoPose.getY() - botPose.getY());
-            initialAutoPoseRotationOffset = initialAutoPose.getRotation().getDegrees() - botPose.getRotation().getDegrees();
+            Transform2d offset = initialAutoPose.minus(botPose);
+
+            initialAutoPoseXOffset = offset.getX();
+            initialAutoPoseYOffset = offset.getY();
+            initialAutoPoseRotationOffset = offset.getRotation().getDegrees();
 
         }
 
@@ -182,7 +189,7 @@ public class AutoSelector {
 
         if (storedDesiredMode != null) {
 
-            return storedDesiredMode.name();
+            return storedDesiredMode.value;
 
         } else {
 
@@ -192,17 +199,11 @@ public class AutoSelector {
 
     }
 
-    public static StartingPosition getStoredStartingPosition() {
-
-        return storedStartingPosition;
-
-    }
-
-    public String getStoredStartingPositionName() {
+    public String getStoredStartingPosition() {
 
         if (storedStartingPosition != null) {
 
-            return storedStartingPosition.name();
+            return storedStartingPosition.value;
 
         } else {
 
