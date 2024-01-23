@@ -50,6 +50,10 @@ public final class Constants {
     public static final double DGainAim = 0;
   }
 
+  public static final class kElevator {
+    public static final double CLIMB_HEIGHT = 0.5;
+  }
+
   public static final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;
