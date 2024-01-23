@@ -41,9 +41,10 @@ public class Indexer extends SubsystemBase {
 
   /** Method that makes the high index motor spin depending on the isStored method */
   public void spinIndex() {
-    highIndexMotor.set(.1); //sets motor speed
+    highIndexMotor.set(.5); //sets motor speed
   }
 
+  
   /** Method that checks if a note is at the high index motor */
   public boolean isStored() {
     //checks if the laserCan distance is more than 177.9 millimeters or less than 177.9 millimeters
@@ -64,6 +65,12 @@ public class Indexer extends SubsystemBase {
     //returns the distance from the laserCAN in millimeters
     return laser.getMeasurement().distance_mm;
   }
+
+  public void stopMotor() {
+      highIndexMotor.set(0);
+    }
+
+  
 
   @Override
   public void periodic() {
