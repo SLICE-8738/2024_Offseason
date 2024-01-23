@@ -42,12 +42,23 @@ public final class Constants {
   }
 
   public static final class kShooter {
+
     public static final double FLYWHEEL_KP = 0.1;
     public static final double FLYWHEEL_KI = 0;
     public static final double FLYWHEEL_KD = 0;
     public static final double AIM_KP = 0.1;
     public static final double AIM_KI = 0;
     public static final double AIM_KD = 0;
+
+    // Flywheel Speed
+    public static final double FLYWHEEL_RPM = 60;
+
+    // Stow Angle for picking up game pieces
+    public static final double SHOOTER_STOW_ANGLE = 0;
+  }
+
+  public static final class kElevator {
+    public static final double CLIMB_HEIGHT = 0.5;
   }
 
   public static final class kDrivetrain {

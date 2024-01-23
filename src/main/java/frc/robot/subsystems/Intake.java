@@ -36,6 +36,10 @@ public class Intake extends SubsystemBase {
     intakeRamp.set(speed);
   }
 
+  public void runIntakeEntranceOnly(double speed) {
+    intakeEntrance.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
