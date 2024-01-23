@@ -68,6 +68,14 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
+   * Spins the flywheel using normal duty cycle control instead of velocity PID
+   * @param speed power to run the flywheel at from -1 to 1
+   */
+  public void dutyCycleSpinFlywheel(double speed) {
+    flywheel.set(speed);
+  }
+
+  /**
    * This function begins to move the shooter to a target angle.
    * @param angle Target angle.
    */
