@@ -42,12 +42,20 @@ public final class Constants {
   }
 
   public static final class kShooter {
+    // PID Gains
     public static final double PGainFly = 0.1;
     public static final double IGainFly = 0;
     public static final double DGainFly = 0;
     public static final double PGainAim = 0.1;
     public static final double IGainAim = 0;
     public static final double DGainAim = 0;
+
+    // Flywheel Speed
+    public static final double FLYWHEEL_RPM = 60;
+  }
+
+  public static final class kElevator {
+    public static final double CLIMB_HEIGHT = 0.5;
   }
 
   public static final class kDrivetrain {
