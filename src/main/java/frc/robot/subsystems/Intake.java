@@ -23,8 +23,12 @@ public class Intake extends SubsystemBase {
    * Sets the spinning speed of the intake motors.
    * @param speed
    */
-  public void intakeOn(double speed) {
+  public void runIntake(double speed) {
     intakeEntrance.set(speed);
+    intakeRamp.set(speed);
+  }
+
+  public void runRampIntakeOnly(double speed) {
     intakeRamp.set(speed);
   }
 
