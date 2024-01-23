@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
+/**
+ * Reverses the shooter flywheels and indexer until a note has completely passed through the indexer
+ * This can be used to intake a note from the source instead of the ground
+ */
 public class ReverseShooterCommand extends Command {
 
   private final Shooter m_shooter;
