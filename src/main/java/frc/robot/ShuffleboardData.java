@@ -6,19 +6,20 @@ package frc.robot;
 
 import java.util.Map;
 
+import au.grapplerobotics.LaserCan;
 //import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.Drivetrain;
-
+import frc.robot.subsystems.Indexer;
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
 public class ShuffleboardData {
 
     private final ShuffleboardTab driverTab, debugTab, modulesTab, autoTab;
 
-    public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector) {
+    public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector, Indexer indexer) {
 
         driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
@@ -27,7 +28,7 @@ public class ShuffleboardData {
 
         new DrivetrainData(drivetrain);
         new AutoData(autoSelector);
-        
+        new IndexerData(indexer);
     }
 
     public class DrivetrainData {
@@ -159,6 +160,17 @@ public class ShuffleboardData {
 
         }
 
+    }
+
+    public class IndexerData {
+
+        public IndexerData(Indexer indexer) {
+            //Displays the laserCan distance from the laser to an object on Shuffleboard
+            debugTab.addDouble("LaserCAN Distance:", () -> indexer.getLaserCanDistance()).
+            withPosition(7,2).
+            withSize(2,1);
+
+        }
     }
 
 }
