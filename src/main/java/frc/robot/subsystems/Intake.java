@@ -28,6 +28,10 @@ public class Intake extends SubsystemBase {
     intakeRamp.set(speed);
   }
 
+  /**
+   * Sets the spinning speed of only the upper ramp intake motor
+   * @param speed
+   */
   public void runRampIntakeOnly(double speed) {
     intakeRamp.set(speed);
   }
