@@ -37,15 +37,15 @@ public class NudgeIndexer extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //starts the spin the motor (calls the spinIndex constructor)
-    indexer.spinIndex();
+    //starts the spin the motor 
+    indexer.spinIndex(.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //stops the motor (calls the stopMotor constructor)
-    indexer.stopMotor();
+    //stops the motor 
+    indexer.spinIndex(0);
   }
 
   // Returns true when the command should end.
