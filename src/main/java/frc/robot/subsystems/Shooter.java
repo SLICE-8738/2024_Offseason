@@ -22,6 +22,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.kShooter;
 
 /**
@@ -96,6 +97,14 @@ public class Shooter extends SubsystemBase {
   public boolean detectShooterAngle(double acceptableError){
     double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
     if (Math.abs(angleTarget - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
+      return true; // if so, true.
+    }
+    return false; // otherwise, false
+  }
+
+  public boolean isStowed(double acceptableError) {
+    double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
+    if (Math.abs(Constants.kShooter.SHOOTER_STOW_ANGLE - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
     return false; // otherwise, false
