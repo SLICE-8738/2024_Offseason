@@ -55,6 +55,18 @@ public final class Constants {
 
     // Stow Angle for picking up game pieces
     public static final double SHOOTER_STOW_ANGLE = 0;
+
+    // Shooter Measurements
+    public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
+    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 118.719; // Angle between the high flywheel and pivot point from the low flywheel
+    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3556; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
+    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2667; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
+
+    // The constant you subtract the launch angle from to get the shooter angle
+    public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
+
+    public static final double PIVOT_Y = 0; // Hieght of the shooter pivot from "robot center"
+    public static final double PIVOT_X = 0; // Distance (front to back) of the shooter pivot from "robot center"
   }
 
   public static final class kElevator {
