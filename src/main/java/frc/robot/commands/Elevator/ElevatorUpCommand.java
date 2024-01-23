@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
+/**
+ * Moves the elevator up to the pre-climbing position
+ */
 public class ElevatorUpCommand extends Command {
 
   private final Elevator m_elevator;
@@ -15,7 +18,7 @@ public class ElevatorUpCommand extends Command {
   /** Creates a new ElevatorDownCommand. */
   public ElevatorUpCommand(Elevator elevator) {
     m_elevator = elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // No requirements needed since it uses PIDs
   }
 
   // Called when the command is initially scheduled.

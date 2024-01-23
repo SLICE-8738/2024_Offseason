@@ -7,6 +7,9 @@ package frc.robot.commands.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 
+/**
+ * Moves the elevator down to the default, stowed position, potentially bringing the robort up the chain
+ */
 public class ElevatorDownCommand extends Command {
 
   private final Elevator m_elevator;
@@ -14,7 +17,7 @@ public class ElevatorDownCommand extends Command {
   /** Creates a new ElevatorDownCommand. */
   public ElevatorDownCommand(Elevator elevator) {
     m_elevator = elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // No requirements needed since it uses PIDs
   }
 
   // Called when the command is initially scheduled.
