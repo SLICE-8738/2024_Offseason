@@ -49,13 +49,13 @@ public class Shooter extends SubsystemBase {
     aimPID = aimMotor.getPIDController();
     
     // Set PID of flywheel and aim motors.
-    flyPID.setP(kShooter.PGainFly);
-    flyPID.setI(kShooter.IGainFly);
-    flyPID.setD(kShooter.DGainFly);
+    flyPID.setP(kShooter.FLYWHEEL_KP);
+    flyPID.setI(kShooter.FLYWHEEL_KI);
+    flyPID.setD(kShooter.FLYWHEEL_KD);
 
-    aimPID.setP(kShooter.PGainAim);
-    aimPID.setI(kShooter.IGainAim);
-    aimPID.setD(kShooter.DGainAim);
+    aimPID.setP(kShooter.AIM_KP);
+    aimPID.setI(kShooter.AIM_KI);
+    aimPID.setD(kShooter.AIM_KD);
   }
 
   /**
