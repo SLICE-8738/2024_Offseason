@@ -13,6 +13,9 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
+/**
+ * Aims and spins up the flywheels to prepare for a shot into the speaker
+ */
 public class PrepareShooterCommand extends Command {
   Shooter m_shooter;
   Indexer m_indexer;
@@ -35,9 +38,13 @@ public class PrepareShooterCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Figures our the current position
     Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
+    // Determines distance to the speaker
     double distanceToSpeaker = currentPosition.getDistance(Constants.kFieldPositions.SPEAKER_POSITION);
+    // Uses distance info the calculate optimal shot
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
+    // Sets the flywheel speed and aim angle to the appropriate values 
     m_shooter.spinFlywheel(shotDetails.getFlywheelVelocity());
     m_shooter.aimShooter(shotDetails.getShooterAngle());
   }

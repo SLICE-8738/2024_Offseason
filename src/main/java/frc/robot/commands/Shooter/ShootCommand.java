@@ -18,9 +18,9 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+/**
+ * Prepares the shooter for shooting, aligns the robot with the speaker (while maintaining driver control of translation) and then fires when everything is ready
+ */
 public class ShootCommand extends ParallelDeadlineGroup {
   /** Creates a new ShootCommand. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
@@ -31,8 +31,9 @@ public class ShootCommand extends ParallelDeadlineGroup {
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
-    // Find if the shooter is prepared
+    // Check if the flywheels are spinning fast enough
     boolean atSpeed = shooter.detectFlywheelSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
+    // Check if the shooter is aimed vertically accurately enough
     boolean verticallyAimed = shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR);
     // find the angle to speaker
     Translation2d currentPosition = drivetrain.getPose().getTranslation();
@@ -40,10 +41,12 @@ public class ShootCommand extends ParallelDeadlineGroup {
     Rotation2d targetAngle = directionToSpeaker.getAngle();
     // Find the error in the drivetrain angle
     double drivetrainAngleError = targetAngle.minus(drivetrain.getRotation2d()).getDegrees();
+    // Check if the robot is aimed horizontally accurately enough
     boolean horizontallyAimed = Math.abs(drivetrainAngleError) < Constants.kShooter.HORIZONTAL_AIM_ACCEPTABLE_ERROR;
-    // Find the drivetrainspeed
+    // Find the drivetrain speed
     ChassisSpeeds chassisSpeeds = drivetrain.getChassisSpeeds();
     double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+    // Check if the robot is moving slow enough to shoot
     boolean stopped = speed < Constants.kShooter.MAXIMUM_SHOOTING_DRIVETRAIN_SPEED;
 
     return atSpeed && verticallyAimed && horizontallyAimed && stopped;
