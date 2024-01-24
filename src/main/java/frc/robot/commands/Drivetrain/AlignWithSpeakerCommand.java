@@ -16,6 +16,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 
+/**
+ * Maintains driver control of robot translation, but automatically turns to face the speaker.
+ */
 public class AlignWithSpeakerCommand extends Command {
   /** Creates a new SwerveDriveCommand. */
   private final Drivetrain m_drivetrain;
