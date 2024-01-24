@@ -12,14 +12,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveCommand extends Command {
   /** Creates a new SwerveDriveCommand. */
   private final Drivetrain m_drivetrain;
 
-  private final GenericHID m_driverController;
+  private final PS4Controller m_driverController;
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
   private final boolean m_isOpenLoop;
@@ -27,7 +27,7 @@ public class SwerveDriveCommand extends Command {
 
   private final PIDController rotationController;
 
-  public SwerveDriveCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
+  public SwerveDriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);

@@ -43,8 +43,6 @@ public class Drivetrain extends SubsystemBase {
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
 
-  private final Limelight drivetrainLimelight;
-
   /** Creates a new Drivetrain. */
   public Drivetrain() {
 
@@ -70,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getRotation2d(), 
       getPositions(), 
-      new Pose2d(8.28, 4, Rotation2d.fromDegrees(0)));
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -84,8 +82,6 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
 
-    drivetrainLimelight = new Limelight("limelight-slice");
-
   }
 
   @Override
@@ -95,11 +91,6 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
 
     m_field2d.setRobotPose(getPose());
-
-    SmartDashboard.putNumber("Left Front Distance", getPositions()[0].distanceMeters);
-    SmartDashboard.putNumber("Left Back Distance", getPositions()[1].distanceMeters);
-    SmartDashboard.putNumber("Right Front Distance", getPositions()[2].distanceMeters);
-    SmartDashboard.putNumber("Right Back Distance", getPositions()[3].distanceMeters);
 
   }
 
@@ -233,9 +224,9 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d updateOdometry() {
 
     Pose2d odometryPose = m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
-    Pose2d visionPose = drivetrainLimelight.getCurrentBotPoseBlue();
+    Pose2d visionPose = Limelights.getIntakeLimelight().getCurrentBotPoseBlue();
 
-    if(visionPose != null) {
+    if(visionPose != null && RobotBase.isReal()) {
 
       Transform2d difference = odometryPose.minus(visionPose);
     

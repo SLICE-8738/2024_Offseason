@@ -14,7 +14,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 
@@ -115,6 +114,14 @@ public final class Constants {
     public static final double MAX_LINEAR_VELOCITY = 4.5; // meters per second
     public static final double MAX_ANGULAR_VELOCITY = 7; // radians per second
 
+    /* PathPlanner Values */
+    public static final double MAX_MODULE_VELOCITY = 3.5;
+
+    public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
+
+    public static final double TRANSLATION_KP = 2.5;
+    public static final double ROTATION_KP = 2.5;
+
     /* Neutral Modes */
     public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
     public static final NeutralModeValue DRIVE_IDLE_MODE = NeutralModeValue.Brake;
@@ -167,23 +174,7 @@ public final class Constants {
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
-  }
-
-  public static final class kAutonomous {
-
-    public static final double kMaxVelocityMetersPerSecond = 3.5;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 2.5;
-    public static final double kMaxAngularVelocityRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI;
-
-    public static final PathConstraints kPathConstraints = new PathConstraints(3.5, 2.5, Math.PI, Math.PI);
-
-    public static final double kPTranslation = 2.5;
-    public static final double kPRotation = 2.5;
-
-    // Constraint for the motion profilied robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularVelocityRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
 
   }
+
 }

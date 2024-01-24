@@ -4,15 +4,20 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Drivetrain.PathfindCommand;
+
 import frc.robot.commands.Drivetrain.SetPercentOutputCommand;
 import frc.robot.commands.Drivetrain.SwerveDriveCommand;
+import frc.robot.commands.Drivetrain.AprilTagAlignCommand;
+import frc.robot.commands.Drivetrain.NoteAlignCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -23,7 +28,7 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class RobotContainer {
 
-  private static final GenericHID driverController = Button.controller1;
+  private static final PS4Controller driverController = Button.controller1;
 
   // ==========================
   // Subsystems
@@ -42,8 +47,11 @@ public class RobotContainer {
   public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true, true);
   public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false, true);
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
-  public final PathfindCommand m_pathfindToSource = new PathfindCommand(m_drivetrain, new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)));
-  public final PathfindCommand m_pathfindToAmp = new PathfindCommand(m_drivetrain, new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)));
+  public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final AprilTagAlignCommand m_aprilTagAlign = new AprilTagAlignCommand(m_drivetrain, driverController);
+  public final NoteAlignCommand m_noteAlign = new NoteAlignCommand(m_drivetrain, driverController);
+  //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -69,6 +77,7 @@ public class RobotContainer {
     /* Drivetrain Bindings */
     Button.pathfindToSource.whileTrue(m_pathfindToSource);
     Button.pathfindToAmp.whileTrue(m_pathfindToAmp);
+    //Button.limelightAlign.whileTrue(m_limelightAlign);
 
   }
 

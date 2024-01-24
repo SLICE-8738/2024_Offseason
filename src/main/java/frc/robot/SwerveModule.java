@@ -1,10 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -16,8 +17,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-import frc.robot.Constants;
 import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
@@ -33,6 +32,7 @@ public class SwerveModule {
 
     private CANSparkMax angleMotor;
     private TalonFX driveMotor;
+    private TalonFXSimState driveMotorSim;
     private RelativeEncoder integratedAngleEncoder;
     private CANcoder angleEncoder;
 
@@ -45,8 +45,6 @@ public class SwerveModule {
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
-
-    private double simDistance = 0;
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -64,6 +62,7 @@ public class SwerveModule {
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
+        driveMotorSim = new TalonFXSimState(driveMotor);
         configDriveMotor();
 
         lastAngle = getState().angle;
@@ -179,8 +178,7 @@ public class SwerveModule {
     }
 
     public void setSimulationPosition() {
-        simDistance += driveMotor.getVelocity().getValue() * 0.02;
-        driveMotor.setPosition(simDistance);
+        driveMotorSim.addRotorPosition(Conversions.metersToTalon(targetState.speedMetersPerSecond * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
     }
 }

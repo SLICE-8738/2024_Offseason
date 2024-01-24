@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Class for interfacing with a Limelight connected to NetworkTables. */
-public class Limelight {
+public class LimelightTable {
 
   private final NetworkTable table;
   
@@ -28,7 +28,8 @@ public class Limelight {
   private double[] currentTargetCameraSpacePose;
   private double[] lastTargetCameraSpacePose = new double[0];
 
-  private static double currentAprilTagID;
+  private double currentAprilTagID;
+  private double lastAprilTagID;
 
   private final NetworkTableEntry ledMode;
   private final NetworkTableEntry cameraMode;
@@ -39,7 +40,7 @@ public class Limelight {
    * 
    * @param tableKey The key/name assigned to the desired Limglight on NetworkTables.
    */
-  public Limelight(String tableKey) {
+  public LimelightTable(String tableKey) {
     
     table = NetworkTableInstance.getDefault().getTable(tableKey);
 
@@ -96,6 +97,12 @@ public class Limelight {
     }
 
     currentAprilTagID = table.getEntry("tid").getDouble(0);
+
+    if(currentAprilTagID != 0) {
+
+      lastAprilTagID = currentAprilTagID;
+
+    }
 
   }
 
@@ -200,11 +207,11 @@ public class Limelight {
   }
 
   /**
-   * @return The ID of the primary in-view AprilTag
+   * @return The ID of the last identified primary in-view AprilTag
    */
   public double getAprilTagID() {
 
-    return currentAprilTagID;
+    return lastAprilTagID;
 
   }
 

@@ -102,9 +102,9 @@ public class AutoSelector {
             m_drivetrain::getChassisSpeeds,
             m_drivetrain::setChassisSpeeds,
             new HolonomicPathFollowerConfig(
-                new PIDConstants(Constants.kAutonomous.kPTranslation),
-                new PIDConstants(Constants.kAutonomous.kPRotation),
-                Constants.kAutonomous.kMaxVelocityMetersPerSecond,
+                new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
+                new PIDConstants(Constants.kDrivetrain.ROTATION_KP),
+                Constants.kDrivetrain.MAX_MODULE_VELOCITY,
                 Constants.kDrivetrain.DRIVE_BASE_RADIUS,
                 new ReplanningConfig(false, false)),
             () -> DriverStation.getAlliance().get() == Alliance.Red,
