@@ -68,6 +68,11 @@ public final class Constants {
 
     public static final double PIVOT_Y = 0; // Hieght of the shooter pivot from "robot center"
     public static final double PIVOT_X = 0; // Distance (front to back) of the shooter pivot from "robot center"
+
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 5; // The maximum error allowed in the flywheel RPM
+    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
+    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
+    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
   }
 
   public static final class kElevator {

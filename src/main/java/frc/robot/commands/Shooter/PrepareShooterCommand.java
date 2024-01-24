@@ -8,20 +8,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.ShooterMath;
+import frc.robot.ShooterMath.ShotDetails;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
-public class SpinFlywheelCommand extends Command {
-  private final Shooter m_shooter;
-  private final Drivetrain m_drivetrain;
-
-  /** Creates a new SpinFlywheelCommand. */
-  public SpinFlywheelCommand(Shooter shooter, Drivetrain drivetrain) {
+public class PrepareShooterCommand extends Command {
+  Shooter m_shooter;
+  Indexer m_indexer;
+  Drivetrain m_drivetrain;
+  /** Creates a new ShootCommand. */
+  public PrepareShooterCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     m_shooter = shooter;
+    m_indexer = indexer;
     m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
+    addRequirements(indexer);
   }
 
   // Called when the command is initially scheduled.
@@ -33,8 +37,9 @@ public class SpinFlywheelCommand extends Command {
   public void execute() {
     Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
     double distanceToSpeaker = currentPosition.getDistance(Constants.kFieldPositions.SPEAKER_POSITION);
-    double flywheelVelocity = ShooterMath.getShot(distanceToSpeaker).getFlywheelVelocity();
-    m_shooter.spinFlywheel(flywheelVelocity);
+    ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
+    m_shooter.spinFlywheel(shotDetails.getFlywheelVelocity());
+    m_shooter.aimShooter(shotDetails.getShooterAngle());
   }
 
   // Called once the command ends or is interrupted.
