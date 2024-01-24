@@ -59,9 +59,7 @@ public final class ShooterMath {
    * @return the horizontal distance from the shooter to the speaker, in meters
    */
   public static double getShooterDistance(double shooterAngle, double robotDistance) {
-    double highX = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle));
-    double lowX = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
-    return (-(highX + lowX) / 2) + Constants.kShooter.PIVOT_X + robotDistance;
+    return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -69,9 +67,7 @@ public final class ShooterMath {
    * @return the height of the shooter off the ground, in meters
    */
   public static double getShooterHeight(double shooterAngle) {
-    double highY = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle));
-    double lowY = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
-    return ((highY + lowY) / 2) + Constants.kShooter.PIVOT_Y; 
+    return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -119,7 +115,7 @@ public final class ShooterMath {
     double height = Constants.kShooter.PIVOT_Y; // Initial guess for height of the shooter from the ground
 
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
         // Calculate the shooter angle according to the current guess for shooter position
         double shooterAngle = getShot(distance, height).getShooterAngle();
         // Update the shooter distance and height based on the new angle
