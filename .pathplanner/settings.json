@@ -4,13 +4,15 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp To Note",
-    "Speaker To Note",
+    "Note Intake",
     "Starting Zone To Speaker",
     "Startzing Zone To Amp"
   ],
   "autoFolders": [
-    "Score 1 Speaker And Intake Note",
-    "Score 1 Amp And Intake Note"
+    "Score 1 Amp And 2 Speaker",
+    "Score 1 Amp And 3 Speaker",
+    "Score 3 Speaker",
+    "Score 4 Speaker"
   ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 2.5,

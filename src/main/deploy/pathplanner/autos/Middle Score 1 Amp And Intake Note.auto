@@ -14,12 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Amp To Note"
+            "pathName": "Amp To Note 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1 To Note 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 To Note 3"
           }
         }
       ]
     }
   },
-  "folder": "Score 1 Amp And Intake Note",
+  "folder": "Score 1 Amp And 3 Speaker",
   "choreoAuto": false
 }

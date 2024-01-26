@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Drivetrain.SetPercentOutputCommand;
 import frc.robot.commands.Drivetrain.SwerveDriveCommand;
-import frc.robot.commands.Drivetrain.AprilTagAlignCommand;
-import frc.robot.commands.Drivetrain.NoteAlignCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -49,8 +47,6 @@ public class RobotContainer {
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
   public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final AprilTagAlignCommand m_aprilTagAlign = new AprilTagAlignCommand(m_drivetrain, driverController);
-  public final NoteAlignCommand m_noteAlign = new NoteAlignCommand(m_drivetrain, driverController);
   //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -77,7 +73,6 @@ public class RobotContainer {
     /* Drivetrain Bindings */
     Button.pathfindToSource.whileTrue(m_pathfindToSource);
     Button.pathfindToAmp.whileTrue(m_pathfindToAmp);
-    //Button.limelightAlign.whileTrue(m_limelightAlign);
 
   }
 

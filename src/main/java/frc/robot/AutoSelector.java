@@ -49,8 +49,10 @@ public class AutoSelector {
     public enum DesiredMode {
 
         TEST_PATH_MODE("Test Path"),
-        SCORE_1_AMP_AND_INTAKE_NOTE("Score 1 Amp And Intake Note"),
-        SCORE_1_SPEAKER_AND_INTAKE_NOTE("Score 1 Speaker And Intake Note");
+        SCORE_4_SPEAKER("Score 4 Speaker"),
+        SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker"),
+        SCORE_3_SPEAKER("Score 3 Speaker"),
+        SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker");
 
         public final String value;
 
@@ -93,8 +95,10 @@ public class AutoSelector {
 
         modeChooser.setDefaultOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
 
-        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_INTAKE_NOTE.value, DesiredMode.SCORE_1_AMP_AND_INTAKE_NOTE);
-        modeChooser.addOption(DesiredMode.SCORE_1_SPEAKER_AND_INTAKE_NOTE.value, DesiredMode.SCORE_1_SPEAKER_AND_INTAKE_NOTE);
+        modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER.value, DesiredMode.SCORE_3_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,
@@ -110,7 +114,7 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        //Add custom commands to use in PathPlanner autos here with NamedCommands.registerCommand()
+        //NamedCommands.registerCommand("Align With Speaker", new AlignWithSpeakerCommand(m_drivetrain));
         
     }
 
@@ -154,13 +158,13 @@ public class AutoSelector {
 
     public void updateInitialAutoPoseOffset(DesiredMode mode) {
 
-        Pose2d botPose = m_drivetrain.getPose();
+        Pose2d currentPose = m_drivetrain.getPose();
 
         initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.value);
 
-        if (botPose != null && initialAutoPose != null) {
+        if (currentPose != null && initialAutoPose != null) {
 
-            Transform2d offset = initialAutoPose.minus(botPose);
+            Transform2d offset = initialAutoPose.minus(currentPose);
 
             initialAutoPoseXOffset = offset.getX();
             initialAutoPoseYOffset = offset.getY();

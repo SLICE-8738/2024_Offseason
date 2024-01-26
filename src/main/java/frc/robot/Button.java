@@ -15,7 +15,6 @@ public class Button {
     /* Drivetrain Buttons */
     public static Trigger pathfindToSource = new POVButton(controller1, 0); //Controller 1 Control Pad Right
     public static Trigger pathfindToAmp = new POVButton(controller1, 180); //Controller 1 Control Pad Left
-    public static Trigger limelightAlign = new POVButton(controller1, 90); //Controller 1 Control Pad Up
 
     /* Unassigned Controller 1 Buttons */
     public static Trigger square = new JoystickButton(controller1, 1); //Controller 1 Square
@@ -32,6 +31,7 @@ public class Button {
     public static Trigger rightStickClick1 = new JoystickButton(controller1, 12); //Controller 1 Right Stick Click
     public static Trigger psButton1 = new JoystickButton(controller1, 13); //Controller 1 PS Button
     public static Trigger touchPad1 = new JoystickButton(controller1, 14); //Controller 1 Touch Pad
+    public static Trigger controlPadUp1 = new POVButton(controller1, 90); //Controller 1 Control Pad Up
     public static Trigger controlPadDown1 = new POVButton(controller1, 270); //Controller 1 Control Pad Down
 
     /* Unassigned Controller 2 Buttons */

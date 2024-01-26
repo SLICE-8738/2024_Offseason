@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.83,
-        "y": 7.6
+        "x": 1.4,
+        "y": 5.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9223209312321443,
-        "y": 6.50057935209035
+        "x": 2.078598655394227,
+        "y": 5.871606563758798
       },
       "isLocked": false,
       "linkedName": null
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.14,
-        "y": 4.1
+        "y": 7.0
       },
       "prevControl": {
-        "x": 2.014483235001527,
-        "y": 5.594739288874256
+        "x": 2.0865041967331863,
+        "y": 6.232443307116744
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 0.0,
       "rotateFast": false
     }
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp To Note",
+  "folder": "Note Intake",
   "previewStartingState": {
-    "rotation": 90.0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

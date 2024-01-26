@@ -8,13 +8,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side Starting Zone To Amp"
+            "pathName": "Source Side Starting Zone To Speaker"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Amp To Note 1"
+            "pathName": "Speaker To Note 1"
           }
         },
         {
@@ -32,6 +32,6 @@
       ]
     }
   },
-  "folder": "Score 1 Amp And 3 Speaker",
+  "folder": "Score 4 Speaker",
   "choreoAuto": false
 }
