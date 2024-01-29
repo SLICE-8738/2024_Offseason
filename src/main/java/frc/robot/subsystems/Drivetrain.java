@@ -142,6 +142,26 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public void setDrivePID(double kP, double kI, double kD) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setDrivePID(kP, kI, kD);
+
+    }
+
+  }
+
+  public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setAnglePIDF(kP, kI, kD, kFF);
+
+    }
+
+  }
+
   /**
    * Drives the robot at either given field-relative X, Y, and rotational
    * velocities or given

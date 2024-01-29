@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -156,6 +157,24 @@ public class SwerveModule {
     public void setAngleIdleMode(boolean setBrakeMode) {
 
         angleMotor.setIdleMode(setBrakeMode? IdleMode.kBrake : IdleMode.kCoast);
+
+    }
+
+    public void setDrivePID(double kP, double kI, double kD) {
+
+        driveMotor.getConfigurator().apply(new Slot0Configs().
+        withKP(kP).
+        withKI(kI).
+        withKD(kD));
+
+    }
+
+    public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
+
+        angleController.setP(kP);
+        angleController.setI(kI);
+        angleController.setD(kD);
+        angleController.setFF(kFF);
 
     }
 
