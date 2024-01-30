@@ -82,6 +82,15 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
 
+    new ShuffleboardTuner(
+      (values) -> {
+
+        setDrivePID(values[0], values[1], values[2]);
+
+      },
+    new String[] {"kP", "kI", "kD"},
+    "Drive Motor PID");
+
   }
 
   @Override
