@@ -122,6 +122,39 @@ public class ShuffleboardData {
             withPosition(5, 0).
             withSize(3, 3);
 
+            //Displays a tuner for the drive motor PID gains on Shuffleboard
+            new ShuffleboardTuner(
+                (values) -> {
+          
+                  drivetrain.setDrivePID(values[0], values[1], values[2]);
+          
+                },
+                new String[] {"kP", "kI", "kD"},
+                "Drive Motor PID");
+
+            //Displays a tuner for the angle motor PID gains on Shuffleboard
+            new ShuffleboardTuner(
+                (values) -> {
+
+                    drivetrain.setAnglePIDF(values[0], values[1], values[2], values[3]);
+
+                },
+                new String[] {"kP", "kI", "kD", "kFF"},
+                "Angle Motor PIDF"
+            );
+
+            //Displays a tuner for the maximum velocities on Shuffleboard
+            new ShuffleboardTuner(
+                (values) -> {
+
+                    drivetrain.maxLinearVelocity = values[0];
+                    drivetrain.maxAngularVelocity = values[1];
+
+                },
+                new String[] {"Max Linear", "Max Angular"},
+                "Drivetrain Max Velocities"
+            );
+
         }
 
     }

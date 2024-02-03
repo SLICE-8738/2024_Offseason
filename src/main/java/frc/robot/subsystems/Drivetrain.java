@@ -42,6 +42,7 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d angle = new Rotation2d();
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
+  public double maxLinearVelocity, maxAngularVelocity;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -81,15 +82,6 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Left Back", swerveMods[1]);
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
-
-    new ShuffleboardTuner(
-      (values) -> {
-
-        setDrivePID(values[0], values[1], values[2]);
-
-      },
-    new String[] {"kP", "kI", "kD"},
-    "Drive Motor PID");
 
   }
 

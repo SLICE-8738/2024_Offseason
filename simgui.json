@@ -13,6 +13,9 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",
       "/Shuffleboard/Autonomous/Starting Position": "String Chooser",
+      "/Shuffleboard/Debug Tab/Angle Motor PIDF/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drive Motor PID/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drivetrain Max Velocities/Update": "Command",
       "/Shuffleboard/Debug Tab/Field": "Field2d",
       "/SmartDashboard/Field": "Field2d"
     },
