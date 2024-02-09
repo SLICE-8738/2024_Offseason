@@ -5,7 +5,10 @@ package frc.robot;
  */
 public final class ShooterMath {
     
+  private static final double OOMF = 2;
+
     public static class ShotDetails {
+
         private final double xVelocity, yVelocity;
         public ShotDetails(double xVelocity, double yVelocity) {
             this.xVelocity = xVelocity;
@@ -48,7 +51,7 @@ public final class ShooterMath {
         }
 
         public double getFlywheelVelocity() {
-            return getLaunchVelocity();
+            return getLaunchVelocity() * (15 * 39.37) / Math.PI;
         }
     }
 
@@ -96,8 +99,8 @@ public final class ShooterMath {
    */
   public static ShotDetails getShot(double distance, double height) {
     // see https://www.desmos.com/calculator/sfjrd3ja6f
-    double yVelocity = Math.sqrt(((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
-    double xVelocity = 32 * (3.28084 * distance) / yVelocity; // x velocity of the note (ft/s)
+    double yVelocity = Math.sqrt( Math.pow(OOMF * 3.2804,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
+    double xVelocity = 32 * (3.28084 * distance) / (yVelocity - OOMF); // x velocity of the note (ft/s)
     // Convert back to meters
     yVelocity *= 0.3048;
     xVelocity *= 0.3048;
