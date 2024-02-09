@@ -8,13 +8,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Side Starting Zone To Speaker"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker To Note 1"
+            "pathName": "Middle Speaker To Note 2"
           }
         },
         {

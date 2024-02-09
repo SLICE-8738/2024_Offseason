@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.95,
-        "y": 2.15
+        "x": 0.75,
+        "y": 4.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4437834806867724,
-        "y": 3.4181056262468403
+        "x": 3.81627656872335,
+        "y": 2.1032683200118165
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4,
-        "y": 5.53
+        "x": 7.52,
+        "y": 0.76
       },
       "prevControl": {
-        "x": 1.8448820313773493,
-        "y": 4.235590195640653
+        "x": 4.1219418609049985,
+        "y": 1.9649911640248807
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,16 +34,19 @@
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 2.5,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Starting Zone To Speaker",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Mid Field Note Intake",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

@@ -4,9 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp To Note",
-    "Note Intake",
-    "Starting Zone To Speaker",
-    "Startzing Zone To Amp"
+    "Mid Field Note Intake",
+    "Note Score",
+    "Starting Zone To Amp",
+    "Wing Note Intake"
   ],
   "autoFolders": [
     "Score 1 Amp And 2 Speaker",
