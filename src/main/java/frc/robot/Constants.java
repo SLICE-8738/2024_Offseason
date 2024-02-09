@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -46,6 +47,8 @@ public final class Constants {
     public static final double FLYWHEEL_KP = 0.1;
     public static final double FLYWHEEL_KI = 0;
     public static final double FLYWHEEL_KD = 0;
+    public static final double FLYWHEEL_FEED_FORWARD = 0.002;
+
     public static final double AIM_KP = 0.1;
     public static final double AIM_KI = 0;
     public static final double AIM_KD = 0;
@@ -55,6 +58,23 @@ public final class Constants {
 
     // Stow Angle for picking up game pieces
     public static final double SHOOTER_STOW_ANGLE = 0;
+
+    // Shooter Measurements
+    public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
+    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 118.719; // Angle between the high flywheel and pivot point from the low flywheel
+    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3556; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
+    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2667; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
+
+    // The constant you subtract the launch angle from to get the shooter angle
+    public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
+
+    public static final double PIVOT_Y = 0; // Hieght of the shooter pivot from "robot center"
+    public static final double PIVOT_X = 0; // Distance (front to back) of the shooter pivot from "robot center"
+
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 5; // The maximum error allowed in the flywheel RPM
+    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
+    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
+    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
   }
 
   public static final class kElevator {
@@ -64,8 +84,7 @@ public final class Constants {
   public static final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;
-    public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW- (except for some godforsaken
-                                                     // reason CCW- CW+ is the one that actually works so ignore this)
+    public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
 
     /* Drivetrain Constants */
     //TODO: Measure chassis and wheel dimensions
@@ -225,5 +244,16 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularVelocityRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
 
+    public static final double kPSpeakerAlignRotation = 2.5;
+    public static final double kISpeakerAlignRotation = 0;
+    public static final double kDSpeakerAlignRotation = 0;
+
+  }
+
+  public static final class kFieldPositions {
+    public static final Translation2d SPEAKER_POSITION = new Translation2d(0, 0);
+    public static final Pose2d LEFT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
+    public static final Pose2d RIGHT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
+    public static final Pose2d CENTER_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
   }
 }
