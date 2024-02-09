@@ -7,51 +7,65 @@ package frc.robot;
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-/** Creates a Shuffelboard layout for tuning one or more double variables. */
+/** Creates a Shuffleboard layout for tuning one or more double variables. */
 public class ShuffleboardTuner {
 
     /**
-     * Creates a new ShuffleboardTuner for a single double variable.
+     * Creates a new tuner on Shuffleboard for a single double variable.
      * 
      * @param updateCallback A double consumer to update the code with the value
      *                       set on Shuffleboard for the tuner variable. 
      * @param layoutName The name of the Shuffleboard tuner layout to be created.
      */
-    public ShuffleboardTuner(DoubleConsumer updateCallback, String layoutName) {
+    public static void create(DoubleConsumer updateCallback, String layoutName) {
 
-        ShuffleboardLayout debugTab = Shuffleboard.getTab("Debug Tab").getLayout(layoutName);
+        ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug Tab").getLayout(layoutName, BuiltInLayouts.kGrid);
 
-        SimpleWidget valueWidget = debugTab.add("Value", 0);
-        debugTab.add("Update", new InstantCommand(() -> updateCallback.accept(valueWidget.getEntry().getDouble(0))));
+        GenericEntry valueEntry = tunerLayout.add("Value", 0).getEntry();
+        tunerLayout.add("Update", new InstantCommand(() -> updateCallback.accept(valueEntry.getDouble(0))));
         
     }
 
     /**
-     * Creates a new ShuffleboardTuner for mutiple double variables that share one callback.
+     * Creates a new tuner on Shuffleboard for mutiple double variables that share one update callback.
      * 
      * @param updateCallback A double array consumer to update the code with the values
      *                       set on Shuffleboard for the tuner variables.
-     * @param entryNames The names of the entries representing the double variables.
+     * @param entryNames The names of the entries representing the double variables to be tuned.
      * @param layoutName The name of the Shuffleboard tuner layout to be created.
      */
-    public ShuffleboardTuner(Consumer<Double[]> updateCallback, String[] entryNames, String layoutName) {
+    public static void create(Consumer<Double[]> updateCallback, String[] entryNames, String layoutName) {
 
         ShuffleboardLayout tunerLayout = Shuffleboard.getTab("Debug Tab").getLayout(layoutName, BuiltInLayouts.kGrid);
-        Double[] widgetValues = new Double[entryNames.length];
+        GenericEntry[] valueEntries = new GenericEntry[entryNames.length];
 
         for(int i = 0; i < entryNames.length; i++) {
 
-            widgetValues[i] = tunerLayout.add(entryNames[i], 0).withPosition(0, i).getEntry().getDouble(0);
+            valueEntries[i] = tunerLayout.add(entryNames[i], 0).withPosition(0, i).getEntry();
 
         }
 
-        tunerLayout.add("Update", new InstantCommand(() -> updateCallback.accept(widgetValues)));
+        tunerLayout.add("Update", new InstantCommand(() -> updateCallback.accept(getEntriesAsDoubles(valueEntries))));
+
+    }
+
+    private static Double[] getEntriesAsDoubles(GenericEntry[] entries) {
+
+        Double[] doubleValues = new Double[entries.length];
+
+        for(int i = 0; i < entries.length; i++) {
+
+            doubleValues[i] = entries[i].getDouble(0);
+
+        }
+
+        return doubleValues;
 
     }
 

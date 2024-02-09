@@ -93,6 +93,11 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d.setRobotPose(getPose());
 
+    SmartDashboard.putNumber("P Gain", swerveMods[0].getAngleController().getP());
+    SmartDashboard.putNumber("I Gain", swerveMods[0].getAngleController().getI());
+    SmartDashboard.putNumber("D Gain", swerveMods[0].getAngleController().getD());
+    SmartDashboard.putNumber("FF Gain", swerveMods[0].getAngleController().getFF());
+
   }
 
   @Override

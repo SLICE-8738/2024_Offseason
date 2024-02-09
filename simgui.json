@@ -33,6 +33,18 @@
   },
   "NetworkTables": {
     "transitory": {
+      "Shuffleboard": {
+        "Debug Tab": {
+          "Angle Motor PIDF": {
+            "Update": {
+              "open": true
+            },
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
         "open": true
       }
