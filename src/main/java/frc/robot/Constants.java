@@ -47,6 +47,8 @@ public final class Constants {
     public static final double FLYWHEEL_KP = 0.1;
     public static final double FLYWHEEL_KI = 0;
     public static final double FLYWHEEL_KD = 0;
+    public static final double FLYWHEEL_FEED_FORWARD = 0.002;
+
     public static final double AIM_KP = 0.1;
     public static final double AIM_KI = 0;
     public static final double AIM_KD = 0;
