@@ -32,7 +32,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     // Check if the flywheels are spinning fast enough
-    boolean atSpeed = shooter.detectFlywheelSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
+    boolean atSpeed = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
     // Check if the shooter is aimed vertically accurately enough
     boolean verticallyAimed = shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR);
     // find the angle to speaker
