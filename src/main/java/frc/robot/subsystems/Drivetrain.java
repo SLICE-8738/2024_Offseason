@@ -18,6 +18,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 
 import java.util.List;
 
@@ -557,6 +559,16 @@ public class Drivetrain extends SubsystemBase {
     for(SwerveModule mod : swerveMods) {
 
       mod.setPercentOutput(drivePercentOutput, anglePercentOutput);
+
+    }
+
+  }
+
+  public void setDriveVolts(Measure<Voltage> volts) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setVoltage(volts.magnitude(), 0);
 
     }
 
