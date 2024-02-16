@@ -5,13 +5,14 @@
 package frc.robot.testing.routines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FullTestRoutine extends SequentialCommandGroup {
   /** Creates a new FullTestRoutine. */
-  public FullTestRoutine() {
+  public FullTestRoutine(Subsystem subsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands();
