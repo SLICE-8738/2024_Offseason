@@ -5,6 +5,8 @@
 package frc.slicelibs;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import frc.slicelibs.util.config.JoystickFilterConfig;
 
 /** 
@@ -17,6 +19,9 @@ public class PolarJoystickFilter {
     JoystickFilterConfig config;
     double lastInput;
     SlewRateLimiter slewRateLimiter;
+
+    ShuffleboardTab filterTab;
+    SimpleWidget rawWidget, dead1Widget, curveWidget, slewWidget, dead2Widget;
 
     public PolarJoystickFilter(JoystickFilterConfig config) {
 
@@ -83,9 +88,6 @@ public class PolarJoystickFilter {
     private double withCurve(double raw) {
         double firstTerm = config.exponentPercent * Math.pow(Math.abs(raw), config.exponent);
         firstTerm = Math.copySign(firstTerm, raw);
-        if(raw == 0) {
-            firstTerm = 0;
-        }
         double secondTerm = (1 - config.exponentPercent) * raw;
         return firstTerm + secondTerm;
     }
@@ -109,11 +111,17 @@ public class PolarJoystickFilter {
         // Convert joystick coordinates to polar coordinates
         double[] filtered = toPolar(rawX, rawY);
 
+            rawWidget.getEntry().setDouble(filtered[1]);
+
         // Apply filters
         filtered = withDead(filtered);
+            dead1Widget.getEntry().setDouble(filtered[1]);
         filtered[1] = withCurve(filtered[1]);
+            curveWidget.getEntry().setDouble(filtered[1]);
         filtered[1] = withSlewRateLimiter(filtered[1]);
+            slewWidget.getEntry().setDouble(filtered[1]);
         double[] signal = withDead(filtered);
+            dead2Widget.getEntry().setDouble(filtered[1]);
         
         return toRectangular(signal[0], signal[1]);
     }

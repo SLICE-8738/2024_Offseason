@@ -66,10 +66,10 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+    //double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
-    double translationX = translation[0] * m_drivetrain.maxLinearVelocity;
-    double translationY = translation[1] * m_drivetrain.maxLinearVelocity;
+    double translationX = 0;//translation[0] * m_drivetrain.maxLinearVelocity;
+    double translationY = 0;//translation[1] * m_drivetrain.maxLinearVelocity;
 
     double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
     double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
