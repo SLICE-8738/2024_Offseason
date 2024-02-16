@@ -5,6 +5,7 @@
 package frc.slicelibs;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import frc.slicelibs.util.config.JoystickFilterConfig;
@@ -30,6 +31,14 @@ public class PolarJoystickFilter {
         lastInput = 0;
 
         slewRateLimiter = new SlewRateLimiter(config.maxAcceleration);
+
+        filterTab = Shuffleboard.getTab("Joystick Filters");
+        rawWidget = filterTab.add("raw", 0);
+        dead1Widget = filterTab.add("deadzone 1", 0);
+        curveWidget = filterTab.add("curve", 0);
+        slewWidget = filterTab.add("slew", 0);
+        dead2Widget = filterTab.add("deadzone 2", 0);
+
     }
 
     /**
