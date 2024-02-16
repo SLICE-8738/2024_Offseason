@@ -13,14 +13,14 @@ public class Button {
     public static GenericHID controller2 = new GenericHID(1);
 
     /* Drivetrain Buttons */
+    public static Trigger setPercentOutput = new JoystickButton(controller1, 1); //Controller 1 Square
+    public static Trigger resetFieldOrientedHeading = new JoystickButton(controller1, 4); //Controller 1 Triangle
     public static Trigger pathfindToSource = new POVButton(controller1, 0); //Controller 1 Control Pad Right
     public static Trigger pathfindToAmp = new POVButton(controller1, 180); //Controller 1 Control Pad Left
 
     /* Unassigned Controller 1 Buttons */
-    public static Trigger square = new JoystickButton(controller1, 1); //Controller 1 Square
     public static Trigger cross = new JoystickButton(controller1, 2); //Controller 1 Cross
     public static Trigger circle = new JoystickButton(controller1, 3); //Controller 1 Circle
-    public static Trigger triangle = new JoystickButton(controller1, 4); //Controller 1 Triangle
     public static Trigger leftBumper1 = new JoystickButton(controller1, 5); //Controller 1 Left Bumper
     public static Trigger rightBumper1 = new JoystickButton(controller1, 6); //Controller 1 Right Bumper
     public static Trigger leftTrigger1 = new JoystickButton(controller1, 7); //Controller 1 Left Trigger

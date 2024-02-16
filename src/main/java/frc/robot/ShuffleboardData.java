@@ -99,12 +99,6 @@ public class ShuffleboardData {
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(0, 0).
             withSize(2, 1);
-            //Displays the current roll of the robot in degrees on Shuffleboard
-            debugTab.addDouble("Drivetrain Roll", drivetrain::getRoll).
-            withWidget(BuiltInWidgets.kDial).
-            withProperties(Map.of("Min", -180, "Max", 180)).
-            withPosition(7, 0).
-            withSize(2, 1);
                 
             //Displays the current position of the robot on the field on Shuffleboard
             debugTab.add(drivetrain.m_field2d).

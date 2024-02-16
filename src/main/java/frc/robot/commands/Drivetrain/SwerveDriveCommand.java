@@ -46,7 +46,7 @@ public class SwerveDriveCommand extends Command {
         Constants.OperatorConstants.driveExponentPercent));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.5,
+        0.85,
         Constants.OperatorConstants.turnExponent,
         Constants.OperatorConstants.turnExponentPercent));
 

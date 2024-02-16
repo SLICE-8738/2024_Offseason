@@ -45,6 +45,7 @@ public class RobotContainer {
   public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true, true);
   public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false, true);
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
+  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
   public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
@@ -71,6 +72,8 @@ public class RobotContainer {
   private void configureBindings() {
 
     /* Drivetrain Bindings */
+    Button.setPercentOutput.whileTrue(m_setDrivePercentOutput);
+    Button.resetFieldOrientedHeading.onTrue(m_resetFieldOrientedHeading);
     Button.pathfindToSource.whileTrue(m_pathfindToSource);
     Button.pathfindToAmp.whileTrue(m_pathfindToAmp);
 

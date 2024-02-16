@@ -83,6 +83,9 @@ public class PolarJoystickFilter {
     private double withCurve(double raw) {
         double firstTerm = config.exponentPercent * Math.pow(Math.abs(raw), config.exponent);
         firstTerm = Math.copySign(firstTerm, raw);
+        if(raw == 0) {
+            firstTerm = 0;
+        }
         double secondTerm = (1 - config.exponentPercent) * raw;
         return firstTerm + secondTerm;
     }

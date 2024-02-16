@@ -42,7 +42,8 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d angle = new Rotation2d();
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
-  public double maxLinearVelocity, maxAngularVelocity;
+  public double maxLinearVelocity = 4.5;
+  public double maxAngularVelocity = 7;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -92,11 +93,6 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
 
     m_field2d.setRobotPose(getPose());
-
-    SmartDashboard.putNumber("P Gain", swerveMods[0].getAngleController().getP());
-    SmartDashboard.putNumber("I Gain", swerveMods[0].getAngleController().getI());
-    SmartDashboard.putNumber("D Gain", swerveMods[0].getAngleController().getD());
-    SmartDashboard.putNumber("FF Gain", swerveMods[0].getAngleController().getFF());
 
   }
 
@@ -436,15 +432,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Obtains and returns the current pitch of the robot from -180 to 180 degrees,
-   * with an offset of 1 degree from the gyro object.
+   * Obtains and returns the current pitch of the robot from -180 to 180 degrees from the gyro object.
    * 
-   * @return The current pitch of the robot from -180 to 180 degrees, with an
-   *         offset of 1 degree.
+   * @return The current pitch of the robot from -180 to 180 degrees.
    */
   public double getPitch() {
 
-    return navXGyro.getPitch() + 1;
+    return navXGyro.getPitch();
 
   }
 
@@ -457,7 +451,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getRoll() {
 
-    return navXGyro.getRoll() + 1.7;
+    return navXGyro.getRoll();
 
   }
 
