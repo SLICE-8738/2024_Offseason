@@ -6,7 +6,12 @@ package frc.robot.subsystems;
 
 import frc.robot.*;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -18,9 +23,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 
 import java.util.List;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -44,6 +51,8 @@ public class Drivetrain extends SubsystemBase {
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
   public double maxLinearVelocity = 4.5;
   public double maxAngularVelocity = 7;
+
+  private final SysIdRoutine sysIdDriveRoutine;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -83,6 +92,16 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Left Back", swerveMods[1]);
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
+
+    sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
+      (volts) -> {
+        for(SwerveModule mod : swerveMods) {
+          mod.setVolts(volts.in(Units.Volts), 0);
+        }
+      },
+      null,
+      this 
+    ));
 
   }
 
@@ -576,4 +595,16 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-}
+  public Command getSysIdDriveQuasistatic(Direction direction) {
+
+    return sysIdDriveRoutine.quasistatic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+
+  }
+
+  public Command getSysIdDriveDynamic(Direction direction) {
+
+    return sysIdDriveRoutine.dynamic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+
+  }
+
+} 

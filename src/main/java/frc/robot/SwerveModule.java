@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -45,6 +46,7 @@ public class SwerveModule {
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
+    private final VoltageOut driveVoltage = new VoltageOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
@@ -83,6 +85,12 @@ public class SwerveModule {
         driveDutyCycle.Output = drivePercentOutput;
         driveMotor.setControl(driveDutyCycle);
         angleMotor.set(anglePercentOutput);
+    }
+
+    public void setVolts(double driveVolts, double angleVolts) {
+        driveVoltage.Output = driveVolts;
+        driveMotor.setControl(driveVoltage);
+        angleMotor.setVoltage(angleVolts);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
@@ -199,11 +207,5 @@ public class SwerveModule {
     public void setSimulationPosition() {
         driveMotorSim.addRotorPosition(Conversions.metersToTalon(targetState.speedMetersPerSecond * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
-    }
-
-    public SparkPIDController getAngleController() {
-
-        return angleController;
-
     }
 }
