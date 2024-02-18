@@ -8,6 +8,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.slicelibs.util.config.JoystickFilterConfig;
 
 /** 
@@ -22,7 +23,9 @@ public class PolarJoystickFilter {
     SlewRateLimiter slewRateLimiter;
 
     ShuffleboardTab filterTab;
-    SimpleWidget rawWidget, dead1Widget, curveWidget, slewWidget, dead2Widget;
+    SimpleWidget rawWidget, dead1Widget, curveWidget, slewWidget, dead2Widget, cosWidget;
+
+    double lastThetaValue = 0;
 
     public PolarJoystickFilter(JoystickFilterConfig config) {
 
@@ -31,13 +34,6 @@ public class PolarJoystickFilter {
         lastInput = 0;
 
         slewRateLimiter = new SlewRateLimiter(config.maxAcceleration);
-
-        filterTab = Shuffleboard.getTab("Joystick Filters");
-        rawWidget = filterTab.add("raw", 0);
-        dead1Widget = filterTab.add("deadzone 1", 0);
-        curveWidget = filterTab.add("curve", 0);
-        slewWidget = filterTab.add("slew", 0);
-        dead2Widget = filterTab.add("deadzone 2", 0);
 
     }
 
@@ -56,6 +52,8 @@ public class PolarJoystickFilter {
         double[] polarCoords = {
             Math.atan2(rawY, rawX),
             Math.sqrt(rawX * rawX + rawY * rawY)};
+
+        lastThetaValue = polarCoords[0];
 
         if (polarCoords[1] > 1) {
             polarCoords[1] = 1;
@@ -82,7 +80,7 @@ public class PolarJoystickFilter {
      */
     private double[] withDead(double[] polarCoords) {
         if(polarCoords[1] < config.deadzone) {
-            return new double[] {0, 0};
+            return new double[] {lastThetaValue, 0};
         }
         else {
             return polarCoords;
@@ -120,17 +118,11 @@ public class PolarJoystickFilter {
         // Convert joystick coordinates to polar coordinates
         double[] filtered = toPolar(rawX, rawY);
 
-            rawWidget.getEntry().setDouble(filtered[1]);
-
         // Apply filters
         filtered = withDead(filtered);
-            dead1Widget.getEntry().setDouble(filtered[1]);
         filtered[1] = withCurve(filtered[1]);
-            curveWidget.getEntry().setDouble(filtered[1]);
         filtered[1] = withSlewRateLimiter(filtered[1]);
-            slewWidget.getEntry().setDouble(filtered[1]);
         double[] signal = withDead(filtered);
-            dead2Widget.getEntry().setDouble(filtered[1]);
         
         return toRectangular(signal[0], signal[1]);
     }
