@@ -60,7 +60,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
 
   }
 
@@ -76,10 +76,15 @@ public class RobotContainer {
   private void configureBindings() {
 
     /* Drivetrain Bindings */
-    Button.setPercentOutput.whileTrue(m_setDrivePercentOutput);
-    Button.resetFieldOrientedHeading.onTrue(m_resetFieldOrientedHeading);
-    Button.pathfindToSource.whileTrue(m_pathfindToSource);
+    Button.square.whileTrue(m_setDrivePercentOutput);
+    Button.triangle.onTrue(m_resetFieldOrientedHeading);
+    Button.controlPadRight1.whileTrue(m_pathfindToSource);
     Button.pathfindToAmp.whileTrue(m_pathfindToAmp);
+
+    Button.rightBumper1.and(Button.triangle).onTrue(m_driveQuasistaicForward);
+    Button.rightBumper1.and(Button.square).onTrue(m_driveQuasistaicReverse);
+    Button.rightBumper1.and(Button.cross).onTrue(m_driveDynamicForward);
+    Button.rightBumper1.and(Button.circle).onTrue(m_driveDynamicReverse);
 
   }
 

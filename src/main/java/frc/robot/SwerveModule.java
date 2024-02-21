@@ -146,7 +146,6 @@ public class SwerveModule {
         angleController.setI(Constants.kDrivetrain.ANGLE_KI);
         angleController.setD(Constants.kDrivetrain.ANGLE_KD);
         angleController.setFF(Constants.kDrivetrain.ANGLE_KFF);
-        angleMotor.burnFlash();
         resetToAbsolute();
     }
 

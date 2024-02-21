@@ -21,8 +21,7 @@ public class LimelightTable {
   private double targetYOffset;
 
   private double[] currentBotPoseBlue;
-  private double[] lastNonNullBotPoseBlue = new double[0];
-  private double[] lastNonEmptyBotPoseBlue = {8.28, 4, 0, 0, 0, 0};
+  private double[] lastBotPoseBlue = new double[0];
   private double[] currentRobotTargetSpacePose;
   private double[] lastRobotTargetSpacePose = new double[0];
   private double[] currentTargetCameraSpacePose;
@@ -60,41 +59,15 @@ public class LimelightTable {
 
     currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
 
-    if(currentBotPoseBlue != null) {
-
-      lastNonNullBotPoseBlue = currentBotPoseBlue;
-
-      if(lastNonNullBotPoseBlue.length != 0) {
-
-        lastNonEmptyBotPoseBlue = lastNonNullBotPoseBlue;
-        
-      }
-
-    }
+    handleRawPose(currentBotPoseBlue, lastBotPoseBlue);
 
     currentRobotTargetSpacePose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
 
-    if(currentRobotTargetSpacePose != null) {
-
-      if(currentRobotTargetSpacePose.length != 0) {
-
-        lastRobotTargetSpacePose = currentRobotTargetSpacePose;
-
-      }
-
-    }
+    handleRawPose(currentRobotTargetSpacePose, lastRobotTargetSpacePose);
 
     currentTargetCameraSpacePose = table.getEntry("targetpose_cameraspace").getDoubleArray(new double[6]);
 
-    if(currentTargetCameraSpacePose != null) {
-
-      if(currentTargetCameraSpacePose.length != 0) {
-
-        lastTargetCameraSpacePose = currentTargetCameraSpacePose;
-
-      }
-
-    }
+    handleRawPose(currentTargetCameraSpacePose, lastTargetCameraSpacePose);
 
     currentAprilTagID = table.getEntry("tid").getDouble(0);
 
@@ -135,11 +108,11 @@ public class LimelightTable {
 
   /**
    * @return The last received non-empty robot pose with the origin at the right-hand side of the blue alliance driverstation
-   *         if any. Returns the pose of the center of the field if none has been received yet.
+   *         if any. All-zero pose if none has been received yet.
    */
   public Pose2d getLastBotPoseBlue() {
 
-    return new Pose2d(lastNonEmptyBotPoseBlue[0], lastNonEmptyBotPoseBlue[1], Rotation2d.fromDegrees(lastNonEmptyBotPoseBlue[5]));
+    return new Pose2d(lastBotPoseBlue[0], lastBotPoseBlue[1], Rotation2d.fromDegrees(lastBotPoseBlue[5]));
 
   }
 
@@ -148,61 +121,28 @@ public class LimelightTable {
    *         being received if any. Null if received pose is empty.
    */
   public Pose2d getCurrentBotPoseBlue() {
-
-    double[] lastNonNullBotPoseBlue = this.lastNonNullBotPoseBlue;
-
-    if(lastNonNullBotPoseBlue.length != 0) {
       
-      return new Pose2d(lastNonNullBotPoseBlue[0], lastNonNullBotPoseBlue[1], Rotation2d.fromDegrees(lastNonNullBotPoseBlue[5]));
-  
-    }
-    else {
-
-      return null;
-
-    }
+    return new Pose2d(currentBotPoseBlue[0], currentBotPoseBlue[1], Rotation2d.fromDegrees(currentBotPoseBlue[5]));
 
   }
 
   /**
    * @return The last received non-empty robot pose with the target as the origin if any.
-   *         Null if none has been received yet.
+   *         All-zero pose if none has been received yet.
    */
   public Pose2d getRobotTargetSpacePose() {
 
-    double[] lastRobotTargetSpacePose = this.lastRobotTargetSpacePose;
-
-    if(lastRobotTargetSpacePose.length != 0) {
-
-      return new Pose2d(lastRobotTargetSpacePose[0], lastRobotTargetSpacePose[1], Rotation2d.fromDegrees(lastRobotTargetSpacePose[5]));
-
-    }
-    else {
-
-      return null;
-
-    }
+    return new Pose2d(lastRobotTargetSpacePose[0], lastRobotTargetSpacePose[1], Rotation2d.fromDegrees(lastRobotTargetSpacePose[5]));
 
   }
 
   /**
    * @return The last received non-empty camera pose with the target as the origin if any.
-   *         Null if none has been received yet.
+   *         All-zero pose if none has been received yet.
    */
   public Pose2d getTargetCameraSpacePose() {
 
-    double[] lastTargetCameraSpacePose = this.lastTargetCameraSpacePose;
-
-    if(lastTargetCameraSpacePose.length != 0) {
-
-      return new Pose2d(lastTargetCameraSpacePose[0], lastTargetCameraSpacePose[1], Rotation2d.fromDegrees(lastTargetCameraSpacePose[5]));
-
-    }
-    else {
-
-      return null;
-
-    }  
+    return new Pose2d(lastTargetCameraSpacePose[0], lastTargetCameraSpacePose[1], Rotation2d.fromDegrees(lastTargetCameraSpacePose[5]));
 
   }
 
@@ -253,6 +193,16 @@ public class LimelightTable {
   public void setPipeline(Number pipelineNumber) {
 
     pipeline.setNumber(pipelineNumber);
+
+  }
+
+  public void handleRawPose(double[] rawPose, double[] processedPose) {
+
+    if(rawPose != new double[6]) {
+
+      processedPose = rawPose;
+
+    }
 
   }
 

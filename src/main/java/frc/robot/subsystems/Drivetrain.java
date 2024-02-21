@@ -269,15 +269,11 @@ public class Drivetrain extends SubsystemBase {
     Pose2d odometryPose = m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
     Pose2d visionPose = Limelights.getIntakeLimelight().getCurrentBotPoseBlue();
 
-    if(visionPose != null && RobotBase.isReal()) {
-
-      Transform2d difference = odometryPose.minus(visionPose);
+    Transform2d difference = odometryPose.minus(visionPose);
     
-      if(Math.hypot(difference.getX(), difference.getY()) <= 1) {
+    if(Math.hypot(difference.getX(), difference.getY()) <= 1) {
 
-        m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
-
-      }
+      m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
     }
 
