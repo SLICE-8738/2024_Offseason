@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+
 import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
@@ -46,8 +47,8 @@ public class SwerveModule {
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
     private final VoltageOut driveVoltage = new VoltageOut(0);
+    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -65,7 +66,7 @@ public class SwerveModule {
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
-        driveMotorSim = new TalonFXSimState(driveMotor);
+        driveMotorSim = driveMotor.getSimState();
         configDriveMotor();
 
         lastAngle = getState().angle;
@@ -87,7 +88,7 @@ public class SwerveModule {
         angleMotor.set(anglePercentOutput);
     }
 
-    public void setVoltage(double driveVolts, double angleVolts) {
+    public void setVolts(double driveVolts, double angleVolts) {
         driveVoltage.Output = driveVolts;
         driveMotor.setControl(driveVoltage);
         angleMotor.setVoltage(angleVolts);
@@ -207,11 +208,5 @@ public class SwerveModule {
     public void setSimulationPosition() {
         driveMotorSim.addRotorPosition(Conversions.metersToTalon(targetState.speedMetersPerSecond * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
-    }
-
-    public SparkPIDController getAngleController() {
-
-        return angleController;
-
     }
 }
