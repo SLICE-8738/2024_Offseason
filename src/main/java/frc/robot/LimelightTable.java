@@ -20,12 +20,12 @@ public class LimelightTable {
   private double targetXOffset;
   private double targetYOffset;
 
-  private double[] currentBotPoseBlue;
-  private double[] lastBotPoseBlue = new double[0];
-  private double[] currentRobotTargetSpacePose;
-  private double[] lastRobotTargetSpacePose = new double[0];
-  private double[] currentTargetCameraSpacePose;
-  private double[] lastTargetCameraSpacePose = new double[0];
+  private double[] currentBotPoseBlue = new double[0];
+  private double[] lastBotPoseBlue = new double[6];
+  private double[] currentRobotTargetSpacePose = new double[6];
+  private double[] lastRobotTargetSpacePose = new double[6];
+  private double[] currentTargetCameraSpacePose = new double[6];
+  private double[] lastTargetCameraSpacePose = new double[6];
 
   private double currentAprilTagID;
   private double lastAprilTagID;
@@ -57,7 +57,7 @@ public class LimelightTable {
     targetXOffset = table.getEntry("tx").getDouble(0);
     targetYOffset = table.getEntry("ty").getDouble(0);
 
-    currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+    currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[0]);
 
     handleRawPose(currentBotPoseBlue, lastBotPoseBlue);
 
@@ -122,7 +122,18 @@ public class LimelightTable {
    */
   public Pose2d getCurrentBotPoseBlue() {
       
-    return new Pose2d(currentBotPoseBlue[0], currentBotPoseBlue[1], Rotation2d.fromDegrees(currentBotPoseBlue[5]));
+    double[] currentBotPoseBlue = this.currentBotPoseBlue;
+ 
+    if(currentBotPoseBlue.length != 0) {
+
+      return new Pose2d(currentBotPoseBlue[0], currentBotPoseBlue[1], Rotation2d.fromDegrees(currentBotPoseBlue[5]));
+
+    }
+    else {
+
+      return null;
+
+    }
 
   }
 

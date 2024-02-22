@@ -60,7 +60,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
 
   }
 

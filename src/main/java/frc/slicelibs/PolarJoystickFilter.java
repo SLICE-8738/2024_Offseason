@@ -22,6 +22,8 @@ public class PolarJoystickFilter {
 
     ShuffleboardTab filterTab;
 
+    double lastThetaValue;
+
     public PolarJoystickFilter(JoystickFilterConfig config) {
 
         this.config = config;
@@ -48,6 +50,8 @@ public class PolarJoystickFilter {
             Math.atan2(rawY, rawX),
             Math.sqrt(rawX * rawX + rawY * rawY)};
 
+        lastThetaValue = polarCoords[0];
+
         if (polarCoords[1] > 1) {
             polarCoords[1] = 1;
         }
@@ -73,7 +77,7 @@ public class PolarJoystickFilter {
      */
     private double[] withDead(double[] polarCoords) {
         if(polarCoords[1] < config.deadzone) {
-            return new double[] {polarCoords[0], 0};
+            return new double[] {lastThetaValue, 0};
         }
         else {
             return polarCoords;
