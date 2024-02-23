@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Speaker To Note 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1 To Note 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 To Note 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Score 4 Speaker",
+  "choreoAuto": false
+}
