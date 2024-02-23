@@ -5,6 +5,8 @@
 package frc.slicelibs;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import frc.slicelibs.util.config.JoystickFilterConfig;
 
 /** 
@@ -18,6 +20,10 @@ public class PolarJoystickFilter {
     double lastInput;
     SlewRateLimiter slewRateLimiter;
 
+    ShuffleboardTab filterTab;
+
+    double lastThetaValue;
+
     public PolarJoystickFilter(JoystickFilterConfig config) {
 
         this.config = config;
@@ -25,6 +31,7 @@ public class PolarJoystickFilter {
         lastInput = 0;
 
         slewRateLimiter = new SlewRateLimiter(config.maxAcceleration);
+
     }
 
     /**
@@ -42,6 +49,8 @@ public class PolarJoystickFilter {
         double[] polarCoords = {
             Math.atan2(rawY, rawX),
             Math.sqrt(rawX * rawX + rawY * rawY)};
+
+        lastThetaValue = polarCoords[0];
 
         if (polarCoords[1] > 1) {
             polarCoords[1] = 1;
@@ -68,7 +77,7 @@ public class PolarJoystickFilter {
      */
     private double[] withDead(double[] polarCoords) {
         if(polarCoords[1] < config.deadzone) {
-            return new double[] {0, 0};
+            return new double[] {lastThetaValue, 0};
         }
         else {
             return polarCoords;

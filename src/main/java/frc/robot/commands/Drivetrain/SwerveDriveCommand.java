@@ -12,14 +12,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveCommand extends Command {
   /** Creates a new SwerveDriveCommand. */
   private final Drivetrain m_drivetrain;
 
-  private final GenericHID m_driverController;
+  private final PS4Controller m_driverController;
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
   private final boolean m_isOpenLoop;
@@ -27,7 +28,7 @@ public class SwerveDriveCommand extends Command {
 
   private final PIDController rotationController;
 
-  public SwerveDriveCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
+  public SwerveDriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -46,7 +47,7 @@ public class SwerveDriveCommand extends Command {
         Constants.OperatorConstants.driveExponentPercent));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.5,
+        0.85,
         Constants.OperatorConstants.turnExponent,
         Constants.OperatorConstants.turnExponentPercent));
 
@@ -66,13 +67,15 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+    double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
-    double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-    double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+    double translationX = translation[0] * m_drivetrain.maxLinearVelocity;
+    double translationY = translation[1] * m_drivetrain.maxLinearVelocity;
 
-    double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY;
+    double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
     double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
+
+    SmartDashboard.putNumber("Rotational Speed", rotationFF);
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),

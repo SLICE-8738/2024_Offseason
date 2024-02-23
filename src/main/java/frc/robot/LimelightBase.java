@@ -11,37 +11,38 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Class for interfacing with a Limelight connected to NetworkTables. */
-public class LimelightTable {
+public class LimelightBase extends SubsystemBase {
 
-  private final NetworkTable table;
+  protected final NetworkTable table;
   
-  private double targetDetected;
+  protected double targetDetected;
 
-  private double targetXOffset;
-  private double targetYOffset;
+  protected double targetXOffset;
+  protected double targetYOffset;
 
-  private double[] currentBotPoseBlue = new double[0];
-  private double[] lastBotPoseBlue = new double[6];
-  private double[] currentRobotTargetSpacePose = new double[6];
-  private double[] lastRobotTargetSpacePose = new double[6];
-  private double[] currentTargetCameraSpacePose = new double[6];
-  private double[] lastTargetCameraSpacePose = new double[6];
+  protected static double[] currentBotPoseBlue = new double[0];
+  protected double[] lastBotPoseBlue = new double[6];
+  protected double[] currentRobotTargetSpacePose = new double[6];
+  protected double[] lastRobotTargetSpacePose = new double[6];
+  protected double[] currentTargetCameraSpacePose = new double[6];
+  protected static double[] lastTargetCameraSpacePose = new double[6];
 
-  private double currentAprilTagID;
-  private double lastAprilTagID;
+  protected double currentAprilTagID;
+  protected double lastAprilTagID;
 
-  private final NetworkTableEntry ledMode;
-  private final NetworkTableEntry cameraMode;
-  private final NetworkTableEntry pipeline;
+  protected final NetworkTableEntry ledMode;
+  protected final NetworkTableEntry cameraMode;
+  protected final NetworkTableEntry pipeline;
 
   /**
    * Creates a new Limelight.
    * 
    * @param tableKey The key/name assigned to the desired Limglight on NetworkTables.
    */
-  public LimelightTable(String tableKey) {
+  public LimelightBase(String tableKey) {
     
     table = NetworkTableInstance.getDefault().getTable(tableKey);
 
@@ -51,8 +52,8 @@ public class LimelightTable {
 
   }
 
-  /** Updates vision data from AprilTags. */
-  public void update() {
+  @Override
+  public void periodic() {
 
     targetDetected = table.getEntry("tv").getDouble(0);
 
@@ -122,9 +123,9 @@ public class LimelightTable {
    * @return The current robot pose with the origin at the right-hand side of the blue alliance driverstation
    *         being received if any. Null if received pose is empty.
    */
-  public Pose2d getCurrentBotPoseBlue() {
+  public static Pose2d getCurrentBotPoseBlue() {
       
-    double[] currentBotPoseBlue = this.currentBotPoseBlue;
+    double[] currentBotPoseBlue = LimelightBase.currentBotPoseBlue;
  
     if(currentBotPoseBlue.length != 0) {
 
@@ -153,7 +154,7 @@ public class LimelightTable {
    * @return The last received non-empty camera pose with the target as the origin if any.
    *         All-zero pose if none has been received yet.
    */
-  public Pose3d getTargetCameraSpacePose() {
+  public static Pose3d getTargetCameraSpacePose() {
 
     return new Pose3d(lastTargetCameraSpacePose[0], lastTargetCameraSpacePose[1], lastTargetCameraSpacePose[2], new Rotation3d(lastTargetCameraSpacePose[3], lastTargetCameraSpacePose[4], lastTargetCameraSpacePose[5]));
 

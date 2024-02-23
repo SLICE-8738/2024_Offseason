@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import frc.robot.*;
 
+//import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+//import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.*;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -18,10 +20,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.units.Measure;
+//import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 
 import java.util.List;
 
+//import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -36,10 +41,6 @@ public class Drivetrain extends SubsystemBase {
 
   public final Field2d m_field2d;
 
-  private final Timer autoTrajectoryTimer;
-
-  private Trajectory currentAutoTrajectory;
-
   private Rotation2d fieldOrientedOffset;
 
   public double speedPercent;
@@ -47,8 +48,10 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d angle = new Rotation2d();
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
+  public double maxLinearVelocity = 4.5;
+  public double maxAngularVelocity = 7;
 
-  private final Limelight drivetrainLimelight;
+  //private final SysIdRoutine sysIdDriveRoutine;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -68,8 +71,6 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d = new Field2d();
 
-    autoTrajectoryTimer = new Timer();
-
     // Creates and pushes Field2d to SmartDashboard.
     SmartDashboard.putData(m_field2d);
 
@@ -77,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getRotation2d(), 
       getPositions(), 
-      new Pose2d(8.28, 4, Rotation2d.fromDegrees(0)));
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -91,7 +92,15 @@ public class Drivetrain extends SubsystemBase {
     testModuleChooser.addOption("Right Front", swerveMods[2]);
     testModuleChooser.addOption("Right Back", swerveMods[3]);
 
-    drivetrainLimelight = new Limelight("limelight-slice");
+    /*sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
+      (volts) -> {
+        for(SwerveModule mod : swerveMods) {
+          mod.setVolts(volts.in(Units.Volts), 0);
+        }
+      },
+      null,
+      this 
+    ));*/
 
   }
 
@@ -102,11 +111,6 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
 
     m_field2d.setRobotPose(getPose());
-
-    SmartDashboard.putNumber("Left Front Distance", getPositions()[0].distanceMeters);
-    SmartDashboard.putNumber("Left Back Distance", getPositions()[1].distanceMeters);
-    SmartDashboard.putNumber("Right Front Distance", getPositions()[2].distanceMeters);
-    SmartDashboard.putNumber("Right Back Distance", getPositions()[3].distanceMeters);
 
   }
 
@@ -153,6 +157,26 @@ public class Drivetrain extends SubsystemBase {
     for(SwerveModule mod : swerveMods) {
 
       mod.setAngleIdleMode(enableBrakeMode);
+
+    }
+
+  }
+
+  public void setDrivePID(double kP, double kI, double kD) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setDrivePID(kP, kI, kD);
+
+    }
+
+  }
+
+  public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setAnglePIDF(kP, kI, kD, kFF);
 
     }
 
@@ -232,41 +256,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Resets and starts a timer in order to provide a time
-   * since the beginning of the trajectory to sample from.
-   */
-  public void startAutoTrajectoryTimer() {
-
-    autoTrajectoryTimer.reset();
-    autoTrajectoryTimer.start();
-
-  }
-
-  /**
-   * Sets the auto trajectory used to sample the state at each time step from.
-   * 
-   * @param trajectory The current auto trajectory to sample from.
-   */
-  public void setCurrentAutoTrajectory(Trajectory trajectory) {
-
-    currentAutoTrajectory = trajectory;
-
-  }
-
-  /**
-   * Samples and obtains the rotation at the current time step of the current auto
-   * trajectory.
-   * 
-   * @return The rotation of the robot of at the current time step of the current
-   *         auto trajectory.
-   */
-  public Rotation2d getAutoTrajectoryRotation() {
-
-    return currentAutoTrajectory.sample(autoTrajectoryTimer.get()).poseMeters.getRotation();
-
-  }
-
-  /**
    * Updates the drivetrain odometry object to the robot's current position on the
    * field.
    * 
@@ -275,18 +264,18 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d updateOdometry() {
 
     Pose2d odometryPose = m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
-    Pose2d visionPose = drivetrainLimelight.getCurrentBotPoseBlue();
+    Pose2d visionPose = ShooterLimelight.getCurrentBotPoseBlue();
 
     if(visionPose != null) {
 
       Transform2d difference = odometryPose.minus(visionPose);
-    
+      
       if(Math.hypot(difference.getX(), difference.getY()) <= 1) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
       }
-
+      
     }
 
     return m_swerveDrivetrainOdometry.getEstimatedPosition();
@@ -461,15 +450,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Obtains and returns the current pitch of the robot from -180 to 180 degrees,
-   * with an offset of 1 degree from the gyro object.
+   * Obtains and returns the current pitch of the robot from -180 to 180 degrees from the gyro object.
    * 
-   * @return The current pitch of the robot from -180 to 180 degrees, with an
-   *         offset of 1 degree.
+   * @return The current pitch of the robot from -180 to 180 degrees.
    */
   public double getPitch() {
 
-    return navXGyro.getPitch() + 1;
+    return navXGyro.getPitch();
 
   }
 
@@ -482,7 +469,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getRoll() {
 
-    return navXGyro.getRoll() + 1.7;
+    return navXGyro.getRoll();
 
   }
 
@@ -593,6 +580,16 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public void setDriveVolts(Measure<Voltage> volts) {
+
+    for(SwerveModule mod : swerveMods) {
+
+      mod.setVolts(volts.magnitude(), 0);
+
+    }
+
+  }
+
   /**
    * Sets all drivetrain swerve modules to states with speeds of 0 and the current
    * angles of the modules.
@@ -607,4 +604,16 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-}
+  /*public Command getSysIdDriveQuasistatic(Direction direction) {
+
+    return sysIdDriveRoutine.quasistatic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+
+  }
+
+  public Command getSysIdDriveDynamic(Direction direction) {
+
+    return sysIdDriveRoutine.dynamic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+
+  }*/
+
+} 

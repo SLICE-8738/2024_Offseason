@@ -1,11 +1,18 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+
 /**
  * A class for methods for calculating shooter trajectories
  */
 public final class ShooterMath {
     
   private static final double OOMF = 2;
+
+  private static final ShuffleboardTab shooterTestingTab = Shuffleboard.getTab("Shooter Testing");
+  public static final SimpleWidget multiplierWidget = shooterTestingTab.add("Velocity Multiplier", 0);
 
     public static class ShotDetails {
 
@@ -51,7 +58,13 @@ public final class ShooterMath {
         }
 
         public double getFlywheelVelocity() {
-            return getLaunchVelocity() * (15 * 39.37) / Math.PI;
+            double firstVelocity = getLaunchVelocity() * (15 * 39.37) / Math.PI;
+            return firstVelocity * getMultiplier(firstVelocity);
+        }
+
+        private double getMultiplier(double originalVelocity) {
+            return 0.00000267806 * Math.pow(originalVelocity, 2) + -0.00839714 * originalVelocity + 8.42241;
+            //return multiplierWidget.getEntry().getDouble(0);
         }
     }
 

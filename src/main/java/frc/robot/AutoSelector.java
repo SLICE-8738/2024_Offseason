@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,9 +32,9 @@ public class AutoSelector {
 
     public enum StartingPosition {
 
-        LEFT("Left"),
+        AMP_SIDE("Amp Side"),
         MIDDLE("Middle"),
-        RIGHT("Right");
+        SOURCE_SIDE("Source Side");
 
         public final String value;
 
@@ -47,7 +48,11 @@ public class AutoSelector {
 
     public enum DesiredMode {
 
-        TEST_PATH_MODE("Test Path Mode");
+        TEST_PATH_MODE("Test Path"),
+        SCORE_4_SPEAKER("Score 4 Speaker"),
+        SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker"),
+        SCORE_3_SPEAKER("Score 3 Speaker"),
+        SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker");
 
         public final String value;
 
@@ -65,8 +70,7 @@ public class AutoSelector {
     public SendableChooser<StartingPosition> startingPositionChooser;
     public SendableChooser<DesiredMode> modeChooser;
 
-    private Optional<PathPlannerAuto> autoMode = Optional.empty();
-    private String autoName;
+    private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
 
     private Pose2d initialAutoPose;
 
@@ -82,15 +86,19 @@ public class AutoSelector {
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
-        startingPositionChooser.setDefaultOption("Left", StartingPosition.LEFT);
+        startingPositionChooser.setDefaultOption("Amp Side", StartingPosition.AMP_SIDE);
 
         startingPositionChooser.addOption("Middle", StartingPosition.MIDDLE);
-        startingPositionChooser.addOption("Right", StartingPosition.RIGHT);
+        startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        //Add autonomous modes here with modeChooser.setDefaultOption() and modeChooser.addOption()
-        modeChooser.setDefaultOption("Test Path", DesiredMode.TEST_PATH_MODE);
+        modeChooser.setDefaultOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
+
+        modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER.value, DesiredMode.SCORE_3_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,
@@ -98,15 +106,15 @@ public class AutoSelector {
             m_drivetrain::getChassisSpeeds,
             m_drivetrain::setChassisSpeeds,
             new HolonomicPathFollowerConfig(
-                new PIDConstants(Constants.kAutonomous.kPTranslation),
-                new PIDConstants(Constants.kAutonomous.kPRotation),
-                Constants.kAutonomous.kMaxVelocityMetersPerSecond,
+                new PIDConstants(Constants.kDrivetrain.TRANSLATION_KP),
+                new PIDConstants(Constants.kDrivetrain.ROTATION_KP),
+                Constants.kDrivetrain.MAX_MODULE_VELOCITY,
                 Constants.kDrivetrain.DRIVE_BASE_RADIUS,
                 new ReplanningConfig(false, false)),
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        //Add custom commands to use in PathPlanner autos here with NamedCommands.registerCommand()
+        //NamedCommands.registerCommand("Align With Speaker", new AlignWithSpeakerCommand(m_drivetrain));
         
     }
 
@@ -120,9 +128,9 @@ public class AutoSelector {
             System.out.println("Auto selection changed, updating creator; Starting Position: " + startingPosition.name()
                     + ", Desired Mode: " + desiredMode.name());
 
-            autoMode = getAutoModeForParams(startingPosition, desiredMode);
+            autoRoutine = getAutoRoutineForParams(startingPosition, desiredMode);
 
-            updateInitialAutoPoseOffset();
+            updateInitialAutoPoseOffset(desiredMode);
 
         }
 
@@ -131,56 +139,36 @@ public class AutoSelector {
 
     }
 
-    private Optional<PathPlannerAuto> getAutoModeForParams(StartingPosition position, DesiredMode mode) {
+    private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        switch (mode) {
+        try {
 
-            //Uncomment and replace this code with autonomous mode names
-            /*case SCORE_ONE_HIGH_ROW:
-                autoName = "Score One High Row";
-                break;
-            case SCORE_ONE_HIGH_ROW_AND_MOBILITY:
-                autoName = "Score One High Row And Mobility";
-                break;
-            case SCORE_ONE_HIGH_ROW_AND_ENGAGE:
-                autoName = "Score One High Row And Engage";
-                break;
-            case SCORE_ONE_HIGH_ROW_MOBILITY_AND_ENGAGE:
-                autoName = "Score One High Row Mobility And Engage";
-                break;
-            case SCORE_ONE_HIGH_ROW_PICK_UP_AND_ENGAGE:
-                autoName = "Score One High Row Pick Up And Engage";
-                break;
-            case SCORE_TWO_HIGH_AND_MID_ROW:
-                autoName = "Score Two High And Mid Row";
-                break;
-            case SCORE_TWO_HIGH_AND_MID_ROW_AND_ENGAGE:
-                autoName = "Score Two High And Mid Row And Engage";
-                break;*/
-            case TEST_PATH_MODE:
-                autoName = "Test Auto";
-                break;
-            default:
-                System.err.println("No valid auto mode found for " + mode);
-                return Optional.empty();
+            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
 
         }
+        catch(Exception e) {
 
-        return Optional.of(new PathPlannerAuto(autoName));
+            DriverStation.reportError(
+                "Could not construct a valid PathPlannerauto for selected starting position and mode. Error: " + e.toString() + " " + e.getMessage(), true);
+            return Optional.empty();
 
+        }
+ 
     }
 
-    public void updateInitialAutoPoseOffset() {
+    public void updateInitialAutoPoseOffset(DesiredMode mode) {
 
-        Pose2d botPose = m_drivetrain.getPose();
+        Pose2d currentPose = m_drivetrain.getPose();
 
-        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(autoName);
+        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.value);
 
-        if (botPose != null && initialAutoPose != null) {
+        if (currentPose != null && initialAutoPose != null) {
 
-            initialAutoPoseXOffset = Math.abs(initialAutoPose.getX() - botPose.getX());
-            initialAutoPoseYOffset = Math.abs(initialAutoPose.getY() - botPose.getY());
-            initialAutoPoseRotationOffset = initialAutoPose.getRotation().getDegrees() - botPose.getRotation().getDegrees();
+            Transform2d offset = initialAutoPose.minus(currentPose);
+
+            initialAutoPoseXOffset = offset.getX();
+            initialAutoPoseYOffset = offset.getY();
+            initialAutoPoseRotationOffset = offset.getRotation().getDegrees();
 
         }
 
@@ -188,16 +176,16 @@ public class AutoSelector {
 
     public void reset() {
 
-        autoMode = Optional.empty();
+        autoRoutine = Optional.empty();
         storedDesiredMode = null;
 
         initialAutoPose = null;
 
     }
 
-    public PathPlannerAuto getAutoMode() {
+    public PathPlannerAuto getAutoRoutine() {
 
-        return autoMode.get();
+        return autoRoutine.get();
 
     }
 
@@ -205,7 +193,7 @@ public class AutoSelector {
 
         if (storedDesiredMode != null) {
 
-            return storedDesiredMode.name();
+            return storedDesiredMode.value;
 
         } else {
 
@@ -215,17 +203,11 @@ public class AutoSelector {
 
     }
 
-    public static StartingPosition getStoredStartingPosition() {
-
-        return storedStartingPosition;
-
-    }
-
-    public String getStoredStartingPositionName() {
+    public String getStoredStartingPosition() {
 
         if (storedStartingPosition != null) {
 
-            return storedStartingPosition.name();
+            return storedStartingPosition.value;
 
         } else {
 

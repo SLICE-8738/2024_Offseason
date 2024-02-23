@@ -92,4 +92,26 @@ public final class REVConfigs {
         Constants.kDrivetrain.ANGLE_FRAME_1_PERIOD_MS, 
         Constants.kDrivetrain.ANGLE_FRAME_2_PERIOD_MS);
 
+    public static final SparkMaxConfiguration shooterSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kShooter.IDLE_MODE, 
+        Constants.kShooter.INVERT, 
+        false, 
+        12, 
+        0.0, 
+        0.0, 
+        30, 
+        Constants.kShooter.FRAME_1_PERIOD_MS, 
+        Constants.kShooter.FRAME_2_PERIOD_MS);
+
+    public static final SparkMaxConfiguration intakeSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kIntake.ENTRANCE_IDLE_MODE, 
+        Constants.kIntake.ENTRANCE_INVERT, 
+        false, 
+        12, 
+        0.0, 
+        0.0, 
+        20, 
+        Constants.kIntake.ENTRANCE_FRAME_1_PERIOD_MS, 
+        Constants.kIntake.ENTRANCE_FRAME_2_PERIOD_MS);
+
 }

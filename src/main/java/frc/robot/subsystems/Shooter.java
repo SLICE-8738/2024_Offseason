@@ -15,11 +15,13 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,18 +30,20 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kShooter;
+import frc.slicelibs.util.config.REVConfigs;
+import frc.slicelibs.util.factories.SparkMaxFactory;
 
 /**
  * This subsystem controls the speed of the flywheel and the angle of the shooter. 
  */
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private CANSparkMax flywheelTop, flywheelBottom; // Create the flywheel motor
-  private CANSparkMax aimMotor; // Create the aiming motor
+  private CANSparkMax flywheelTop, flywheelBottom; // Create the flywheel motors
+  private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
   private RelativeEncoder flyTopEncoder, flyBottomEncoder; // Encoder for both...
-  private RelativeEncoder aimEncoder; // ...
+  private AbsoluteEncoder aimEncoder; // ...
   private SparkPIDController flyTopPID, flyBottomPID; // PIDs for both...
-  private SparkPIDController aimPID; // ...
+  private SparkPIDController aimPIDLeft, aimPIDRight; // ...
   private SimpleMotorFeedforward flyFeedforward;
   private double speedTarget; // Target speed of flywheel
   private double angleTarget; // Target angle of shooter
@@ -53,18 +57,23 @@ public class Shooter extends SubsystemBase {
     differential = shooterTesting.add("Differential Testing: Top Flywheel", 0);
 
     // Define the above objects
-    flywheelTop = new CANSparkMax(18, MotorType.kBrushless);
-    flywheelBottom = new CANSparkMax(17, MotorType.kBrushless);
+    flywheelTop = SparkMaxFactory.createSparkMax(10, REVConfigs.shooterSparkMaxConfig);
+    flywheelBottom = SparkMaxFactory.createSparkMax(11, REVConfigs.shooterSparkMaxConfig);
+    aimMotorLeft = new CANSparkMax(12, MotorType.kBrushless);
+    aimMotorLeft = new CANSparkMax(9, MotorType.kBrushless);
 
-    aimMotor = new CANSparkMax(0, MotorType.kBrushless);
     flyTopEncoder = flywheelTop.getEncoder();
     flyBottomEncoder = flywheelBottom.getEncoder();
-    aimEncoder = aimMotor.getEncoder();
+    aimEncoder = aimMotorLeft.getAbsoluteEncoder(Type.kDutyCycle);
     flyTopPID = flywheelTop.getPIDController();
     flyBottomPID = flywheelBottom.getPIDController();
-    aimPID = aimMotor.getPIDController();
+    aimPIDLeft = aimMotorLeft.getPIDController();
+    aimPIDRight = aimMotorRight.getPIDController();
     flyFeedforward = new SimpleMotorFeedforward(0, kShooter.FLYWHEEL_FEED_FORWARD);
-    
+
+    aimEncoder.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
+    aimEncoder.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);
+
     // Set PID of flywheel and aim motors.
     flyTopPID.setP(kShooter.FLYWHEEL_KP);
     flyTopPID.setI(kShooter.FLYWHEEL_KI);
@@ -74,11 +83,14 @@ public class Shooter extends SubsystemBase {
     flyBottomPID.setI(kShooter.FLYWHEEL_KI);
     flyBottomPID.setD(kShooter.FLYWHEEL_KD);
 
-    aimPID.setP(kShooter.AIM_KP);
-    aimPID.setI(kShooter.AIM_KI);
-    aimPID.setD(kShooter.AIM_KD);
+    aimPIDLeft.setP(kShooter.AIM_KP);
+    aimPIDLeft.setI(kShooter.AIM_KI);
+    aimPIDLeft.setD(kShooter.AIM_KD);
 
-    aimEncoder.setPosition(0);
+    aimPIDRight.setP(kShooter.AIM_KP);
+    aimPIDRight.setI(kShooter.AIM_KI);
+    aimPIDRight.setD(kShooter.AIM_KD);
+
   }
 
   /**
@@ -118,7 +130,16 @@ public class Shooter extends SubsystemBase {
    */
   public void aimShooter(double angle){
     angleTarget = angle;
-    aimPID.setReference(angle, ControlType.kPosition); // Move the shooter to the target angle.
+    // Move the shooter to the target angle 
+    aimPIDLeft.setReference(angle, ControlType.kPosition);
+    aimPIDLeft.setReference(angle, ControlType.kPosition);
+  }
+
+  /**
+   * @return The current angle of the shooter pivot in degrees.
+   */
+  public double getAngle() {
+    return aimEncoder.getPosition();
   }
 
   /**
@@ -148,7 +169,7 @@ public class Shooter extends SubsystemBase {
    * @return True if at the correct angle, false otherwise.
    */
   public boolean detectShooterAngle(double acceptableError){
-    double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
+    double currentAngle = getAngle(); // Get the current angle of the shooter
     if (Math.abs(angleTarget - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
@@ -156,7 +177,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isStowed(double acceptableError) {
-    double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
+    double currentAngle = getAngle(); // Get the current angle of the shooter
     if (Math.abs(Constants.kShooter.SHOOTER_STOW_ANGLE - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }

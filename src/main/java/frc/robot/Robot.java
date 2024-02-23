@@ -34,6 +34,9 @@ public class Robot extends TimedRobot {
 
     Timer.delay(0.2);
     SparkMaxFactory.flashAll();
+
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
   }
 
   /**
@@ -54,10 +57,19 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+
+    m_robotContainer.m_autoSelector.reset();
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

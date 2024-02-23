@@ -48,7 +48,7 @@ public class AlignWithSpeakerCommand extends Command {
         Constants.OperatorConstants.driveExponent,
         Constants.OperatorConstants.driveExponentPercent));
 
-    rotationController = new PIDController(Constants.kAutonomous.kPSpeakerAlignRotation, Constants.kAutonomous.kISpeakerAlignRotation, Constants.kAutonomous.kDSpeakerAlignRotation);
+    rotationController = new PIDController(Constants.kDrivetrain.kPSpeakerAlignRotation, Constants.kDrivetrain.kISpeakerAlignRotation, Constants.kDrivetrain.kDSpeakerAlignRotation);
     rotationController.enableContinuousInput(0, 360);
   }
 

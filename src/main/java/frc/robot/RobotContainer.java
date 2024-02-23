@@ -4,9 +4,20 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+//import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Intake.SpinIntakeCommand;
+import frc.robot.commands.Shooter.PrepareShooterCommand;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,11 +27,52 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
+  private static final PS4Controller driverController = Button.controller1;
+
+  // ==========================
+  // Subsystems
+  // ==========================
+
+  public final Drivetrain m_drivetrain = new Drivetrain();
+  public final Shooter m_shooter = new Shooter();
+  public final Intake m_intake = new Intake();
+  //public final Indexer m_indexer = new Indexer();
+  public final ShooterLimelight m_limelights = new ShooterLimelight();
+
+  public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain);
+  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain/*, m_indexer*/, m_autoSelector);
+
+  // ==========================
+  // Commands
+  // ==========================
+
+  /* Drivetrain */
+  public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true, true);
+  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false, true);
+  public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
+  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+  public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  //public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
+  //public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
+  //public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
+  //public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
+  //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
+
+  /* Shooter */
+  public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter);
+
+  /* Intake */
+  public final SpinIntakeCommand m_spinIntake = new SpinIntakeCommand(m_intake, m_shooter);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     // Configure the trigger bindings
     configureBindings();
-    System.out.println(ShooterMath.getShot(3));
+
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+
   }
 
   /**
@@ -34,6 +86,22 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    /* Drivetrain Bindings */
+    Button.square.whileTrue(m_setDrivePercentOutput);
+    Button.triangle.onTrue(m_resetFieldOrientedHeading);
+    Button.controlPadRight1.whileTrue(m_pathfindToSource);
+    Button.controlPadLeft1.whileTrue(m_pathfindToAmp);
+    //Button.rightBumper1.and(Button.triangle).onTrue(m_driveQuasistaicForward);
+    //Button.rightBumper1.and(Button.square).onTrue(m_driveQuasistaicReverse);
+    //Button.rightBumper1.and(Button.cross).onTrue(m_driveDynamicForward);
+    //Button.rightBumper1.and(Button.circle).onTrue(m_driveDynamicReverse);
+
+    /* Shooter Bindings */
+    Button.x.whileTrue(m_prepareShooter);
+
+    /* Intake Bindings */
+    Button.b.toggleOnTrue(m_spinIntake);
+
   }
 
   /**
@@ -42,6 +110,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+
+    return m_autoSelector.getAutoRoutine();
+    
   }
+
 }

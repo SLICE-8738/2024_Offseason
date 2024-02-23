@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.Map;
 
-import au.grapplerobotics.LaserCan;
 //import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -14,21 +13,23 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
 public class ShuffleboardData {
 
     private final ShuffleboardTab driverTab, debugTab, modulesTab, autoTab;
 
-    public ShuffleboardData(Drivetrain drivetrain, AutoSelector autoSelector, Indexer indexer) {
+    public ShuffleboardData(Drivetrain drivetrain/*, Indexer indexer*/, AutoSelector autoSelector) {
 
         driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
         modulesTab = Shuffleboard.getTab("Modules Tab");
-        autoTab = Shuffleboard.getTab("Auto Tab");
+        autoTab = Shuffleboard.getTab("Autonomous");
 
         new DrivetrainData(drivetrain);
+        //new IndexerData(indexer);
         new AutoData(autoSelector);
-        new IndexerData(indexer);
     }
 
     public class DrivetrainData {
@@ -100,12 +101,6 @@ public class ShuffleboardData {
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(0, 0).
             withSize(2, 1);
-            //Displays the current roll of the robot in degrees on Shuffleboard
-            debugTab.addDouble("Drivetrain Roll", drivetrain::getRoll).
-            withWidget(BuiltInWidgets.kDial).
-            withProperties(Map.of("Min", -180, "Max", 180)).
-            withPosition(7, 0).
-            withSize(2, 1);
                 
             //Displays the current position of the robot on the field on Shuffleboard
             debugTab.add(drivetrain.m_field2d).
@@ -123,8 +118,63 @@ public class ShuffleboardData {
             withPosition(5, 0).
             withSize(3, 3);
 
+            //Adds a tuner for the drive motor PID gains to Shuffleboard
+            ShuffleboardTuner.create(
+                (values) -> {
+          
+                  drivetrain.setDrivePID(values[0], values[1], values[2]);
+          
+                },
+                new String[] {"kP", "kI", "kD"},
+                "Drive Motor PID");
+
+            //Adds a tuner for the angle motor PID gains to Shuffleboard
+            ShuffleboardTuner.create(
+                (values) -> {
+
+                    drivetrain.setAnglePIDF(values[0], values[1], values[2], values[3]);
+
+                },
+                new String[] {"kP", "kI", "kD", "kFF"},
+                "Angle Motor PIDF");
+
+            //Adds a tuner for the maximum velocities to Shuffleboard
+            ShuffleboardTuner.create(
+                (values) -> {
+
+                    drivetrain.maxLinearVelocity = values[0];
+                    drivetrain.maxAngularVelocity = values[1];
+
+                },
+                new String[] {"Max Linear", "Max Angular"},
+                "Drivetrain Max Velocities");
+
         }
 
+    }
+
+    public class ShooterData {
+
+        public ShooterData(Shooter shooter) {
+
+            //Displays the current angle of the shooter pivot
+            debugTab.addDouble("Shooter Angle", shooter::getAngle).
+            withPosition(0, 3).
+            withSize(2, 1);
+            
+        }
+
+    }
+
+    public class IndexerData {
+
+        public IndexerData(Indexer indexer) {
+            //Displays the laserCan distance from the laser to an object on Shuffleboard
+            debugTab.addDouble("LaserCAN Distance:", () -> indexer.getLaserCanDistance()).
+            withPosition(7,2).
+            withSize(2,1);
+
+        }
     }
 
     public class AutoData {
@@ -141,7 +191,7 @@ public class ShuffleboardData {
             withPosition(2, 1).
             withSize(2, 1);
             //Displays the robot starting position selected on the sendable chooser on Shuffleboard
-            autoTab.addString("Selected Starting Position", autoSelector::getStoredStartingPositionName).
+            autoTab.addString("Selected Starting Position", autoSelector::getStoredStartingPosition).
             withPosition(5, 1).
             withSize(2, 1);
 
@@ -160,17 +210,6 @@ public class ShuffleboardData {
 
         }
 
-    }
-
-    public class IndexerData {
-
-        public IndexerData(Indexer indexer) {
-            //Displays the laserCan distance from the laser to an object on Shuffleboard
-            debugTab.addDouble("LaserCAN Distance:", () -> indexer.getLaserCanDistance()).
-            withPosition(7,2).
-            withSize(2,1);
-
-        }
     }
 
 }
