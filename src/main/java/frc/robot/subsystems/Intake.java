@@ -8,17 +8,18 @@ import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
 /**
  * An intake pulls in the ring (or "note") that will later be launched.
  */
 public class Intake extends SubsystemBase {
-  private CANSparkMax intakeEntrance/*, intakeRamp*/;
+  private CANSparkMax intakeEntrance, intakeRamp;
   /** Creates a new Intake. */
   public Intake() {
-    this.intakeEntrance = SparkMaxFactory.createSparkMax(13, REVConfigs.intakeSparkMaxConfig);
-    //this.intakeRamp = new CANSparkMax(0, MotorType.kBrushless);
+    this.intakeEntrance = SparkMaxFactory.createSparkMax(13, REVConfigs.intakeEntranceSparkMaxConfig);
+    this.intakeRamp = SparkMaxFactory.createSparkMax(14, REVConfigs.intakeRampSparkMaxConfig);
   }
 
   /**
@@ -27,7 +28,9 @@ public class Intake extends SubsystemBase {
    */
   public void runIntake(double speed) {
     intakeEntrance.set(speed);
-    //intakeRamp.set(speed);
+    if(getEntranceOutputCurrent() < Constants.kIntake.ENTRANCE_CURRENT_THRESHOLD) {
+      intakeRamp.set(speed * 1.5);
+    }
   }
 
   /**
@@ -35,11 +38,15 @@ public class Intake extends SubsystemBase {
    * @param speed
    */
   public void runRampIntakeOnly(double speed) {
-    //intakeRamp.set(speed);
+    intakeRamp.set(speed);
   }
 
   public void runIntakeEntranceOnly(double speed) {
     intakeEntrance.set(speed);
+  }
+
+  public double getEntranceOutputCurrent() {
+    return intakeEntrance.getOutputCurrent();
   }
 
   @Override

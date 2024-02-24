@@ -8,14 +8,19 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Indexer.NudgeIndexer;
+import frc.robot.commands.Indexer.RunIndexerCommand;
 import frc.robot.commands.Intake.SpinIntakeCommand;
+import frc.robot.commands.Shooter.AimShooterManualCommand;
 import frc.robot.commands.Shooter.PrepareShooterCommand;
 import frc.robot.subsystems.*;
 
@@ -27,7 +32,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
 
-  private static final PS4Controller driverController = Button.controller1;
+  private final PS4Controller driverController = Button.controller1;
+  private final GenericHID operatorController = Button.controller2;
 
   // ==========================
   // Subsystems
@@ -35,12 +41,12 @@ public class RobotContainer {
 
   public final Drivetrain m_drivetrain = new Drivetrain();
   public final Shooter m_shooter = new Shooter();
-  public final Intake m_intake = new Intake();
-  //public final Indexer m_indexer = new Indexer();
-  public final ShooterLimelight m_limelights = new ShooterLimelight();
+  public final Intake m_intake = new Intake();  
+  public final Indexer m_indexer = new Indexer();
+  public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
 
   public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain);
-  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain/*, m_indexer*/, m_autoSelector);
+  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter, m_intake/*, m_indexer*/, m_autoSelector);
 
   // ==========================
   // Commands
@@ -61,9 +67,14 @@ public class RobotContainer {
 
   /* Shooter */
   public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter);
+  public final AimShooterManualCommand m_aimShooterManual = new AimShooterManualCommand(m_shooter, operatorController);
 
   /* Intake */
   public final SpinIntakeCommand m_spinIntake = new SpinIntakeCommand(m_intake, m_shooter);
+
+  /* Indexer */
+  public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.5);
+  public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -71,7 +82,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_shooter.setDefaultCommand(m_aimShooterManual);
 
   }
 
@@ -97,10 +109,14 @@ public class RobotContainer {
     //Button.rightBumper1.and(Button.circle).onTrue(m_driveDynamicReverse);
 
     /* Shooter Bindings */
-    Button.x.whileTrue(m_prepareShooter);
+    Button.x.toggleOnTrue(m_prepareShooter);
 
     /* Intake Bindings */
     Button.b.toggleOnTrue(m_spinIntake);
+
+    /* Indexer Bindings */
+    Button.y.toggleOnTrue(m_runIndexerUp);
+    Button.a.toggleOnTrue(m_runIndexerDown);
 
   }
 

@@ -184,19 +184,23 @@ public final class Constants {
   public static final class kShooter {
 
     /* Idle Mode */
-    public static final IdleMode IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode FLYWHEEL_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode AIM_IDLE_MODE = IdleMode.kBrake;
 
     /* Motor Invert */
     public static final boolean INVERT = false;
 
     /* Status Frame Periods */
     public static final int FRAME_1_PERIOD_MS = 500;
-    public static final int FRAME_2_PERIOD_MS = 200;
+    public static final int FRAME_2_PERIOD_MS = 100;
 
-    public static final double AIM_POSITION_CONVERSION_FACTOR = 360;
+    /* Encoder Conversion Values */
+    public static final double AIM_GEAR_RATIO = (80.0 / 1.0); // 80:1
+
+    public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
 
-    public static final double FLYWHEEL_KP = 0.1;
+    public static final double FLYWHEEL_KP = 0.0001;
     public static final double FLYWHEEL_KI = 0;
     public static final double FLYWHEEL_KD = 0;
     public static final double FLYWHEEL_FEED_FORWARD = 0.002;
@@ -209,7 +213,7 @@ public final class Constants {
     public static final double FLYWHEEL_RPM = 60;
 
     // Stow Angle for picking up game pieces
-    public static final double SHOOTER_STOW_ANGLE = -2.3;
+    public static final double SHOOTER_STOW_ANGLE = 0;
 
     // Shooter Measurements
     public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
@@ -231,15 +235,36 @@ public final class Constants {
 
   public static final class kIntake {
 
-    /* Idle Mode */
+    /* Idle Modes */
     public static final IdleMode ENTRANCE_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode RAMP_IDLE_MODE = IdleMode.kCoast;
 
-    /* Motor Invert */
+    /* Motor Inverts */
     public static final boolean ENTRANCE_INVERT = false;
+    public static final boolean RAMP_INVERT = false;
 
     /* Status Frame Periods */
     public static final int ENTRANCE_FRAME_1_PERIOD_MS = 500;
     public static final int ENTRANCE_FRAME_2_PERIOD_MS = 200;
+
+    public static final int RAMP_FRAME_1_PERIOD_MS = 500;
+    public static final int RAMP_FRAME_2_PERIOD_MS = 200;
+
+    public static final double ENTRANCE_CURRENT_THRESHOLD = 33;
+
+  }
+
+  public static final class kIndexer {
+
+    /* Idle Mode */
+    public static final IdleMode IDLE_MODE = IdleMode.kCoast;
+
+    /* Motor Invert */
+    public static final boolean INVERT = false;
+
+    /* Status Frame Periods */
+    public static final int FRAME_1_PERIOD_MS = 500;
+    public static final int FRAME_2_PERIOD_MS = 200;
 
   }
 

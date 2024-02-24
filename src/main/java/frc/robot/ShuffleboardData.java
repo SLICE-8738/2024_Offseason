@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /** Contains and runs all code needed to display all necessary information on Shuffleboard.*/
@@ -20,7 +21,7 @@ public class ShuffleboardData {
 
     private final ShuffleboardTab driverTab, debugTab, modulesTab, autoTab;
 
-    public ShuffleboardData(Drivetrain drivetrain/*, Indexer indexer*/, AutoSelector autoSelector) {
+    public ShuffleboardData(Drivetrain drivetrain, Shooter shooter, Intake intake/*, Indexer indexer*/, AutoSelector autoSelector) {
 
         driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
@@ -28,6 +29,8 @@ public class ShuffleboardData {
         autoTab = Shuffleboard.getTab("Autonomous");
 
         new DrivetrainData(drivetrain);
+        new ShooterData(shooter);
+        new IntakeData(intake);
         //new IndexerData(indexer);
         new AutoData(autoSelector);
     }
@@ -104,7 +107,7 @@ public class ShuffleboardData {
                 
             //Displays the current position of the robot on the field on Shuffleboard
             debugTab.add(drivetrain.m_field2d).
-            withPosition(3, 2).
+            withPosition(4, 2).
             withSize(3, 2);
         
             //Displays the feed from the USB camera on Shuffleboard
@@ -157,9 +160,26 @@ public class ShuffleboardData {
 
         public ShooterData(Shooter shooter) {
 
-            //Displays the current angle of the shooter pivot
-            debugTab.addDouble("Shooter Angle", shooter::getAngle).
+            //Displays the current absolute angle of the shooter pivot
+            debugTab.addDouble("Shooter Absolute Angle", shooter::getAbsoluteAngle).
             withPosition(0, 3).
+            withSize(2, 1);
+
+            //Displays the current relative angle of the shooter pivot
+            debugTab.addDouble("Shooter Relative Angle", shooter::getRelativeAngle).
+            withPosition(2, 3).
+            withSize(2, 1);
+            
+        }
+
+    }
+
+    public class IntakeData {
+
+        public IntakeData(Intake intake) {
+
+            debugTab.addDouble("Intake Entrance Current", intake::getEntranceOutputCurrent).
+            withPosition(7, 3).
             withSize(2, 1);
             
         }

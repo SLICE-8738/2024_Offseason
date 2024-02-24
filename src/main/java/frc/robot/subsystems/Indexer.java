@@ -16,6 +16,8 @@ import au.grapplerobotics.LaserCan.Measurement;
 import au.grapplerobotics.LaserCan.RangingMode;
 import au.grapplerobotics.LaserCan.TimingBudget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.slicelibs.util.config.REVConfigs;
+import frc.slicelibs.util.factories.SparkMaxFactory;
 
 public class Indexer extends SubsystemBase {
 
@@ -23,7 +25,7 @@ public class Indexer extends SubsystemBase {
   private CANSparkMax highIndexMotor;
   private LaserCan laser;
   public Indexer() {
-    highIndexMotor = new CANSparkMax(0, MotorType.kBrushless); //creates new motor
+    highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); //creates new motor
     laser = new LaserCan(0); //creates new laserCan
 
     try {

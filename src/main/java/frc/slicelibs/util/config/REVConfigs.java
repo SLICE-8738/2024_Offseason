@@ -46,6 +46,13 @@ public final class REVConfigs {
 
         }
 
+        public SparkMaxConfiguration withInvert(boolean inverted) {
+
+            this.inverted = inverted;
+            return this;
+
+        }
+
     }
 
     public static final SparkMaxConfiguration defaultSparkMaxConfig = new SparkMaxConfiguration(
@@ -92,8 +99,8 @@ public final class REVConfigs {
         Constants.kDrivetrain.ANGLE_FRAME_1_PERIOD_MS, 
         Constants.kDrivetrain.ANGLE_FRAME_2_PERIOD_MS);
 
-    public static final SparkMaxConfiguration shooterSparkMaxConfig = new SparkMaxConfiguration(
-        Constants.kShooter.IDLE_MODE, 
+    public static final SparkMaxConfiguration shooterFlywheelSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kShooter.FLYWHEEL_IDLE_MODE, 
         Constants.kShooter.INVERT, 
         false, 
         12, 
@@ -103,7 +110,18 @@ public final class REVConfigs {
         Constants.kShooter.FRAME_1_PERIOD_MS, 
         Constants.kShooter.FRAME_2_PERIOD_MS);
 
-    public static final SparkMaxConfiguration intakeSparkMaxConfig = new SparkMaxConfiguration(
+    public static final SparkMaxConfiguration shooterAimSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kShooter.AIM_IDLE_MODE, 
+        Constants.kShooter.INVERT, 
+        false, 
+        12, 
+        0.0, 
+        0.0, 
+        30, 
+        Constants.kShooter.FRAME_1_PERIOD_MS, 
+        Constants.kShooter.FRAME_2_PERIOD_MS);
+
+    public static final SparkMaxConfiguration intakeEntranceSparkMaxConfig = new SparkMaxConfiguration(
         Constants.kIntake.ENTRANCE_IDLE_MODE, 
         Constants.kIntake.ENTRANCE_INVERT, 
         false, 
@@ -113,5 +131,27 @@ public final class REVConfigs {
         20, 
         Constants.kIntake.ENTRANCE_FRAME_1_PERIOD_MS, 
         Constants.kIntake.ENTRANCE_FRAME_2_PERIOD_MS);
+
+    public static final SparkMaxConfiguration intakeRampSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kIntake.RAMP_IDLE_MODE, 
+        Constants.kIntake.RAMP_INVERT, 
+        false, 
+        12, 
+        0.0, 
+        0.0, 
+        40, 
+        Constants.kIntake.RAMP_FRAME_1_PERIOD_MS, 
+        Constants.kIntake.RAMP_FRAME_2_PERIOD_MS);
+
+    public static final SparkMaxConfiguration indexerSparkMaxConfig = new SparkMaxConfiguration(
+        Constants.kIndexer.IDLE_MODE, 
+        Constants.kIndexer.INVERT, 
+        false, 
+        12, 
+        0.0, 
+        0.0, 
+        40, 
+        Constants.kIndexer.FRAME_1_PERIOD_MS, 
+        Constants.kIndexer.FRAME_2_PERIOD_MS);
 
 }
