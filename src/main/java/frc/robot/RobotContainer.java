@@ -75,6 +75,7 @@ public class RobotContainer {
   /* Indexer */
   public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.5);
   public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.5);
+  public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -84,6 +85,7 @@ public class RobotContainer {
 
     //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_shooter.setDefaultCommand(m_aimShooterManual);
+    m_indexer.setDefaultCommand(m_manualIndexer);
 
   }
 
