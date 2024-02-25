@@ -24,7 +24,7 @@ public class SpinDownCommand extends Command {
   @Override
   public void initialize() {
     // Set the flywheel speed to 0
-    m_shooter.spinFlywheel(0);
+    m_shooter.spinFlywheels(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

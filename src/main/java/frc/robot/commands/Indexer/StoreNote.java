@@ -35,7 +35,7 @@ public class StoreNote extends Command {
   public void execute() {
     //spins the motors
 
-    indexer.spinIndex(.5);
+    indexer.spinIndex(.3);
     intake.runRampIntakeOnly(.5);
   }
 

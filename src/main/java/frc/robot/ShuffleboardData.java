@@ -117,7 +117,7 @@ public class ShuffleboardData {
             withSize(3, 3);*/
 
             //Displays the feed from the Limelight on Shuffleboard
-            driverTab.addCamera("Limelight", "limelight-slice-1", "http://10.87.38.73:5800").
+            driverTab.addCamera("Limelight", "limelight-shooter-1", "http://10.87.38.41:5800").
             withPosition(5, 0).
             withSize(3, 3);
 

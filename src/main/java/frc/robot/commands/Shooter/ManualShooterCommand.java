@@ -10,14 +10,14 @@ import frc.robot.subsystems.Shooter;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
 
-public class AimShooterManualCommand extends Command {
+public class ManualShooterCommand extends Command {
 
   private final Shooter m_shooter;
   private final GenericHID m_operatorController;
   private final PolarJoystickFilter joystickFilter;
 
   /** Creates a new AimShooterCommand. */
-  public AimShooterManualCommand(Shooter shooter, GenericHID operatorController) {
+  public ManualShooterCommand(Shooter shooter, GenericHID operatorController) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     m_shooter = shooter;
@@ -34,8 +34,9 @@ public class AimShooterManualCommand extends Command {
   @Override
   public void execute() {
 
-    double speed = joystickFilter.filter(-m_operatorController.getRawAxis(1), 0)[0];
-    m_shooter.aimShooterManual(speed);
+    double aimSpeed = joystickFilter.filter(-m_operatorController.getRawAxis(1), 0)[0];
+
+    m_shooter.dutyCycleAimShooter(aimSpeed);
 
   }
 
@@ -43,7 +44,7 @@ public class AimShooterManualCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_shooter.aimShooterManual(0);
+    m_shooter.dutyCycleAimShooter(0);
 
   }
 

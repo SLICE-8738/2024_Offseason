@@ -6,18 +6,17 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
 /**
  * Runs the intake wheels (including the vectoring ramp wheels) in order to pick up a note from the ground
  */
-public class SpinIntakeCommand extends Command {
+public class RunIntakeCommand extends Command {
   private final Intake m_intake;
-  private final Shooter m_shooter;
+  private final double percentOutput;
   /** Creates a new SpinIntakeCommand. */
-  public SpinIntakeCommand(Intake intake, Shooter shooter) {
+  public RunIntakeCommand(Intake intake, double percentOutput) {
     m_intake = intake;
-    m_shooter = shooter;
+    this.percentOutput = percentOutput;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }
@@ -29,20 +28,13 @@ public class SpinIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.runIntake(0.5);
+    m_intake.runIntake(percentOutput);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Check if the shooter is stowed
-    if (m_shooter.isStowed(2)) {
-      // If it is, stop the lower intake wheels but continuing spinning the ramp wheels to send the note into the shooter
-      m_intake.runIntakeEntranceOnly(0);
-    }else {
-      // If it isn't, stop all motors to wait for the shooter to be stowed
-      m_intake.runIntake(0);
-    }
+    m_intake.runIntake(0);
   }
 
   // Returns true when the command should end.

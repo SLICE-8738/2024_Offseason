@@ -52,8 +52,8 @@ public class PrepareShooterCommand extends Command {
     // Sets the flywheel speed and aim angle to the appropriate values 
     originalVelocityWidget.getEntry().setDouble(shotDetails.getFlywheelVelocity());
     double speed = shotDetails.getFlywheelVelocity();
-    m_shooter.spinFlywheel(speed);
-    //m_shooter.aimShooter(shotDetails.getShooterAngle());
+    m_shooter.spinFlywheels(speed);
+    m_shooter.aimShooter(shotDetails.getShooterAngle());
     
     currentAngleWidget.getEntry().setDouble(m_shooter.getAbsoluteAngle());
     desiredSpeedWidget.getEntry().setDouble(speed);
@@ -64,7 +64,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_shooter.stopFlywheel();
+    m_shooter.stopFlywheels();
 
   }
 

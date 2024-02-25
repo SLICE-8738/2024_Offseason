@@ -25,7 +25,7 @@ public class SpinUpCommand extends Command {
   @Override
   public void initialize() {
     // Set the flywheel speed to the appropriate RPM for shooting
-    m_shooter.spinFlywheel(Constants.kShooter.FLYWHEEL_RPM);
+    m_shooter.spinFlywheels(Constants.kShooter.FLYWHEEL_RPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

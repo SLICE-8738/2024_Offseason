@@ -34,7 +34,7 @@ public class SpinFlywheelCommand extends Command {
     Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
     double distanceToSpeaker = currentPosition.getDistance(Constants.kFieldPositions.SPEAKER_POSITION);
     double flywheelVelocity = ShooterMath.getShot(distanceToSpeaker).getFlywheelVelocity();
-    m_shooter.spinFlywheel(flywheelVelocity);
+    m_shooter.spinFlywheels(flywheelVelocity);
   }
 
   // Called once the command ends or is interrupted.

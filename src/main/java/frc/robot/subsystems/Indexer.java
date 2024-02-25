@@ -15,6 +15,7 @@ import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.LaserCan.Measurement;
 import au.grapplerobotics.LaserCan.RangingMode;
 import au.grapplerobotics.LaserCan.TimingBudget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -68,9 +69,13 @@ public class Indexer extends SubsystemBase {
     return laser.getMeasurement().distance_mm;
   }
 
-  
+  public double getOutputCurrent() {
+    return highIndexMotor.getOutputCurrent();
+  }
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Indexer Output Current", getOutputCurrent());
   }
 }

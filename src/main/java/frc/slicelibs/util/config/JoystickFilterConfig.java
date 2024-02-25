@@ -32,7 +32,7 @@ public class JoystickFilterConfig {
         this.deadzone = deadzone;
         this.maxAcceleration = maxAcceleration;
         this.exponent = 1;
-        this.exponentPercent = 0;
+        this.exponentPercent = 1;
     }
 
     /**
@@ -43,6 +43,6 @@ public class JoystickFilterConfig {
         this.deadzone = deadzone;
         this.maxAcceleration = 1000;
         this.exponent = 1;
-        this.exponentPercent = 0;
+        this.exponentPercent = 1;
     }
 }

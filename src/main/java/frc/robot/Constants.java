@@ -45,7 +45,7 @@ public final class Constants {
   public static final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;
-    public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
+    public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
 
     /* Drivetrain Constants */
     public static final double TRACK_WIDTH = Units.inchesToMeters(23.729);
@@ -205,7 +205,7 @@ public final class Constants {
     public static final double FLYWHEEL_KD = 0;
     public static final double FLYWHEEL_FEED_FORWARD = 0.002;
 
-    public static final double AIM_KP = 0.1;
+    public static final double AIM_KP = 0.05;
     public static final double AIM_KI = 0;
     public static final double AIM_KD = 0;
 
@@ -227,7 +227,7 @@ public final class Constants {
     public static final double PIVOT_Y = 0.61595; // Hieght of the shooter pivot from "robot center"
     public static final double PIVOT_X = -0.072288; // Distance (front to back) of the shooter pivot from "robot center"
 
-    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 5; // The maximum error allowed in the flywheel RPM
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 10; // The maximum error allowed in the flywheel RPM
     public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
     public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
@@ -257,7 +257,7 @@ public final class Constants {
   public static final class kIndexer {
 
     /* Idle Mode */
-    public static final IdleMode IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
     /* Motor Invert */
     public static final boolean INVERT = false;
@@ -265,6 +265,8 @@ public final class Constants {
     /* Status Frame Periods */
     public static final int FRAME_1_PERIOD_MS = 500;
     public static final int FRAME_2_PERIOD_MS = 200;
+
+    public static final double CURRENT_THRESHOLD = 13;
 
   }
 

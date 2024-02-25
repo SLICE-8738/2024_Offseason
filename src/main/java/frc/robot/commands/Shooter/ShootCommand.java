@@ -49,6 +49,6 @@ public class ShootCommand extends ParallelDeadlineGroup {
     // Check if the robot is moving slow enough to shoot
     boolean stopped = speed < Constants.kShooter.MAXIMUM_SHOOTING_DRIVETRAIN_SPEED;
 
-    return atSpeed && verticallyAimed && horizontallyAimed && stopped;
+    return atSpeed && verticallyAimed /*&& horizontallyAimed*/ && stopped;
   }
 }

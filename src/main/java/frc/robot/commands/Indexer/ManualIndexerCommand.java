@@ -4,11 +4,9 @@
 
 package frc.robot.commands.Indexer;
 
-import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
 /**
  Spins the indexer so the note will go into the flywheel, nudges the note into the flywheel
@@ -29,14 +27,13 @@ public class ManualIndexerCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-  }
+}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //starts the spin the motor 
-    indexer.spinIndex(controller.getRawAxis(3));
+    indexer.spinIndex(-controller.getRawAxis(5)*0.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +46,6 @@ public class ManualIndexerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return indexer.getOutputCurrent() >= Constants.kIndexer.CURRENT_THRESHOLD;
   }
 }

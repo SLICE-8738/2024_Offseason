@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -17,10 +18,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.commands.Drivetrain.*;
+import frc.robot.commands.Indexer.ManualIndexerCommand;
 import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.commands.Indexer.RunIndexerCommand;
-import frc.robot.commands.Intake.SpinIntakeCommand;
-import frc.robot.commands.Shooter.AimShooterManualCommand;
+import frc.robot.commands.Intake.RunIntakeCommand;
+import frc.robot.commands.Shooter.ManualShooterCommand;
 import frc.robot.commands.Shooter.PrepareShooterCommand;
 import frc.robot.subsystems.*;
 
@@ -67,14 +69,15 @@ public class RobotContainer {
 
   /* Shooter */
   public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter);
-  public final AimShooterManualCommand m_aimShooterManual = new AimShooterManualCommand(m_shooter, operatorController);
+  public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
 
   /* Intake */
-  public final SpinIntakeCommand m_spinIntake = new SpinIntakeCommand(m_intake, m_shooter);
+  public final RunIntakeCommand m_runIntakeUp = new RunIntakeCommand(m_intake, 0.5);
+  public final RunIntakeCommand m_runIntakeDown = new RunIntakeCommand(m_intake, -1);
 
   /* Indexer */
-  public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.5);
-  public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.5);
+  public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.3);
+  public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -83,8 +86,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    //m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
-    m_shooter.setDefaultCommand(m_aimShooterManual);
+    m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
+    m_shooter.setDefaultCommand(m_manualShooter);
     m_indexer.setDefaultCommand(m_manualIndexer);
 
   }
@@ -114,11 +117,11 @@ public class RobotContainer {
     Button.x.toggleOnTrue(m_prepareShooter);
 
     /* Intake Bindings */
-    Button.b.toggleOnTrue(m_spinIntake);
+    Button.b.toggleOnTrue(m_runIntakeUp);
+    Button.a.whileTrue(m_runIntakeDown);
 
     /* Indexer Bindings */
-    Button.y.toggleOnTrue(m_runIndexerUp);
-    Button.a.toggleOnTrue(m_runIndexerDown);
+    Button.y.whileTrue(m_runIndexerUp);
 
   }
 

@@ -208,4 +208,8 @@ public class SwerveModule {
         driveMotorSim.addRotorPosition(Conversions.metersToTalon(targetState.speedMetersPerSecond * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
     }
+
+    public CANSparkMax getAngleMotor() {
+        return angleMotor;
+    }
 }

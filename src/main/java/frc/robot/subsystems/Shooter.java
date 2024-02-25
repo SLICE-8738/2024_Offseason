@@ -26,6 +26,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -42,7 +43,7 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
   private RelativeEncoder flyTopEncoder, flyBottomEncoder; // Encoder for both...
   private RelativeEncoder aimRelativeEncoderLeft, aimRelativeEncoderRight; // ...
-  private AbsoluteEncoder aimAbsoluteEncoder; // ...
+  private RelativeEncoder aimAbsoluteEncoder; // ...
   private SparkPIDController flyTopPID, flyBottomPID; // PIDs for both...
   private SparkPIDController aimPIDLeft, aimPIDRight; // ...
   private SimpleMotorFeedforward flyFeedforward;
@@ -60,14 +61,14 @@ public class Shooter extends SubsystemBase {
     // Define the above objects
     flywheelTop = SparkMaxFactory.createSparkMax(10, REVConfigs.shooterFlywheelSparkMaxConfig);
     flywheelBottom = SparkMaxFactory.createSparkMax(11, REVConfigs.shooterFlywheelSparkMaxConfig);
-    aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
-    aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig);
+    aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig);
+    aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
 
     flyTopEncoder = flywheelTop.getEncoder();
     flyBottomEncoder = flywheelBottom.getEncoder();
     aimRelativeEncoderLeft = aimMotorLeft.getEncoder();
     aimRelativeEncoderRight = aimMotorRight.getEncoder();
-    aimAbsoluteEncoder = aimMotorRight.getAbsoluteEncoder(Type.kDutyCycle);
+    aimAbsoluteEncoder = aimMotorLeft.getAlternateEncoder(4096);
     flyTopPID = flywheelTop.getPIDController();
     flyBottomPID = flywheelBottom.getPIDController();
     aimPIDLeft = aimMotorLeft.getPIDController();
@@ -80,9 +81,9 @@ public class Shooter extends SubsystemBase {
     aimRelativeEncoderRight.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
     aimRelativeEncoderRight.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);
 
-    aimAbsoluteEncoder.setPositionConversionFactor(360);
-    aimAbsoluteEncoder.setVelocityConversionFactor(6);
-    aimAbsoluteEncoder.setZeroOffset(168.88);
+    aimAbsoluteEncoder.setPositionConversionFactor(180);
+    aimAbsoluteEncoder.setVelocityConversionFactor(3);
+    aimAbsoluteEncoder.setPosition(0);
 
     aimRelativeEncoderLeft.setPosition(aimAbsoluteEncoder.getPosition());
     aimRelativeEncoderRight.setPosition(aimAbsoluteEncoder.getPosition());
@@ -107,20 +108,20 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * This function begins to spin up the fly wheel to a target speed.
+   * This function begins to spin up the fly wheels to a target speed.
    * @param speed Target speed.
    */
-  public void spinFlywheel(double speed){
+  public void spinFlywheels(double speed){
     double differentialMultiplier = differential.getEntry().getDouble(0);
     speedTarget = speed;
-    flyTopPID.setReference(speed * (1+differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
-    flyBottomPID.setReference(speed * (1-differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
+    flyTopPID.setReference(speed * (1 + differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
+    flyBottomPID.setReference(speed * (1 - differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
   }
 
   /** 
    * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
    */
-  public void stopFlywheel() {
+  public void stopFlywheels() {
 
     flywheelTop.set(0);
     flywheelBottom.set(0);
@@ -144,18 +145,18 @@ public class Shooter extends SubsystemBase {
   public void aimShooter(double angle){
     angleTarget = angle;
     // Move the shooter to the target angle 
-    aimPIDLeft.setReference(angle, ControlType.kPosition);
-    aimPIDRight.setReference(angle, ControlType.kPosition);
+    aimPIDLeft.setReference(-angle, ControlType.kPosition);
+    aimPIDRight.setReference(-angle, ControlType.kPosition);
   }
 
   /**
    * This function runs the pivot motors at the given percent output.
-   * @param percentOutput
+   * @param speed Power to run the aim motors at from -1 to 1
    */
-  public void aimShooterManual(double percentOutput) {
+  public void dutyCycleAimShooter(double speed) {
 
-    aimMotorLeft.set(percentOutput);
-    aimMotorRight.set(percentOutput);
+    aimMotorLeft.set(speed);
+    aimMotorRight.set(speed);
 
   }
 
@@ -218,5 +219,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Aim Relative Angle", aimRelativeEncoderLeft.getPosition());
+    SmartDashboard.putNumber("Right Aim Relative Angle", aimRelativeEncoderRight.getPosition());
   }
 }
