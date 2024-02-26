@@ -200,7 +200,7 @@ public final class Constants {
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
 
-    public static final double FLYWHEEL_KP = 0.0001;
+    public static final double FLYWHEEL_KP = 0.000625;
     public static final double FLYWHEEL_KI = 0;
     public static final double FLYWHEEL_KD = 0;
     public static final double FLYWHEEL_FEED_FORWARD = 0.002;

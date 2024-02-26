@@ -216,10 +216,17 @@ public class Shooter extends SubsystemBase {
     return false; // otherwise, false
   }
 
+  public double getTopOutputCurrent(){
+    return flywheelTop.getOutputCurrent();
+  }
+  public double getBottomOutputCurrent(){
+    return flywheelBottom.getOutputCurrent();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left Aim Relative Angle", aimRelativeEncoderLeft.getPosition());
-    SmartDashboard.putNumber("Right Aim Relative Angle", aimRelativeEncoderRight.getPosition());
+    SmartDashboard.putNumber("Left Aim Current", aimMotorLeft.getOutputCurrent());
+    SmartDashboard.putNumber("Right Aim Current", aimMotorRight.getOutputCurrent());
   }
 }

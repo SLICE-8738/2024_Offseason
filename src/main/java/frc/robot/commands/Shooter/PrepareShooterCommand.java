@@ -21,7 +21,7 @@ public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
 
   private final ShuffleboardTab shooterTestTab;
-  private final SimpleWidget originalVelocityWidget, distanceWidget, currentAngleWidget, desiredAngleWidget, desiredSpeedWidget;
+  private final SimpleWidget originalVelocityWidget, distanceWidget, currentAngleWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter) {
     m_shooter = shooter;
@@ -32,6 +32,9 @@ public class PrepareShooterCommand extends Command {
     currentAngleWidget = shooterTestTab.add("Current Shooter Angle", 0);
     desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
+    currentFlywheelSpeed = shooterTestTab.add("Current Flywheel Velocity", 0);
+    topFlywheelCurrent = shooterTestTab.add("Top Flywheel Current", 0);
+    bottomFlywheelCurrent = shooterTestTab.add("Bottom Flywheel Current", 0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -45,7 +48,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    double distanceToSpeaker = ShooterLimelight.getTargetCameraSpacePose().getZ();
+    double distanceToSpeaker = 2.5;//ShooterLimelight.getTargetCameraSpacePose().getZ();
     distanceWidget.getEntry().setDouble(distanceToSpeaker);
     // Uses distance info the calculate optimal shot
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
@@ -58,6 +61,9 @@ public class PrepareShooterCommand extends Command {
     currentAngleWidget.getEntry().setDouble(m_shooter.getAbsoluteAngle());
     desiredSpeedWidget.getEntry().setDouble(speed);
     desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
+    currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
+    topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
+    bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
   }
 
   // Called once the command ends or is interrupted.
