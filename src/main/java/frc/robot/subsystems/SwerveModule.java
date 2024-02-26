@@ -185,6 +185,6 @@ public class SwerveModule {
     }
 
     public double getDriveOutputCurrent(){
-       return driveMotor.getOutputCurrent();
+       return driveMotor.getTorqueCurrent().getValueAsDouble();
     }
 }

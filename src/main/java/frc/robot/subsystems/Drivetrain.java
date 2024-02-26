@@ -594,8 +594,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double[] driveOutputCurents(){
-    double[] currents = new double[]{0,0,0,0};
+    double[] currents = new double[]{swerveMods[0].getDriveOutputCurrent(),swerveMods[1].getDriveOutputCurrent(),swerveMods[2].getDriveOutputCurrent(),swerveMods[3].getDriveOutputCurrent()};
+    return currents;
+  }
 
+  public void swivelMotors(){
+    
   }
 
   /**
