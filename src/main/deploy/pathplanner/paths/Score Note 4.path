@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4,
-        "y": 5.53
+        "x": 7.52,
+        "y": 7.44
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8722639580510483,
-        "y": 3.992658993621665
+        "x": 6.819265833074965,
+        "y": 7.128357032514777
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.189953812885087,
-        "y": 1.772351065461325
+        "x": 5.465657052310546,
+        "y": 6.641447399146282
       },
       "prevControl": {
-        "x": 2.9321249203993123,
-        "y": 2.081763520297398
-      },
-      "nextControl": {
-        "x": 6.010995841683261,
-        "y": 1.3243942027623088
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.52,
-        "y": 4.1
-      },
-      "prevControl": {
-        "x": 6.994553301087623,
-        "y": 1.8989475701371337
+        "x": 6.17654511702855,
+        "y": 6.865425830495789
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Mid Field Note Intake",
+  "folder": "Mid Field Note Score",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

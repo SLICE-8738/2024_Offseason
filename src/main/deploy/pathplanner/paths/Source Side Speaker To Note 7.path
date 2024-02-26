@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4,
-        "y": 5.53
+        "x": 0.75,
+        "y": 4.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8722639580510483,
-        "y": 3.992658993621665
+        "x": 2.4370791327585035,
+        "y": 1.7528746801265855
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.189953812885087,
-        "y": 1.772351065461325
+        "x": 3.615400445510263,
+        "y": 1.4899434781075978
       },
       "prevControl": {
-        "x": 2.9321249203993123,
-        "y": 2.081763520297398
+        "x": 3.201116179487471,
+        "y": 1.628038233448528
       },
       "nextControl": {
-        "x": 6.010995841683261,
-        "y": 1.3243942027623088
+        "x": 4.05361911554191,
+        "y": 1.3438705880970496
       },
       "isLocked": false,
       "linkedName": null
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 7.52,
-        "y": 4.1
+        "y": 2.43
       },
       "prevControl": {
-        "x": 6.994553301087623,
-        "y": 1.8989475701371337
+        "x": 4.852150914266242,
+        "y": 1.1491067347496495
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
   "reversed": false,
   "folder": "Mid Field Note Intake",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

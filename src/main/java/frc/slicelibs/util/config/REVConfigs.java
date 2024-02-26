@@ -106,7 +106,7 @@ public final class REVConfigs {
         12, 
         0.0, 
         0.0, 
-        30, 
+        25, 
         Constants.kShooter.FRAME_1_PERIOD_MS, 
         Constants.kShooter.FRAME_2_PERIOD_MS);
 
@@ -150,7 +150,7 @@ public final class REVConfigs {
         12, 
         0.0, 
         0.0, 
-        40, 
+        25, 
         Constants.kIndexer.FRAME_1_PERIOD_MS, 
         Constants.kIndexer.FRAME_2_PERIOD_MS);
 
