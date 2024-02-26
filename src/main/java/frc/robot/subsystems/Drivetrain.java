@@ -593,6 +593,11 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public double[] driveOutputCurents(){
+    double[] currents = new double[]{0,0,0,0};
+
+  }
+
   /**
    * Sets all drivetrain swerve modules to states with speeds of 0 and the current
    * angles of the modules.
