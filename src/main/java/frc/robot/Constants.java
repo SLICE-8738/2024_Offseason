@@ -200,10 +200,10 @@ public final class Constants {
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
 
-    public static final double FLYWHEEL_KP = 0.000625;
-    public static final double FLYWHEEL_KI = 0;
+    public static final double FLYWHEEL_KP = 0.000675;
+    public static final double FLYWHEEL_KI = 0.00000000450;
     public static final double FLYWHEEL_KD = 0;
-    public static final double FLYWHEEL_FEED_FORWARD = 0.002;
+    public static final double FLYWHEEL_FEED_FORWARD = 0.0018;
 
     public static final double AIM_KP = 0.05;
     public static final double AIM_KI = 0;
@@ -213,7 +213,7 @@ public final class Constants {
     public static final double FLYWHEEL_RPM = 60;
 
     // Stow Angle for picking up game pieces
-    public static final double SHOOTER_STOW_ANGLE = 0;
+    public static final double SHOOTER_STOW_ANGLE = -2.3;
 
     // Shooter Measurements
     public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
@@ -225,7 +225,7 @@ public final class Constants {
     public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
 
     public static final double PIVOT_Y = 0.61595; // Hieght of the shooter pivot from "robot center"
-    public static final double PIVOT_X = -0.072288; // Distance (front to back) of the shooter pivot from "robot center"
+    public static final double PIVOT_X = -0.065952; // Distance (front to back) of the shooter pivot from "robot center"
 
     public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 10; // The maximum error allowed in the flywheel RPM
     public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees

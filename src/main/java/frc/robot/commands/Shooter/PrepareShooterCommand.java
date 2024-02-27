@@ -21,7 +21,7 @@ public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
 
   private final ShuffleboardTab shooterTestTab;
-  private final SimpleWidget originalVelocityWidget, distanceWidget, currentAngleWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
+  private final SimpleWidget originalVelocityWidget, distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter) {
     m_shooter = shooter;
@@ -29,7 +29,6 @@ public class PrepareShooterCommand extends Command {
     shooterTestTab = Shuffleboard.getTab("Shooter Testing");
     originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
     distanceWidget = shooterTestTab.add("Robot Distance", 0);
-    currentAngleWidget = shooterTestTab.add("Current Shooter Angle", 0);
     desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
     currentFlywheelSpeed = shooterTestTab.add("Current Flywheel Velocity", 0);
@@ -48,7 +47,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    double distanceToSpeaker = 2.5;//ShooterLimelight.getTargetCameraSpacePose().getZ();
+    double distanceToSpeaker = 5;//ShooterLimelight.getTargetCameraSpacePose().getZ();
     distanceWidget.getEntry().setDouble(distanceToSpeaker);
     // Uses distance info the calculate optimal shot
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
@@ -58,7 +57,7 @@ public class PrepareShooterCommand extends Command {
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
     
-    currentAngleWidget.getEntry().setDouble(m_shooter.getAbsoluteAngle());
+
     desiredSpeedWidget.getEntry().setDouble(speed);
     desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
     currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());

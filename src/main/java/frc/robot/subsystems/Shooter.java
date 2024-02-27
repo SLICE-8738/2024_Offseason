@@ -53,7 +53,13 @@ public class Shooter extends SubsystemBase {
   private ShuffleboardTab shooterTesting;
   private SimpleWidget differential;
 
+  private final ShuffleboardTab shooterTestTab;
+  private final SimpleWidget currentAngleWidget;
+
   public Shooter() {
+
+    shooterTestTab = Shuffleboard.getTab("Shooter Testing");
+    currentAngleWidget = shooterTestTab.add("Current Shooter Angle", 0);
 
     shooterTesting = Shuffleboard.getTab("Shooter Testing");
     differential = shooterTesting.add("Differential Testing: Top Flywheel", 0);
@@ -61,8 +67,8 @@ public class Shooter extends SubsystemBase {
     // Define the above objects
     flywheelTop = SparkMaxFactory.createSparkMax(10, REVConfigs.shooterFlywheelSparkMaxConfig);
     flywheelBottom = SparkMaxFactory.createSparkMax(11, REVConfigs.shooterFlywheelSparkMaxConfig);
-    aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig);
-    aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
+    aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
+    aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(false));
 
     flyTopEncoder = flywheelTop.getEncoder();
     flyBottomEncoder = flywheelBottom.getEncoder();
@@ -81,12 +87,12 @@ public class Shooter extends SubsystemBase {
     aimRelativeEncoderRight.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
     aimRelativeEncoderRight.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);
 
+    aimRelativeEncoderLeft.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    aimRelativeEncoderRight.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    
     aimAbsoluteEncoder.setPositionConversionFactor(180);
     aimAbsoluteEncoder.setVelocityConversionFactor(3);
-    aimAbsoluteEncoder.setPosition(0);
-
-    aimRelativeEncoderLeft.setPosition(aimAbsoluteEncoder.getPosition());
-    aimRelativeEncoderRight.setPosition(aimAbsoluteEncoder.getPosition());
+    aimAbsoluteEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
 
     // Set PID of flywheel and aim motors.
     flyTopPID.setP(kShooter.FLYWHEEL_KP);
@@ -145,8 +151,8 @@ public class Shooter extends SubsystemBase {
   public void aimShooter(double angle){
     angleTarget = angle;
     // Move the shooter to the target angle 
-    aimPIDLeft.setReference(-angle, ControlType.kPosition);
-    aimPIDRight.setReference(-angle, ControlType.kPosition);
+    aimPIDLeft.setReference(angle, ControlType.kPosition);
+    aimPIDRight.setReference(angle, ControlType.kPosition);
   }
 
   /**
@@ -228,5 +234,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Left Aim Current", aimMotorLeft.getOutputCurrent());
     SmartDashboard.putNumber("Right Aim Current", aimMotorRight.getOutputCurrent());
+
+    currentAngleWidget.getEntry().setDouble(getRelativeAngle());
   }
 }
