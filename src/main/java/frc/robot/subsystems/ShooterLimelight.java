@@ -24,8 +24,12 @@ public class ShooterLimelight extends LimelightBase {
 
     currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[0]);
 
-    handleRawPose(currentBotPoseBlue, lastBotPoseBlue);
+    if(currentBotPoseBlue.length != 0) {
 
+      lastBotPoseBlue = currentBotPoseBlue;
+
+    }
+    
     currentRobotTargetSpacePose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
 
     handleRawPose(currentRobotTargetSpacePose, lastRobotTargetSpacePose);

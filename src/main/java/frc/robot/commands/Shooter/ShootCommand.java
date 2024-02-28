@@ -25,7 +25,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
   /** Creates a new ShootCommand. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
     super(new SequentialCommandGroup(new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
-    PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter);
+    PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
     AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
     addCommands(prepareShooter, alignWithSpeakerCommand);
   }

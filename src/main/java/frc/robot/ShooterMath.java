@@ -75,7 +75,10 @@ public final class ShooterMath {
    * @return the horizontal distance from the shooter to the speaker, in meters
    */
   public static double getShooterDistance(double shooterAngle, double robotDistance) {
-    return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.cos(shooterAngle);
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.cos(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS);
+    return Constants.kShooter.PIVOT_X + robotDistance + (high + low) / 2;
+    //return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -83,7 +86,10 @@ public final class ShooterMath {
    * @return the height of the shooter off the ground, in meters
    */
   public static double getShooterHeight(double shooterAngle) {
-    return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.sin(shooterAngle);
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.sin(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS);
+    return Constants.kShooter.PIVOT_Y + (high + low) / 2;
+    //return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -112,7 +118,7 @@ public final class ShooterMath {
    */
   public static ShotDetails getShot(double distance, double height) {
     // see https://www.desmos.com/calculator/sfjrd3ja6f
-    double yVelocity = Math.sqrt( Math.pow(OOMF * 3.2804,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
+    double yVelocity = Math.sqrt( Math.pow(OOMF * 3.28084,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
     double xVelocity = 32 * (3.28084 * distance) / (yVelocity - OOMF); // x velocity of the note (ft/s)
     // Convert back to meters
     yVelocity *= 0.3048;

@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -24,6 +23,7 @@ import frc.robot.commands.Indexer.RunIndexerCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.Shooter.ManualShooterCommand;
 import frc.robot.commands.Shooter.PrepareShooterCommand;
+import frc.robot.commands.Shooter.ResetAlternateAngleCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -66,10 +66,12 @@ public class RobotContainer {
   //public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
   //public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
   //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
+  public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
 
   /* Shooter */
-  public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter);
+  public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
+  public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeUp = new RunIntakeCommand(m_intake, 0.5);
@@ -112,9 +114,11 @@ public class RobotContainer {
     //Button.rightBumper1.and(Button.square).onTrue(m_driveQuasistaicReverse);
     //Button.rightBumper1.and(Button.cross).onTrue(m_driveDynamicForward);
     //Button.rightBumper1.and(Button.circle).onTrue(m_driveDynamicReverse);
+    Button.leftBumper1.onTrue(m_resetToAprilTagPose);
 
     /* Shooter Bindings */
     Button.x.toggleOnTrue(m_prepareShooter);
+    Button.leftBumper2.onTrue(m_resetAlternateAngle);
 
     /* Intake Bindings */
     Button.b.toggleOnTrue(m_runIntakeUp);

@@ -15,13 +15,12 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,9 +42,9 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
   private RelativeEncoder flyTopEncoder, flyBottomEncoder; // Encoder for both...
   private RelativeEncoder aimRelativeEncoderLeft, aimRelativeEncoderRight; // ...
-  private RelativeEncoder aimAbsoluteEncoder; // ...
+  private RelativeEncoder aimAlternateEncoder; // ...
   private SparkPIDController flyTopPID, flyBottomPID; // PIDs for both...
-  private SparkPIDController aimPIDLeft, aimPIDRight; // ...
+  private PIDController aimPID;// ...
   private SimpleMotorFeedforward flyFeedforward;
   private double speedTarget; // Target speed of flywheel
   private double angleTarget; // Target angle of shooter
@@ -74,11 +73,11 @@ public class Shooter extends SubsystemBase {
     flyBottomEncoder = flywheelBottom.getEncoder();
     aimRelativeEncoderLeft = aimMotorLeft.getEncoder();
     aimRelativeEncoderRight = aimMotorRight.getEncoder();
-    aimAbsoluteEncoder = aimMotorLeft.getAlternateEncoder(4096);
+    aimAlternateEncoder = aimMotorLeft.getAlternateEncoder(4096);
+    aimAlternateEncoder.setInverted(true);
     flyTopPID = flywheelTop.getPIDController();
     flyBottomPID = flywheelBottom.getPIDController();
-    aimPIDLeft = aimMotorLeft.getPIDController();
-    aimPIDRight = aimMotorRight.getPIDController();
+    aimPID = new PIDController(Constants.kShooter.AIM_KP, Constants.kShooter.AIM_KI, Constants.kShooter.AIM_KD);
     flyFeedforward = new SimpleMotorFeedforward(0, kShooter.FLYWHEEL_FEED_FORWARD);
 
     aimRelativeEncoderLeft.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
@@ -90,9 +89,9 @@ public class Shooter extends SubsystemBase {
     aimRelativeEncoderLeft.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
     aimRelativeEncoderRight.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
     
-    aimAbsoluteEncoder.setPositionConversionFactor(180);
-    aimAbsoluteEncoder.setVelocityConversionFactor(3);
-    aimAbsoluteEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    aimAlternateEncoder.setPositionConversionFactor(180);
+    aimAlternateEncoder.setVelocityConversionFactor(3);
+    aimAlternateEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
 
     // Set PID of flywheel and aim motors.
     flyTopPID.setP(kShooter.FLYWHEEL_KP);
@@ -102,14 +101,6 @@ public class Shooter extends SubsystemBase {
     flyBottomPID.setP(kShooter.FLYWHEEL_KP);
     flyBottomPID.setI(kShooter.FLYWHEEL_KI);
     flyBottomPID.setD(kShooter.FLYWHEEL_KD);
-
-    aimPIDLeft.setP(kShooter.AIM_KP);
-    aimPIDLeft.setI(kShooter.AIM_KI);
-    aimPIDLeft.setD(kShooter.AIM_KD);
-
-    aimPIDRight.setP(kShooter.AIM_KP);
-    aimPIDRight.setI(kShooter.AIM_KI);
-    aimPIDRight.setD(kShooter.AIM_KD);
 
   }
 
@@ -128,10 +119,8 @@ public class Shooter extends SubsystemBase {
    * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
    */
   public void stopFlywheels() {
-
     flywheelTop.set(0);
     flywheelBottom.set(0);
-
   }
 
   /**
@@ -141,7 +130,6 @@ public class Shooter extends SubsystemBase {
   public void dutyCycleSpinFlywheel(double speed) {
     flywheelTop.set(-speed);
     flywheelBottom.set(-speed);
-
   }
 
   /**
@@ -151,8 +139,9 @@ public class Shooter extends SubsystemBase {
   public void aimShooter(double angle){
     angleTarget = angle;
     // Move the shooter to the target angle 
-    aimPIDLeft.setReference(angle, ControlType.kPosition);
-    aimPIDRight.setReference(angle, ControlType.kPosition);
+    double feedback = aimPID.calculate(getAlternateAngle(), angle);
+    aimMotorLeft.setVoltage(feedback);
+    aimMotorRight.setVoltage(feedback);
   }
 
   /**
@@ -160,24 +149,28 @@ public class Shooter extends SubsystemBase {
    * @param speed Power to run the aim motors at from -1 to 1
    */
   public void dutyCycleAimShooter(double speed) {
-
     aimMotorLeft.set(speed);
     aimMotorRight.set(speed);
-
   }
 
   /**
-   * @return The current absolute angle of the shooter pivot in degrees from 0 - 360.
+   * @return The current absolute angle of the shooter pivot in degrees with no bounds
+   *         read from the alternate encoder.
    */
-  public double getAbsoluteAngle() {
-    return aimAbsoluteEncoder.getPosition();
+  public double getAlternateAngle() {
+    return aimAlternateEncoder.getPosition();
   }
 
   /**
-   * @return The current relative angle of the shooter pivot in degrees with no bounds.
+   * @return The current relative angle of the shooter pivot in degrees with no bounds
+   *         read from the relative encoders.
    */
   public double getRelativeAngle() {
     return (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2;
+  }
+
+  public void setAlternateAngle(double angle) {
+    aimAlternateEncoder.setPosition(angle);
   }
 
   /**
@@ -207,7 +200,7 @@ public class Shooter extends SubsystemBase {
    * @return True if at the correct angle, false otherwise.
    */
   public boolean detectShooterAngle(double acceptableError){
-    double currentAngle = getAbsoluteAngle(); // Get the current angle of the shooter
+    double currentAngle = getAlternateAngle(); // Get the current angle of the shooter
     if (Math.abs(angleTarget - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
@@ -215,7 +208,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isStowed(double acceptableError) {
-    double currentAngle = getAbsoluteAngle(); // Get the current angle of the shooter
+    double currentAngle = getAlternateAngle(); // Get the current angle of the shooter
     if (Math.abs(Constants.kShooter.SHOOTER_STOW_ANGLE - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
@@ -235,6 +228,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left Aim Current", aimMotorLeft.getOutputCurrent());
     SmartDashboard.putNumber("Right Aim Current", aimMotorRight.getOutputCurrent());
 
-    currentAngleWidget.getEntry().setDouble(getRelativeAngle());
+    currentAngleWidget.getEntry().setDouble(getAlternateAngle());
   }
 }

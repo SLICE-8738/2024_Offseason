@@ -4,27 +4,33 @@
 
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import frc.robot.Constants;
 import frc.robot.ShooterMath;
 import frc.robot.ShooterMath.ShotDetails;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterLimelight;
 
 /**
  * Aims and spins up the flywheels to prepare for a shot into the speaker
  */
 public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
+  private final Drivetrain m_drivetrain;
 
   private final ShuffleboardTab shooterTestTab;
   private final SimpleWidget originalVelocityWidget, distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
   /** Creates a new ShootCommand. */
-  public PrepareShooterCommand(Shooter shooter) {
+  public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
     m_shooter = shooter;
+    m_drivetrain  = drivetrain;
 
     shooterTestTab = Shuffleboard.getTab("Shooter Testing");
     originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
@@ -47,7 +53,17 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    double distanceToSpeaker = 5;//ShooterLimelight.getTargetCameraSpacePose().getZ();
+    Translation2d robotTranslation = m_drivetrain.getPose().getTranslation();
+    Translation2d distanceTranslation;
+    double distanceToSpeaker;
+    if(DriverStation.getAlliance().get() == Alliance.Blue) {
+      distanceTranslation = robotTranslation.minus(Constants.kShooter.BLUE_SPEAKER);
+    }
+    else {
+      distanceTranslation = robotTranslation.minus(Constants.kShooter.RED_SPEAKER);
+    }
+    distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
+
     distanceWidget.getEntry().setDouble(distanceToSpeaker);
     // Uses distance info the calculate optimal shot
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
@@ -56,7 +72,6 @@ public class PrepareShooterCommand extends Command {
     double speed = shotDetails.getFlywheelVelocity();
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
-    
 
     desiredSpeedWidget.getEntry().setDouble(speed);
     desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());

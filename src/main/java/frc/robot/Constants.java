@@ -195,7 +195,7 @@ public final class Constants {
     public static final int FRAME_2_PERIOD_MS = 100;
 
     /* Encoder Conversion Values */
-    public static final double AIM_GEAR_RATIO = (400 / 3.0); // 133.333:1
+    public static final double AIM_GEAR_RATIO = (500 / 3.0); // (500/3):1
 
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
@@ -205,7 +205,7 @@ public final class Constants {
     public static final double FLYWHEEL_KD = 0;
     public static final double FLYWHEEL_FEED_FORWARD = 0.0018;
 
-    public static final double AIM_KP = 0.05;
+    public static final double AIM_KP = 0.5;
     public static final double AIM_KI = 0;
     public static final double AIM_KD = 0;
 
@@ -216,10 +216,10 @@ public final class Constants {
     public static final double SHOOTER_STOW_ANGLE = -2.3;
 
     // Shooter Measurements
-    public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
-    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 118.719; // Angle between the high flywheel and pivot point from the low flywheel
-    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3556; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
-    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2667; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
+    public static final double ANGLE_BETWEEN_FLYWHEELS = 17.222; // Angle between the flywheels from the pivot point of the shooter
+    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 124.818; // Angle between the high flywheel and pivot point from the low flywheel
+    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3873627; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
+    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2902966; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
 
     // The constant you subtract the launch angle from to get the shooter angle
     public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
@@ -231,6 +231,9 @@ public final class Constants {
     public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
     public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
+
+    public static final Translation2d BLUE_SPEAKER = new Translation2d(-0.0381, 5.548);
+    public static final Translation2d RED_SPEAKER = new Translation2d(16.579, 5.548);
   }
 
   public static final class kIntake {

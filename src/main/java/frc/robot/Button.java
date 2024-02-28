@@ -27,10 +27,10 @@ public class Button {
     public static Trigger rightStickClick1 = new JoystickButton(controller1, 12); //Controller 1 Right Stick Click
     public static Trigger psButton1 = new JoystickButton(controller1, 13); //Controller 1 PS Button
     public static Trigger touchPad1 = new JoystickButton(controller1, 14); //Controller 1 Touch Pad
-    public static Trigger controlPadRight1 = new POVButton(controller1, 0); //Controller 1 Control Pad Right
-    public static Trigger controlPadUp1 = new POVButton(controller1, 90); //Controller 1 Control Pad Up
-    public static Trigger controlPadLeft1 = new POVButton(controller1, 180); //Controller 1 Control Pad Left
-    public static Trigger controlPadDown1 = new POVButton(controller1, 270); //Controller 1 Control Pad Down
+    public static Trigger controlPadRight1 = new POVButton(controller1, 90); //Controller 1 Control Pad Right
+    public static Trigger controlPadUp1 = new POVButton(controller1, 0); //Controller 1 Control Pad Up
+    public static Trigger controlPadLeft1 = new POVButton(controller1, 270); //Controller 1 Control Pad Left
+    public static Trigger controlPadDown1 = new POVButton(controller1, 180); //Controller 1 Control Pad Down
 
     /* Controller 2 Buttons */
     public static Trigger x = new JoystickButton(controller2, 1); //Controller 2 X
@@ -45,9 +45,9 @@ public class Button {
     public static Trigger start = new JoystickButton(controller2, 10); //Controller 2 Start
     public static Trigger leftStickClick2 = new JoystickButton(controller2, 11); //Controller 2 Left Stick Click
     public static Trigger rightStickClick2 = new JoystickButton(controller2, 12); //Controller 2 Right Stick Click
-    public static Trigger controlPadRight2 = new POVButton(controller1, 0); //Controller 2 Control Pad Right
-    public static Trigger controlPadUp2 = new POVButton(controller1, 90); //Controller 2 Control Pad Up
-    public static Trigger controlPadLeft2 = new POVButton(controller1, 180); //Controller 2 Control Pad Left
-    public static Trigger controlPadDown2 = new POVButton(controller1, 270); //Controller 2 Control Pad Down
+    public static Trigger controlPadRight2 = new POVButton(controller2, 90); //Controller 2 Control Pad Right
+    public static Trigger controlPadUp2 = new POVButton(controller2, 0); //Controller 2 Control Pad Up
+    public static Trigger controlPadLeft2 = new POVButton(controller2, 270); //Controller 2 Control Pad Left
+    public static Trigger controlPadDown2 = new POVButton(controller2, 180); //Controller 2 Control Pad Down
 
 }

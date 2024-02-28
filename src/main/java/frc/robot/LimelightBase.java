@@ -24,7 +24,7 @@ public class LimelightBase extends SubsystemBase {
   protected double targetYOffset;
 
   protected static double[] currentBotPoseBlue = new double[0];
-  protected double[] lastBotPoseBlue = new double[6];
+  protected static double[] lastBotPoseBlue = new double[6];
   protected double[] currentRobotTargetSpacePose = new double[6];
   protected double[] lastRobotTargetSpacePose = new double[6];
   protected double[] currentTargetCameraSpacePose = new double[6];
@@ -62,7 +62,11 @@ public class LimelightBase extends SubsystemBase {
 
     currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[0]);
 
-    handleRawPose(currentBotPoseBlue, lastBotPoseBlue);
+    if(currentBotPoseBlue.length != 0) {
+
+      lastBotPoseBlue = currentBotPoseBlue;
+
+    }
 
     currentRobotTargetSpacePose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
 
@@ -113,7 +117,7 @@ public class LimelightBase extends SubsystemBase {
    * @return The last received non-empty robot pose with the origin at the right-hand side of the blue alliance driverstation
    *         if any. All-zero pose if none has been received yet.
    */
-  public Pose2d getLastBotPoseBlue() {
+  public static Pose2d getLastBotPoseBlue() {
 
     return new Pose2d(lastBotPoseBlue[0], lastBotPoseBlue[1], Rotation2d.fromDegrees(lastBotPoseBlue[5]));
 
