@@ -5,6 +5,8 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 import frc.slicelibs.PolarJoystickFilter;
@@ -14,7 +16,9 @@ public class ManualShooterCommand extends Command {
 
   private final Shooter m_shooter;
   private final GenericHID m_operatorController;
-  private final PolarJoystickFilter joystickFilter;
+  private final PolarJoystickFilter speedFilter;
+
+  private final SimpleWidget flywheelSpeedWidget;
 
   /** Creates a new AimShooterCommand. */
   public ManualShooterCommand(Shooter shooter, GenericHID operatorController) {
@@ -23,7 +27,9 @@ public class ManualShooterCommand extends Command {
     m_shooter = shooter;
     m_operatorController = operatorController;
 
-    joystickFilter = new PolarJoystickFilter(new JoystickFilterConfig(0.08));
+    speedFilter = new PolarJoystickFilter(new JoystickFilterConfig(0.08));
+
+    flywheelSpeedWidget = Shuffleboard.getTab("Debug Tab").add("Set Flywheel Speed", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -34,9 +40,11 @@ public class ManualShooterCommand extends Command {
   @Override
   public void execute() {
 
-    double aimSpeed = joystickFilter.filter(-m_operatorController.getRawAxis(1), 0)[0];
+    double aimSpeed = speedFilter.filter(-m_operatorController.getRawAxis(1), 0)[0];
+    double flywheelSpeed = flywheelSpeedWidget.getEntry().getDouble(0);
 
     m_shooter.dutyCycleAimShooter(aimSpeed);
+    m_shooter.dutyCycleSpinFlywheel(flywheelSpeed);
 
   }
 
@@ -45,6 +53,7 @@ public class ManualShooterCommand extends Command {
   public void end(boolean interrupted) {
 
     m_shooter.dutyCycleAimShooter(0);
+    m_shooter.dutyCycleSpinFlywheel(0);
 
   }
 
