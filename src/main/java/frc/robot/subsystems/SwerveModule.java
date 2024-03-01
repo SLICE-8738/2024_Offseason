@@ -183,7 +183,7 @@ public class SwerveModule {
         driveMotor.setPosition(simDistance);
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
     }
-
+    //returns the output current of driveMotor 
     public double getDriveOutputCurrent(){
        return driveMotor.getTorqueCurrent().getValueAsDouble();
     }
