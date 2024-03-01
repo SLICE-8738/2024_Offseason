@@ -18,7 +18,7 @@ public class LimelightBase extends SubsystemBase {
 
   protected final NetworkTable table;
   
-  protected double targetDetected;
+  protected static double targetDetected;
 
   protected double targetXOffset;
   protected double targetYOffset;
@@ -26,7 +26,7 @@ public class LimelightBase extends SubsystemBase {
   protected static double[] currentBotPoseBlue = new double[0];
   protected static double[] lastBotPoseBlue = new double[6];
   protected double[] currentRobotTargetSpacePose = new double[6];
-  protected double[] lastRobotTargetSpacePose = new double[6];
+  protected static double[] lastRobotTargetSpacePose = new double[6];
   protected double[] currentTargetCameraSpacePose = new double[6];
   protected static double[] lastTargetCameraSpacePose = new double[6];
 
@@ -89,7 +89,7 @@ public class LimelightBase extends SubsystemBase {
   /**
    * @return Whether the Limelight can see any valid targets
    */
-  public boolean getTargetDetected() {
+  public static boolean getTargetDetected() {
 
     return targetDetected == 1;
 
@@ -148,9 +148,9 @@ public class LimelightBase extends SubsystemBase {
    * @return The last received non-empty robot pose with the target as the origin if any.
    *         All-zero pose if none has been received yet.
    */
-  public Pose2d getRobotTargetSpacePose() {
+  public static Pose3d getRobotTargetSpacePose() {
 
-    return new Pose2d(lastRobotTargetSpacePose[0], lastRobotTargetSpacePose[1], Rotation2d.fromDegrees(lastRobotTargetSpacePose[5]));
+    return new Pose3d(lastRobotTargetSpacePose[0], lastRobotTargetSpacePose[1], lastRobotTargetSpacePose[2], new Rotation3d(lastRobotTargetSpacePose[3], lastRobotTargetSpacePose[4], lastRobotTargetSpacePose[5]));
 
   }
 

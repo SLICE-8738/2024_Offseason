@@ -5,8 +5,6 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -26,14 +24,13 @@ public class PrepareShooterCommand extends Command {
   private final Drivetrain m_drivetrain;
 
   private final ShuffleboardTab shooterTestTab;
-  private final SimpleWidget originalVelocityWidget, distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
+  private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
     m_shooter = shooter;
     m_drivetrain  = drivetrain;
 
     shooterTestTab = Shuffleboard.getTab("Shooter Testing");
-    originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
     distanceWidget = shooterTestTab.add("Robot Distance", 0);
     desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
@@ -47,28 +44,22 @@ public class PrepareShooterCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    m_shooter.resetAimSpeed();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // Determines distance to the speaker
-    Translation2d robotTranslation = m_drivetrain.getPose().getTranslation();
-    Translation2d distanceTranslation;
-    double distanceToSpeaker;
-    if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      distanceTranslation = robotTranslation.minus(Constants.kShooter.BLUE_SPEAKER);
-    }
-    else {
-      distanceTranslation = robotTranslation.minus(Constants.kShooter.RED_SPEAKER);
-    }
-    distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
+    Translation2d distanceTranslation = m_drivetrain.getSpeakerRelativePose().getTranslation();
+    double distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
 
     distanceWidget.getEntry().setDouble(distanceToSpeaker);
     // Uses distance info the calculate optimal shot
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
     // Sets the flywheel speed and aim angle to the appropriate values 
-    originalVelocityWidget.getEntry().setDouble(shotDetails.getFlywheelVelocity());
     double speed = shotDetails.getFlywheelVelocity();
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
@@ -77,7 +68,7 @@ public class PrepareShooterCommand extends Command {
     desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
     currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
     topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
-    bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
+    //bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
   }
 
   // Called once the command ends or is interrupted.
@@ -85,7 +76,8 @@ public class PrepareShooterCommand extends Command {
   public void end(boolean interrupted) {
 
     m_shooter.stopFlywheels();
-
+    m_shooter.slowDownAim();
+    m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE + 0.5);
   }
 
   // Returns true when the command should end.

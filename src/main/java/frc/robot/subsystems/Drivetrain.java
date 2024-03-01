@@ -10,11 +10,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -78,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
 
     m_swerveDrivetrainOdometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
-      getRotation2d(), 
+      getHeading(), 
       getPositions(), 
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
@@ -265,14 +268,21 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d updateOdometry() {
 
-    Pose2d odometryPose = m_swerveDrivetrainOdometry.update(getRotation2d(), getPositions());
+    SwerveModulePosition[] positions = getPositions();
+
+    for(int i = 0; i < positions.length; i++) {
+
+      positions[i].distanceMeters *= -1;
+
+    }
+
+    m_swerveDrivetrainOdometry.update(getHeading(), positions);
+
     Pose2d visionPose = ShooterLimelight.getCurrentBotPoseBlue();
 
-    if(visionPose != null) {
-
-      Transform2d difference = odometryPose.minus(visionPose);
+    if(visionPose != null && ShooterLimelight.getTargetDetected()) {
       
-      if(Math.hypot(difference.getX(), difference.getY()) <= 1) {
+      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 4) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
@@ -291,7 +301,25 @@ public class Drivetrain extends SubsystemBase {
    * @return The current estimated pose of the robot.
    */
   public Pose2d getPose() {
+
     return m_swerveDrivetrainOdometry.getEstimatedPosition();
+
+  }
+
+  /**
+   * Returns the current pose of either the blue or red speaker
+   * relative to the robot depending on the selected team station.
+   * 
+   * @return The current robot-relative pose of the speaker.
+   */
+  public Pose2d getSpeakerRelativePose() {
+
+    Transform2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
+    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition())
+    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition());
+
+    return new Pose2d(difference.getTranslation(), difference.getRotation());
+
   }
 
   /**
@@ -397,7 +425,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d position) {
 
-    m_swerveDrivetrainOdometry.resetPosition(getRotation2d(), getPositions(), position);
+    m_swerveDrivetrainOdometry.resetPosition(getHeading(), getPositions(), position);
 
   }
 
@@ -406,13 +434,11 @@ public class Drivetrain extends SubsystemBase {
    * @return
    */
   public void resetFieldOrientedHeading() {
-    double error = getHeading() - 180;
-    fieldOrientedOffset = Rotation2d.fromDegrees(error);
+    fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
   }
 
   public void reverseFieldOrientedHeading() {
-    double error = getHeading();
-    fieldOrientedOffset = Rotation2d.fromDegrees(error);
+    fieldOrientedOffset = getHeading();
   }
 
   /**
@@ -421,22 +447,13 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current heading of the robot as a Rotation2d.
    */
-  public Rotation2d getRotation2d() {
+  public Rotation2d getHeading() {
 
-    return RobotBase.isReal()? Rotation2d.fromDegrees(getHeading()) : angle;
-
-  }
-
-  /**
-   * Obtains and returns the current heading of the robot going positive
-   * counter-clockwise from 0 to 360 degrees from the gyro object.
-   *
-   * @return The current heading of the robot going counter-clockwise positive
-   *         from 0 to 360 degrees.
-   */
-  public double getHeading() {
-
-    return Constants.kDrivetrain.INVERT_GYRO ? -navXGyro.getYaw() + 180 : navXGyro.getYaw() + 180;
+    return RobotBase.isReal()? 
+    Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
+      MathUtil.inputModulus(-navXGyro.getYaw(), 0 , 360) 
+      : MathUtil.inputModulus(navXGyro.getYaw(), 0, 360)) 
+    : angle;
 
   }
 
@@ -486,7 +503,7 @@ public class Drivetrain extends SubsystemBase {
 
   public SwerveModuleState[] toModuleStates(Transform2d transform, boolean isFieldRelative) {
 
-    Rotation2d rotationWithOffset = getRotation2d().minus(fieldOrientedOffset);
+    Rotation2d rotationWithOffset = getHeading().minus(fieldOrientedOffset);
     if (rotationWithOffset.getDegrees() > 360) {
       rotationWithOffset.minus(Rotation2d.fromDegrees(360));
     }

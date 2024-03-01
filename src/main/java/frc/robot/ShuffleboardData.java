@@ -99,7 +99,7 @@ public class ShuffleboardData {
             withSize(2, 1);
         
             //Displays the current heading of the robot in degrees on Shuffleboard
-            debugTab.addDouble("Drivetrain Heading", drivetrain::getHeading).
+            debugTab.addDouble("Drivetrain Heading", () -> drivetrain.getHeading().getDegrees()).
             withWidget(BuiltInWidgets.kDial).
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(0, 0).

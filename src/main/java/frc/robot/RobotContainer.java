@@ -24,6 +24,8 @@ import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.Shooter.ManualShooterCommand;
 import frc.robot.commands.Shooter.PrepareShooterCommand;
 import frc.robot.commands.Shooter.ResetAlternateAngleCommand;
+import frc.robot.commands.Shooter.StowShooterCommand;
+import frc.robot.commands.Shooter.ToAmpPositionCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -67,11 +69,14 @@ public class RobotContainer {
   public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
   //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
   public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
+  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController, false, false);
 
   /* Shooter */
   public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
   public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
+  public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
+  public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeUp = new RunIntakeCommand(m_intake, 0.5);
@@ -89,7 +94,7 @@ public class RobotContainer {
     configureBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
-    m_shooter.setDefaultCommand(m_manualShooter);
+    //m_shooter.setDefaultCommand(m_manualShooter);
     m_indexer.setDefaultCommand(m_manualIndexer);
 
   }
@@ -115,10 +120,12 @@ public class RobotContainer {
     Button.rightBumper1.and(Button.cross).whileTrue(m_driveDynamicForward);
     Button.rightBumper1.and(Button.circle).whileTrue(m_driveDynamicReverse);
     Button.leftBumper1.onTrue(m_resetToAprilTagPose);
+    Button.circle.whileTrue(m_alignWithSpeaker);
 
     /* Shooter Bindings */
     Button.x.toggleOnTrue(m_prepareShooter);
     Button.leftBumper2.onTrue(m_resetAlternateAngle);
+    Button.rightBumper2.onTrue(m_toAmpAngle);
 
     /* Intake Bindings */
     Button.b.toggleOnTrue(m_runIntakeUp);

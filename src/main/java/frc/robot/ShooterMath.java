@@ -13,6 +13,7 @@ public final class ShooterMath {
 
   private static final ShuffleboardTab shooterTestingTab = Shuffleboard.getTab("Shooter Testing");
   public static final SimpleWidget multiplierWidget = shooterTestingTab.add("Velocity Multiplier", 0);
+  public static final SimpleWidget originalVelocityWidget = shooterTestingTab.add("Original Flywheel Velocity", 0);
 
     public static class ShotDetails {
 
@@ -59,12 +60,13 @@ public final class ShooterMath {
 
         public double getFlywheelVelocity() {
             double firstVelocity = getLaunchVelocity() * (15 * 39.37) / Math.PI;
+            originalVelocityWidget.getEntry().setDouble(firstVelocity);
             return firstVelocity * getMultiplier(firstVelocity);
         }
 
         private double getMultiplier(double originalVelocity) {
-            return 0.00000267806 * Math.pow(originalVelocity, 2) + -0.00839714 * originalVelocity + 8.42241;
-            //return multiplierWidget.getEntry().getDouble(0);
+            //return 0.00000267806 * Math.pow(originalVelocity, 2) + -0.00839714 * originalVelocity + 8.42241;
+            return multiplierWidget.getEntry().getDouble(1);
         }
     }
 
@@ -75,8 +77,8 @@ public final class ShooterMath {
    * @return the horizontal distance from the shooter to the speaker, in meters
    */
   public static double getShooterDistance(double shooterAngle, double robotDistance) {
-    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.cos(shooterAngle);
-    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.cos(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS);
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle));
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
     return Constants.kShooter.PIVOT_X + robotDistance + (high + low) / 2;
     //return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
   }
@@ -86,8 +88,8 @@ public final class ShooterMath {
    * @return the height of the shooter off the ground, in meters
    */
   public static double getShooterHeight(double shooterAngle) {
-    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.sin(shooterAngle);
-    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.sin(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS);
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle));
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
     return Constants.kShooter.PIVOT_Y + (high + low) / 2;
     //return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
   }
@@ -118,11 +120,9 @@ public final class ShooterMath {
    */
   public static ShotDetails getShot(double distance, double height) {
     // see https://www.desmos.com/calculator/sfjrd3ja6f
-    double yVelocity = Math.sqrt( Math.pow(OOMF * 3.28084,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
-    double xVelocity = 32 * (3.28084 * distance) / (yVelocity - OOMF); // x velocity of the note (ft/s)
+    double yVelocity = 0.3048 * Math.sqrt( Math.pow(OOMF * 3.28084,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
+    double xVelocity = 0.3048 * 32 * (3.28084 * distance) / (3.28084 * yVelocity - 3.28084 * OOMF); // x velocity of the note (ft/s)
     // Convert back to meters
-    yVelocity *= 0.3048;
-    xVelocity *= 0.3048;
 
     return new ShotDetails(xVelocity, yVelocity);
   }

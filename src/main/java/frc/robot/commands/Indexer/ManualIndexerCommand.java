@@ -33,7 +33,7 @@ public class ManualIndexerCommand extends Command {
   @Override
   public void execute() {
     //starts the spin the motor 
-    indexer.spinIndex(-controller.getRawAxis(5)*0.2);
+    indexer.spinIndex(-controller.getRawAxis(5)/**0.2*/);
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +46,7 @@ public class ManualIndexerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return indexer.getOutputCurrent() >= Constants.kIndexer.CURRENT_THRESHOLD;
+    //return indexer.getOutputCurrent() >= Constants.kIndexer.CURRENT_THRESHOLD;
+    return false;
   }
 }

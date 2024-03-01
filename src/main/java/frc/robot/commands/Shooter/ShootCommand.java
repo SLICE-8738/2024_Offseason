@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+
 import frc.robot.Constants;
 import frc.robot.commands.Drivetrain.AlignWithSpeakerCommand;
 import frc.robot.commands.Indexer.NudgeIndexer;
@@ -36,11 +37,10 @@ public class ShootCommand extends ParallelDeadlineGroup {
     // Check if the shooter is aimed vertically accurately enough
     boolean verticallyAimed = shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR);
     // find the angle to speaker
-    Translation2d currentPosition = drivetrain.getPose().getTranslation();
-    Translation2d directionToSpeaker = Constants.kFieldPositions.SPEAKER_POSITION.minus(currentPosition);
+    Translation2d directionToSpeaker = drivetrain.getSpeakerRelativePose().getTranslation();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
     // Find the error in the drivetrain angle
-    double drivetrainAngleError = targetAngle.minus(drivetrain.getRotation2d()).getDegrees();
+    double drivetrainAngleError = targetAngle.minus(drivetrain.getHeading()).getDegrees();
     // Check if the robot is aimed horizontally accurately enough
     boolean horizontallyAimed = Math.abs(drivetrainAngleError) < Constants.kShooter.HORIZONTAL_AIM_ACCEPTABLE_ERROR;
     // Find the drivetrain speed

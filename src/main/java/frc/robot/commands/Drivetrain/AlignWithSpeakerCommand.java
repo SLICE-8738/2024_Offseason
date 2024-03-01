@@ -64,21 +64,20 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+    double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
 
     double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
     double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
 
     // find the angle to speaker
-    Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
-    Translation2d directionToSpeaker = Constants.kFieldPositions.SPEAKER_POSITION.minus(currentPosition);
+    Translation2d directionToSpeaker = m_drivetrain.getSpeakerRelativePose().getTranslation();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
 
     // Run PID Controller
-    double turnAmount = rotationController.calculate(m_drivetrain.getHeading(), targetAngle.getDegrees());
+    double turnAmount = rotationController.calculate(m_drivetrain.getHeading().getDegrees(), targetAngle.getDegrees());
 
     m_drivetrain.swerveDrive(
-        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(turnAmount)),
+        new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
 
