@@ -24,6 +24,7 @@ public class ResetAlternateAngleCommand extends Command {
   public void initialize() {
 
     m_shooter.setAlternateAngle(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    m_shooter.dutyCycleAimShooter(0);
 
   }
 
