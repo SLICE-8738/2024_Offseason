@@ -61,6 +61,7 @@ public class PrepareShooterCommand extends Command {
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
     // Sets the flywheel speed and aim angle to the appropriate values 
     double speed = shotDetails.getFlywheelVelocity();
+    if(speed == 0) {speed+= 5000;}
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
 

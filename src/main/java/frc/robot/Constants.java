@@ -195,7 +195,7 @@ public final class Constants {
     public static final int FRAME_2_PERIOD_MS = 100;
 
     /* Encoder Conversion Values */
-    public static final double AIM_GEAR_RATIO = (500 / 3.0); // (500/3):1
+    public static final double AIM_GEAR_RATIO = (250); // 250:1
 
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
@@ -268,7 +268,7 @@ public final class Constants {
     public static final int FRAME_1_PERIOD_MS = 500;
     public static final int FRAME_2_PERIOD_MS = 200;
 
-    public static final double CURRENT_THRESHOLD = 13;
+    public static final double CURRENT_THRESHOLD = 11;
 
   }
 
