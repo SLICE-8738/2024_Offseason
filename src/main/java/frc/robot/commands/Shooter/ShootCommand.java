@@ -37,7 +37,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
     // Check if the shooter is aimed vertically accurately enough
     boolean verticallyAimed = shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR);
     // find the angle to speaker
-    Translation2d directionToSpeaker = drivetrain.getSpeakerRelativePose().getTranslation();
+    Translation2d directionToSpeaker = drivetrain.getSpeakerPosition();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
     // Find the error in the drivetrain angle
     double drivetrainAngleError = targetAngle.minus(drivetrain.getHeading()).getDegrees();

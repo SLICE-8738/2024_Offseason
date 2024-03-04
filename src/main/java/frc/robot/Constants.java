@@ -123,7 +123,7 @@ public final class Constants {
     public static final double ROTATION_KP = 2.5;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 2.5;
+    public static final double kPSpeakerAlignRotation = 0.2;
     public static final double kISpeakerAlignRotation = 0;
     public static final double kDSpeakerAlignRotation = 0;
 
@@ -144,7 +144,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 6;
       public static final int CANCODER_ID = 21;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.61);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.61);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -154,7 +154,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int CANCODER_ID = 22;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(136.32);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(316.32);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -164,7 +164,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int CANCODER_ID = 20;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(3.52);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.52);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -174,7 +174,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int CANCODER_ID = 23;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.08);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.08);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -185,7 +185,7 @@ public final class Constants {
 
     /* Idle Mode */
     public static final IdleMode FLYWHEEL_IDLE_MODE = IdleMode.kCoast;
-    public static final IdleMode AIM_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode AIM_IDLE_MODE = IdleMode.kBrake;
 
     /* Motor Invert */
     public static final boolean INVERT = false;
@@ -214,7 +214,8 @@ public final class Constants {
 
     // Stow Angle for picking up game pieces
     public static final double SHOOTER_STOW_ANGLE = -2.3;
-    public static final double SHOOTER_AMP_SCORE_ANGLE = 90;
+    public static final double SHOOTER_AMP_SCORE_ANGLE = 85;
+    public static final double SHOOTER_CLIMB_START_ANGLE = 84;
 
     // Shooter Measurements
     public static final double ANGLE_BETWEEN_FLYWHEELS = 17.222; // Angle between the flywheels from the pivot point of the shooter
@@ -280,8 +281,8 @@ public final class Constants {
 
   public static final class kFieldPositions {
 
-    public static final Pose2d BLUE_SPEAKER_POSITION = new Pose2d(-0.0381, 5.548, new Rotation2d());
-    public static final Pose2d RED_SPEAKER_POSITION = new Pose2d(16.579, 5.548, Rotation2d.fromDegrees(180));
+    public static final Translation2d BLUE_SPEAKER_POSITION = new Translation2d(-0.0381, 5.548);
+    public static final Translation2d RED_SPEAKER_POSITION = new Translation2d(16.579, 5.548);
     public static final Pose2d LEFT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
     public static final Pose2d RIGHT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
     public static final Pose2d CENTER_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());

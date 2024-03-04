@@ -8,11 +8,16 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -29,6 +34,9 @@ public class AlignWithSpeakerCommand extends Command {
   private final boolean m_isFieldRelative;
 
   private final PIDController rotationController;
+
+  private final ShuffleboardTab alignDebugTab;
+  private final SimpleWidget desiredHeadingWidget, currentHeadingWidget;
 
   public AlignWithSpeakerCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
@@ -50,6 +58,11 @@ public class AlignWithSpeakerCommand extends Command {
 
     rotationController = new PIDController(Constants.kDrivetrain.kPSpeakerAlignRotation, Constants.kDrivetrain.kISpeakerAlignRotation, Constants.kDrivetrain.kDSpeakerAlignRotation);
     rotationController.enableContinuousInput(0, 360);
+
+    alignDebugTab = Shuffleboard.getTab("Align Debugging");
+
+    currentHeadingWidget = alignDebugTab.add("Current Heading", 0.0);
+    desiredHeadingWidget = alignDebugTab.add("Desired Heading", 0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -70,16 +83,27 @@ public class AlignWithSpeakerCommand extends Command {
     double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
 
     // find the angle to speaker
-    Translation2d directionToSpeaker = m_drivetrain.getSpeakerRelativePose().getTranslation();
+    Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
+    double targetDegrees = targetAngle.getDegrees() % 360;
+    if (targetDegrees < 0) {
+      targetDegrees += 360;
+    }
 
     // Run PID Controller
-    double turnAmount = rotationController.calculate(m_drivetrain.getHeading().getDegrees(), targetAngle.getDegrees());
+    double turnAmount = rotationController.calculate(m_drivetrain.getHeading().getDegrees(), targetDegrees);
+    // if (Math.abs(targetDegrees - m_drivetrain.getPose().getRotation().getDegrees()) < Constants.kShooter.HORIZONTAL_AIM_ACCEPTABLE_ERROR) {
+    //   turnAmount = 0;
+    // }
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
+
+    
+    currentHeadingWidget.getEntry().setDouble(m_drivetrain.getHeading().getDegrees());
+    desiredHeadingWidget.getEntry().setDouble(targetDegrees);
 
   }
 

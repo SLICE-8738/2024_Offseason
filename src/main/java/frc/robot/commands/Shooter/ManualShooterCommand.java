@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
@@ -44,7 +44,10 @@ public class ManualShooterCommand extends Command {
     double aimSpeed = speedFilter.filter(-m_operatorController.getRawAxis(1), 0)[0];
     double flywheelSpeed = flywheelSpeedWidget.getEntry().getDouble(0);
 
-    m_shooter.dutyCycleAimShooter(aimSpeed);
+    if (Math.abs(aimSpeed) > 0.1 || !m_shooter.pidAimControl || m_shooter.getAlternateAngle() > 120 || m_shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR)) {
+      m_shooter.dutyCycleAimShooter(aimSpeed);
+    }
+
     m_shooter.dutyCycleSpinFlywheel(flywheelSpeed);
 
   }

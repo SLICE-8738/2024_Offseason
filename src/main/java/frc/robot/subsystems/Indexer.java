@@ -33,7 +33,7 @@ public class Indexer extends SubsystemBase {
       //configures settings for the laserCan
       laser.setRangingMode(RangingMode.SHORT); //sets ranging mode to short distance, which is more accurate
       laser.setTimingBudget(TimingBudget.TIMING_BUDGET_50MS); //checks every 50 milliseconds for the measurement of the laser
-      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16)); //the area where the laserCan can sense objects
+      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 2, 2)); //the area where the laserCan can sense objects
 
     } catch (ConfigurationFailedException e) {
       // displays if the code doesn't work properly

@@ -68,12 +68,12 @@ public class SwerveDriveCommand extends Command {
   public void execute() {
 
     SmartDashboard.putNumber("Raw Y Axis", m_driverController.getRawAxis(0));
-    double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
+    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
     double translationX = translation[0] * m_drivetrain.maxLinearVelocity;
     double translationY = translation[1] * m_drivetrain.maxLinearVelocity;
 
-    double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
+    double rotationFF = rotationFilter.filter(m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
     double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
 
     m_drivetrain.swerveDrive(

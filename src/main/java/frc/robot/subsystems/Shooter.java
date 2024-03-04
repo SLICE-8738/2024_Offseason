@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -55,7 +56,7 @@ public class Shooter extends SubsystemBase {
   private final ShuffleboardTab shooterTestTab;
   private final SimpleWidget currentAngleWidget;
 
-  boolean pidAimControl;
+  public boolean pidAimControl;
 
   public Shooter() {
 

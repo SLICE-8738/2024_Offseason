@@ -31,7 +31,7 @@ public class SpinFlywheelCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d directionToSpeaker = m_drivetrain.getSpeakerRelativePose().getTranslation();
+    Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
     double distanceToSpeaker = Math.hypot(directionToSpeaker.getX(), directionToSpeaker.getY());
     double flywheelVelocity = ShooterMath.getShot(distanceToSpeaker).getFlywheelVelocity();
     m_shooter.spinFlywheels(flywheelVelocity);

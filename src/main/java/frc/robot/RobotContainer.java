@@ -26,6 +26,7 @@ import frc.robot.commands.Shooter.PrepareShooterCommand;
 import frc.robot.commands.Shooter.ResetAlternateAngleCommand;
 import frc.robot.commands.Shooter.StowShooterCommand;
 import frc.robot.commands.Shooter.ToAmpPositionCommand;
+import frc.robot.commands.Shooter.ToClimbPositionCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -76,7 +77,8 @@ public class RobotContainer {
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
   public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
-  public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter);
+  public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
+  public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeUp = new RunIntakeCommand(m_intake, 0.5);
@@ -94,8 +96,8 @@ public class RobotContainer {
     configureBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
-    //m_shooter.setDefaultCommand(m_manualShooter);
     m_indexer.setDefaultCommand(m_manualIndexer);
+    m_shooter.setDefaultCommand(m_manualShooter);
 
   }
 
@@ -125,7 +127,9 @@ public class RobotContainer {
     /* Shooter Bindings */
     Button.x.toggleOnTrue(m_prepareShooter);
     Button.leftBumper2.onTrue(m_resetAlternateAngle);
-    Button.rightBumper2.onTrue(m_toAmpAngle);
+    Button.rightBumper2.toggleOnTrue(m_toAmpAngle);
+    Button.leftTrigger2.toggleOnTrue(m_manualShooter);
+    Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
     /* Intake Bindings */
     Button.b.toggleOnTrue(m_runIntakeUp);

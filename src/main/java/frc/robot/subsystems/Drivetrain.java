@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -83,7 +84,9 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      VecBuilder.fill(0.1, 0.1, 0.1),
+      VecBuilder.fill(0.45, 0.45, 0.45));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -268,15 +271,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d updateOdometry() {
 
-    SwerveModulePosition[] positions = getPositions();
-
-    for(int i = 0; i < positions.length; i++) {
-
-      positions[i].distanceMeters *= -1;
-
-    }
-
-    m_swerveDrivetrainOdometry.update(getHeading(), positions);
+    m_swerveDrivetrainOdometry.update(getHeading(), getPositions());
 
     Pose2d visionPose = ShooterLimelight.getCurrentBotPoseBlue();
 
@@ -312,13 +307,15 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current robot-relative pose of the speaker.
    */
-  public Pose2d getSpeakerRelativePose() {
+  public Translation2d getSpeakerPosition() {
 
-    Transform2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
-    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition())
-    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition());
 
-    return new Pose2d(difference.getTranslation(), difference.getRotation());
+
+    Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
+    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition().getTranslation())
+    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition().getTranslation());
+
+    return difference;
 
   }
 

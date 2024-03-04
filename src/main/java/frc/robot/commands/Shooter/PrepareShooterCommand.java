@@ -53,7 +53,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    Translation2d distanceTranslation = m_drivetrain.getSpeakerRelativePose().getTranslation();
+    Translation2d distanceTranslation = m_drivetrain.getSpeakerPosition();
     double distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
 
     distanceWidget.getEntry().setDouble(distanceToSpeaker);

@@ -1,5 +1,32 @@
 {
+  "NetworkTables": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",
+      "/Shuffleboard/Autonomous/Starting Position": "String Chooser",
+      "/Shuffleboard/Debug Tab/Angle Motor PIDF/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drive Motor PID/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drivetrain Max Velocities/Update": "Command",
+      "/Shuffleboard/Debug Tab/Field": "Field2d",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/Debug Tab/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "image": "C:\\Users\\steel\\Documents\\Code\\2024 Main Season\\2024_Main_Season\\.Glass\\2024-field.png",
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
   "NetworkTables Settings": {
-    "mode": "Client (NT4)"
+    "mode": "Client (NT4)",
+    "serverTeam": "8738"
   }
 }

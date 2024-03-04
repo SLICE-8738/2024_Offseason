@@ -8,24 +8,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
-/**
- * Begins making the shooter angle so that it can pick up a note from the intake
- */
-public class StowShooterCommand extends Command {
+public class ToClimbPositionCommand extends Command {
 
   private final Shooter m_shooter;
 
-  /** Creates a new SpinUp. */
-  public StowShooterCommand(Shooter shooter) {
+  /** Creates a new ToAmpPosition. */
+  public ToClimbPositionCommand(Shooter shooter) {
     m_shooter = shooter;
-    // No requirements needed since it uses PIDs
+
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Set the shooter angle to stowed
-    m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    m_shooter.aimShooter(Constants.kShooter.SHOOTER_CLIMB_START_ANGLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,6 +36,6 @@ public class StowShooterCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR);
+    return true;
   }
 }
