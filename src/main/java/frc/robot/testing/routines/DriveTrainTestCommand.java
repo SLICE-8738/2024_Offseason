@@ -27,9 +27,11 @@ public class DriveTrainTestCommand extends Command{
       if(m_maxCurrent < m_currents[i]){
         m_maxCurrent = m_currents[i];
     }
-    for (int i = 0; );
   }
     m_averageCurrent = m_averageCurrent / m_currents.length;
+    System.out.println("Average current: " + m_averageCurrent);
+    System.out.println("Max Current: " + m_maxCurrent);
+    System.out.println("Average Speed: " + m_averageSpeed);
   }
   // Called once the command ends or is interrupted.
   @Override
