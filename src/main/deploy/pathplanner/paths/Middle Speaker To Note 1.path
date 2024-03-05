@@ -3,53 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.95,
-        "y": 2.1542125353754247
+        "x": 1.4,
+        "y": 5.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8148966794387487,
-        "y": 2.6782101791153936
+        "x": 1.4728426619973807,
+        "y": 6.57908152695738
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.83,
-        "y": 7.6
+        "x": 2.6,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 1.83,
-        "y": 5.9041381370317705
+        "x": 1.8220823361681928,
+        "y": 6.8
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Starting Zone To Amp",
-  "previewStartingState": null,
+  "folder": "Wing Note Intake",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

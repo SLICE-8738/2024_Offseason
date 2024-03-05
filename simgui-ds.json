@@ -16,8 +16,8 @@
           "incKey": 68
         },
         {
-          "decKey": 69,
-          "incKey": 82
+          "decKey": 82,
+          "incKey": 69
         }
       ],
       "axisCount": 3,
@@ -96,7 +96,7 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "030000004c050000cc09000000000000"
+      "guid": "Keyboard0"
     }
   ]
 }

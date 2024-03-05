@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2804674870342643,
-        "y": 4.286591835595019
+        "x": 2.324338833074829,
+        "y": 4.3520915410625145
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.14,
-        "y": 4.1
+        "x": 2.6,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 1.5456201125168205,
-        "y": 4.170147914763914
+        "x": 1.4582871718934924,
+        "y": 6.801190739970132
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Wing Note Intake",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 120.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

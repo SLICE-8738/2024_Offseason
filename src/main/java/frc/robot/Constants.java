@@ -119,11 +119,11 @@ public final class Constants {
 
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
 
-    public static final double TRANSLATION_KP = 2.5;
+    public static final double TRANSLATION_KP = 3.5;
     public static final double ROTATION_KP = 2.5;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 0.2;
+    public static final double kPSpeakerAlignRotation = 4.0;
     public static final double kISpeakerAlignRotation = 0;
     public static final double kDSpeakerAlignRotation = 0;
 

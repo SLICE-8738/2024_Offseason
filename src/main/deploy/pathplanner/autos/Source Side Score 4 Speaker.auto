@@ -1,32 +1,52 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.75,
+      "y": 4.34
+    },
+    "rotation": 120.0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle Speaker To Note 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note 1 To Note 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note 2 To Note 3"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Souce Side Speaker To Note 1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note 1 To Note 2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note 2 To Note 3"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Run Intake In"
+                }
+              }
+            ]
           }
         }
       ]

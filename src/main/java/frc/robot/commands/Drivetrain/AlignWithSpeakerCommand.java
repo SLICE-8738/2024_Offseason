@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -77,7 +76,7 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(-m_driverController.getRawAxis(1), -m_driverController.getRawAxis(0));
+    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
     double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
     double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
@@ -91,18 +90,18 @@ public class AlignWithSpeakerCommand extends Command {
     }
 
     // Run PID Controller
-    double turnAmount = rotationController.calculate(m_drivetrain.getHeading().getDegrees(), targetDegrees);
+    double turnAmount = rotationController.calculate(m_drivetrain.getPose().getRotation().getDegrees(), targetDegrees);
     // if (Math.abs(targetDegrees - m_drivetrain.getPose().getRotation().getDegrees()) < Constants.kShooter.HORIZONTAL_AIM_ACCEPTABLE_ERROR) {
     //   turnAmount = 0;
     // }
 
     m_drivetrain.swerveDrive(
-        new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(turnAmount)),
+        new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
 
     
-    currentHeadingWidget.getEntry().setDouble(m_drivetrain.getHeading().getDegrees());
+    currentHeadingWidget.getEntry().setDouble(m_drivetrain.getPose().getRotation().getDegrees());
     desiredHeadingWidget.getEntry().setDouble(targetDegrees);
 
   }

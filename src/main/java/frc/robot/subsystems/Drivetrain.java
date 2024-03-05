@@ -84,9 +84,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.45, 0.45, 0.45));
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -277,7 +275,7 @@ public class Drivetrain extends SubsystemBase {
 
     if(visionPose != null && ShooterLimelight.getTargetDetected()) {
       
-      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 4) {
+      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 2.5 && !DriverStation.isAutonomousEnabled()) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
@@ -308,8 +306,6 @@ public class Drivetrain extends SubsystemBase {
    * @return The current robot-relative pose of the speaker.
    */
   public Translation2d getSpeakerPosition() {
-
-
 
     Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
     Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition().getTranslation())
@@ -552,6 +548,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
 
+    speeds.omegaRadiansPerSecond *= -1;
     setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)));
 
   }

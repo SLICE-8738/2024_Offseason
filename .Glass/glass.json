@@ -1,5 +1,19 @@
 {
   "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "Autonomous": {
+          "Auto Mode": {
+            "open": true
+          },
+          "Starting Position": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    },
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",

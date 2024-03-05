@@ -69,7 +69,7 @@ public class PrepareShooterCommand extends Command {
     desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
     currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
     topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
-    //bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
+    bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
   }
 
   // Called once the command ends or is interrupted.

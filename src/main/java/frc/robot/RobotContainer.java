@@ -50,7 +50,7 @@ public class RobotContainer {
   public final Indexer m_indexer = new Indexer();
   public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
 
-  public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain);
+  public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain, m_intake, m_indexer);
   public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter, m_intake/*, m_indexer*/, m_autoSelector);
 
   // ==========================
@@ -81,8 +81,8 @@ public class RobotContainer {
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
 
   /* Intake */
-  public final RunIntakeCommand m_runIntakeUp = new RunIntakeCommand(m_intake, 0.5);
-  public final RunIntakeCommand m_runIntakeDown = new RunIntakeCommand(m_intake, -1);
+  public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
+  public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -1);
 
   /* Indexer */
   public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.3);
@@ -132,8 +132,8 @@ public class RobotContainer {
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
     /* Intake Bindings */
-    Button.b.toggleOnTrue(m_runIntakeUp);
-    Button.a.whileTrue(m_runIntakeDown);
+    Button.b.toggleOnTrue(m_runIntakeIn);
+    Button.a.whileTrue(m_runIntakeOut);
 
     /* Indexer Bindings */
     Button.y.whileTrue(m_runIndexerUp);

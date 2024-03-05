@@ -10,11 +10,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+import frc.robot.commands.Indexer.RunIndexerCommand;
+import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 //import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -79,10 +84,14 @@ public class AutoSelector {
     public double initialAutoPoseRotationOffset = 0;
 
     private final Drivetrain m_drivetrain;
+    private final Intake m_intake;
+    private final Indexer m_indexer;
 
-    public AutoSelector(Drivetrain drivetrain) {
+    public AutoSelector(Drivetrain drivetrain, Intake intake, Indexer indexer) {
 
         m_drivetrain = drivetrain;
+        m_intake = intake;
+        m_indexer = indexer;
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
@@ -114,7 +123,8 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        //NamedCommands.registerCommand("Align With Speaker", new AlignWithSpeakerCommand(m_drivetrain));
+        NamedCommands.registerCommand("Run Intake In", new RunIntakeCommand(m_intake, 0.5));
+        NamedCommands.registerCommand("Run Indexer Up", new RunIndexerCommand(m_indexer, 0.3));
         
     }
 
@@ -130,7 +140,7 @@ public class AutoSelector {
 
             autoRoutine = getAutoRoutineForParams(startingPosition, desiredMode);
 
-            updateInitialAutoPoseOffset(desiredMode);
+            updateInitialAutoPoseOffset(startingPosition, desiredMode);
 
         }
 
@@ -156,11 +166,11 @@ public class AutoSelector {
  
     }
 
-    public void updateInitialAutoPoseOffset(DesiredMode mode) {
+    public void updateInitialAutoPoseOffset(StartingPosition position, DesiredMode mode) {
 
         Pose2d currentPose = m_drivetrain.getPose();
 
-        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.value);
+        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value);
 
         if (currentPose != null && initialAutoPose != null) {
 
