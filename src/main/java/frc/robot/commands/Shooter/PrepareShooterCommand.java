@@ -24,7 +24,7 @@ public class PrepareShooterCommand extends Command {
   private final Drivetrain m_drivetrain;
 
   private final ShuffleboardTab shooterTestTab;
-  private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent;
+  private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
     m_shooter = shooter;
@@ -37,6 +37,8 @@ public class PrepareShooterCommand extends Command {
     currentFlywheelSpeed = shooterTestTab.add("Current Flywheel Velocity", 0);
     topFlywheelCurrent = shooterTestTab.add("Top Flywheel Current", 0);
     bottomFlywheelCurrent = shooterTestTab.add("Bottom Flywheel Current", 0);
+    multiplierWidget = shooterTestTab.add("Velocity Multiplier", 0);
+    originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -61,7 +63,7 @@ public class PrepareShooterCommand extends Command {
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
     // Sets the flywheel speed and aim angle to the appropriate values 
     double speed = shotDetails.getFlywheelVelocity();
-    if(speed == 0) {speed+= 5000;}
+    originalVelocityWidget.getEntry().setDouble(speed);
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
 

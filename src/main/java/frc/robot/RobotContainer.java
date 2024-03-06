@@ -24,6 +24,7 @@ import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.Shooter.ManualShooterCommand;
 import frc.robot.commands.Shooter.PrepareShooterCommand;
 import frc.robot.commands.Shooter.ResetAlternateAngleCommand;
+import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.StowShooterCommand;
 import frc.robot.commands.Shooter.ToAmpPositionCommand;
 import frc.robot.commands.Shooter.ToClimbPositionCommand;
@@ -58,9 +59,9 @@ public class RobotContainer {
   // ==========================
 
   /* Drivetrain */
-  public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true, true);
-  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false, true);
-  public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.1, 0);
+  public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true);
+  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false);
+  public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.5, 0.5);
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
   public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
@@ -79,6 +80,7 @@ public class RobotContainer {
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
+  //public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
@@ -88,12 +90,13 @@ public class RobotContainer {
   public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.3);
   public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
+  public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     // Configure the trigger bindings
-    configureBindings();
+    configureDebugBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_indexer.setDefaultCommand(m_manualIndexer);
@@ -110,7 +113,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureDebugBindings() {
 
     /* Drivetrain Bindings */
     Button.square.whileTrue(m_setDrivePercentOutput);
@@ -128,7 +131,7 @@ public class RobotContainer {
     Button.x.toggleOnTrue(m_prepareShooter);
     Button.leftBumper2.onTrue(m_resetAlternateAngle);
     Button.rightBumper2.toggleOnTrue(m_toAmpAngle);
-    Button.leftTrigger2.toggleOnTrue(m_manualShooter);
+    Button.leftTrigger2.toggleOnTrue(m_nudgeIndexer);
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
     /* Intake Bindings */
@@ -138,6 +141,25 @@ public class RobotContainer {
     /* Indexer Bindings */
     Button.y.whileTrue(m_runIndexerUp);
 
+  }
+
+  private void configureDriveBindings() {
+    //================
+    // Driver Controls
+    //================
+
+    //Button.rightTrigger1.whileTrue(m_shoot);
+    //Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
+    //Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
+    //Button.leftTrigger1.onTrue(m_stow);
+    //Button.x.onTrue(m_runIntakeIn);
+    //Button.circle.onTrue(m_runIntakeOut);
+
+    //==================
+    // Operator Controls
+    //==================
+
+    
   }
 
   /**

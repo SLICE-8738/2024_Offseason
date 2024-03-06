@@ -113,7 +113,7 @@ public class Shooter extends SubsystemBase {
    * @param speed Target speed.
    */
   public void spinFlywheels(double speed){
-    double differentialMultiplier = differential.getEntry().getDouble(0);
+    double differentialMultiplier = 0;
     speedTarget = speed;
     flyTopPID.setReference(speed * (1 + differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
     flyBottomPID.setReference(speed * (1 - differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.

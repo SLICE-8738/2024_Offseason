@@ -32,8 +32,8 @@ public class Indexer extends SubsystemBase {
     try {
       //configures settings for the laserCan
       laser.setRangingMode(RangingMode.SHORT); //sets ranging mode to short distance, which is more accurate
-      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_50MS); //checks every 50 milliseconds for the measurement of the laser
-      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 2, 2)); //the area where the laserCan can sense objects
+      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS); //checks every 50 milliseconds for the measurement of the laser
+      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); //the area where the laserCan can sense objects
 
     } catch (ConfigurationFailedException e) {
       // displays if the code doesn't work properly
@@ -50,12 +50,12 @@ public class Indexer extends SubsystemBase {
   
   /** Method that checks if a note is at the high index motor */
   public boolean isStored() {
-    //checks if the laserCan distance is more than 177.9 millimeters or less than 177.9 millimeters
-     if (getLaserCanDistance() <= 177.8) {
-      //if the laserCAN distance is less than 177.9 millimeters, returns true and there is a note at the high index motor
+    //checks if the laserCan distance is more than 150 millimeters or less than 150 millimeters
+     if (getLaserCanDistance() <= 150) {
+      //if the laserCAN distance is less than 150 millimeters, returns true and there is a note at the high index motor
       return true;
      } else {
-      //if the laserCAN distance is more than 177.9 millimeters, returns false and there is no note at the high index motor
+      //if the laserCAN distance is more than 150 millimeters, returns false and there is no note at the high index motor
       return false;
      }
   }
@@ -66,7 +66,12 @@ public class Indexer extends SubsystemBase {
   //Method that returns the distance from the laserCAN in millimeters
   public double getLaserCanDistance() {
     //returns the distance from the laserCAN in millimeters
-    return laser.getMeasurement().distance_mm;
+    Measurement measurement = laser.getMeasurement();
+    if (measurement == null || measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+      return 1000;
+    } else {
+      return measurement.distance_mm;
+    }
   }
 
   public double getOutputCurrent() {
@@ -75,6 +80,6 @@ public class Indexer extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    SmartDashboard.putNumber("LaserCAN Distance", getLaserCanDistance());
   }
 }

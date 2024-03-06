@@ -9,11 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
  */
 public final class ShooterMath {
     
-  private static final double OOMF = 2;
-
-  private static final ShuffleboardTab shooterTestingTab = Shuffleboard.getTab("Shooter Testing");
-  public static final SimpleWidget multiplierWidget = shooterTestingTab.add("Velocity Multiplier", 0);
-  public static final SimpleWidget originalVelocityWidget = shooterTestingTab.add("Original Flywheel Velocity", 0);
+  private static final double OOMF = 1.8;
 
     public static class ShotDetails {
 
@@ -60,13 +56,12 @@ public final class ShooterMath {
 
         public double getFlywheelVelocity() {
             double firstVelocity = getLaunchVelocity() * (15 * 39.37) / Math.PI;
-            originalVelocityWidget.getEntry().setDouble(firstVelocity);
             return firstVelocity * getMultiplier(firstVelocity);
         }
 
         private double getMultiplier(double originalVelocity) {
             //return 0.00000267806 * Math.pow(originalVelocity, 2) + -0.00839714 * originalVelocity + 8.42241;
-            return multiplierWidget.getEntry().getDouble(1);
+            return 2;
         }
     }
 

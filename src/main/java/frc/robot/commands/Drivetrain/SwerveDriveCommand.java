@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Drivetrain;
 
+import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
@@ -24,12 +25,11 @@ public class SwerveDriveCommand extends Command {
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
   private final boolean m_isOpenLoop;
-  private final boolean m_isFieldRelative;
+  private boolean m_isFieldRelative;
 
   private final PIDController rotationController;
 
-  public SwerveDriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop,
-      boolean isFieldRelative) {
+  public SwerveDriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
@@ -38,7 +38,6 @@ public class SwerveDriveCommand extends Command {
     m_driverController = driverController;
 
     m_isOpenLoop = isOpenLoop;
-    m_isFieldRelative = isFieldRelative;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
@@ -75,6 +74,8 @@ public class SwerveDriveCommand extends Command {
 
     double rotationFF = rotationFilter.filter(m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
     double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
+
+    m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),
