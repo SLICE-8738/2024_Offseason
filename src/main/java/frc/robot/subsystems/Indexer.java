@@ -27,7 +27,7 @@ public class Indexer extends SubsystemBase {
   private LaserCan laser;
   public Indexer() {
     highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); //creates new motor
-    laser = new LaserCan(0); //creates new laserCan
+    laser = new LaserCan(19); //creates new laserCan
 
     try {
       //configures settings for the laserCan
@@ -75,7 +75,6 @@ public class Indexer extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Indexer Output Current", getOutputCurrent());
+    
   }
 }

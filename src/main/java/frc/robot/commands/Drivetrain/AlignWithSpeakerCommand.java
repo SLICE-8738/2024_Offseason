@@ -14,9 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -33,9 +31,6 @@ public class AlignWithSpeakerCommand extends Command {
   private final boolean m_isFieldRelative;
 
   private final PIDController rotationController;
-
-  private final ShuffleboardTab alignDebugTab;
-  private final SimpleWidget desiredHeadingWidget, currentHeadingWidget;
 
   public AlignWithSpeakerCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
@@ -57,11 +52,6 @@ public class AlignWithSpeakerCommand extends Command {
 
     rotationController = new PIDController(Constants.kDrivetrain.kPSpeakerAlignRotation, Constants.kDrivetrain.kISpeakerAlignRotation, Constants.kDrivetrain.kDSpeakerAlignRotation);
     rotationController.enableContinuousInput(0, 360);
-
-    alignDebugTab = Shuffleboard.getTab("Align Debugging");
-
-    currentHeadingWidget = alignDebugTab.add("Current Heading", 0.0);
-    desiredHeadingWidget = alignDebugTab.add("Desired Heading", 0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -99,10 +89,6 @@ public class AlignWithSpeakerCommand extends Command {
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
-
-    
-    currentHeadingWidget.getEntry().setDouble(m_drivetrain.getPose().getRotation().getDegrees());
-    desiredHeadingWidget.getEntry().setDouble(targetDegrees);
 
   }
 

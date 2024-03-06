@@ -30,7 +30,6 @@ public class ShuffleboardData {
 
         new DrivetrainData(drivetrain);
         new ShooterData(shooter);
-        new IntakeData(intake);
         //new IndexerData(indexer);
         new AutoData(autoSelector);
     }
@@ -121,36 +120,36 @@ public class ShuffleboardData {
             withPosition(5, 0).
             withSize(3, 3);
 
-            //Adds a tuner for the drive motor PID gains to Shuffleboard
-            ShuffleboardTuner.create(
-                (values) -> {
+            // //Adds a tuner for the drive motor PID gains to Shuffleboard
+            // ShuffleboardTuner.create(
+            //     (values) -> {
           
-                  drivetrain.setDrivePID(values[0], values[1], values[2]);
+            //       drivetrain.setDrivePID(values[0], values[1], values[2]);
           
-                },
-                new String[] {"kP", "kI", "kD"},
-                "Drive Motor PID");
+            //     },
+            //     new String[] {"kP", "kI", "kD"},
+            //     "Drive Motor PID");
 
-            //Adds a tuner for the angle motor PID gains to Shuffleboard
-            ShuffleboardTuner.create(
-                (values) -> {
+            // //Adds a tuner for the angle motor PID gains to Shuffleboard
+            // ShuffleboardTuner.create(
+            //     (values) -> {
 
-                    drivetrain.setAnglePIDF(values[0], values[1], values[2], values[3]);
+            //         drivetrain.setAnglePIDF(values[0], values[1], values[2], values[3]);
 
-                },
-                new String[] {"kP", "kI", "kD", "kFF"},
-                "Angle Motor PIDF");
+            //     },
+            //     new String[] {"kP", "kI", "kD", "kFF"},
+            //     "Angle Motor PIDF");
 
-            //Adds a tuner for the maximum velocities to Shuffleboard
-            ShuffleboardTuner.create(
-                (values) -> {
+            // //Adds a tuner for the maximum velocities to Shuffleboard
+            // ShuffleboardTuner.create(
+            //     (values) -> {
 
-                    drivetrain.maxLinearVelocity = values[0];
-                    drivetrain.maxAngularVelocity = values[1];
+            //         drivetrain.maxLinearVelocity = values[0];
+            //         drivetrain.maxAngularVelocity = values[1];
 
-                },
-                new String[] {"Max Linear", "Max Angular"},
-                "Drivetrain Max Velocities");
+            //     },
+            //     new String[] {"Max Linear", "Max Angular"},
+            //     "Drivetrain Max Velocities");
 
         }
 
@@ -164,37 +163,9 @@ public class ShuffleboardData {
             debugTab.addDouble("Shooter Absolute Angle", shooter::getAlternateAngle).
             withPosition(0, 3).
             withSize(2, 1);
-
-            //Displays the current relative angle of the shooter pivot
-            debugTab.addDouble("Shooter Relative Angle", shooter::getRelativeAngle).
-            withPosition(2, 3).
-            withSize(2, 1);
             
         }
 
-    }
-
-    public class IntakeData {
-
-        public IntakeData(Intake intake) {
-
-            debugTab.addDouble("Intake Entrance Current", intake::getEntranceOutputCurrent).
-            withPosition(7, 3).
-            withSize(2, 1);
-            
-        }
-
-    }
-
-    public class IndexerData {
-
-        public IndexerData(Indexer indexer) {
-            //Displays the laserCan distance from the laser to an object on Shuffleboard
-            debugTab.addDouble("LaserCAN Distance:", () -> indexer.getLaserCanDistance()).
-            withPosition(7,2).
-            withSize(2,1);
-
-        }
     }
 
     public class AutoData {

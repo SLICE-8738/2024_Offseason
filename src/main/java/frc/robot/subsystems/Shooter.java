@@ -237,9 +237,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left Aim Current", aimMotorLeft.getOutputCurrent());
-    SmartDashboard.putNumber("Right Aim Current", aimMotorRight.getOutputCurrent());
 
     currentAngleWidget.getEntry().setDouble(getAlternateAngle());
 
