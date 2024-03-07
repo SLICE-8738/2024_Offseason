@@ -327,6 +327,20 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
+   * Calculates and returns whether the robot is within
+   * the tuned shooting range.
+   * 
+   * @return Whether the robot is in range.
+   */
+  public boolean inShootingRange() {
+
+    Translation2d speaker = getSpeakerPosition();
+
+    return Math.hypot(speaker.getX(), speaker.getY()) <= 3;
+
+  }
+
+  /**
    * Obtains and returns the current positions of all drivetrain swerve modules.
    * 
    * @return The current positions of all drivetrain swerve modules.
