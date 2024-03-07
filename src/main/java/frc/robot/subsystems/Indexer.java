@@ -22,18 +22,21 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
 
 public class Indexer extends SubsystemBase {
 
-  // Creates private variables 
+  // Creates private variables
   private CANSparkMax highIndexMotor;
   private LaserCan laser;
+
   public Indexer() {
-    highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); //creates new motor
-    laser = new LaserCan(19); //creates new laserCan
+    highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
+    laser = new LaserCan(19); // creates new laserCan
 
     try {
-      //configures settings for the laserCan
-      laser.setRangingMode(RangingMode.SHORT); //sets ranging mode to short distance, which is more accurate
-      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS); //checks every 50 milliseconds for the measurement of the laser
-      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); //the area where the laserCan can sense objects
+      // configures settings for the laserCan
+      laser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
+      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS); // checks every 50 milliseconds for the measurement of the
+                                                              // laser
+      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense
+                                                                              // objects
 
     } catch (ConfigurationFailedException e) {
       // displays if the code doesn't work properly
@@ -42,35 +45,40 @@ public class Indexer extends SubsystemBase {
     }
   }
 
-  /** Method that makes the high index motor spin depending on the isStored method */
+  /**
+   * Method that makes the high index motor spin depending on the isStored method
+   */
   public void spinIndex(double speed) {
-    highIndexMotor.set(speed); //sets motor speed
+    highIndexMotor.set(speed); // sets motor speed
   }
 
-  
   /** Method that checks if a note is at the high index motor */
   public boolean isStored() {
-    //checks if the laserCan distance is more than 150 millimeters or less than 150 millimeters
-     if (getLaserCanDistance() <= 150) {
-      //if the laserCAN distance is less than 150 millimeters, returns true and there is a note at the high index motor
+    // checks if the laserCan distance is more than 150 millimeters or less than 150
+    // millimeters
+    if (getLaserCanDistance() <= 150) {
+      // if the laserCAN distance is less than 150 millimeters, returns true and there
+      // is a note at the high index motor
       return true;
-     } else {
-      //if the laserCAN distance is more than 150 millimeters, returns false and there is no note at the high index motor
+    } else {
+      // if the laserCAN distance is more than 150 millimeters, returns false and
+      // there is no note at the high index motor
       return false;
-     }
+    }
   }
+
   /**
    * 
    * @return
    */
-  //Method that returns the distance from the laserCAN in millimeters
+  // Method that returns the distance from the laserCAN in millimeters
   public double getLaserCanDistance() {
-    //returns the distance from the laserCAN in millimeters
+    // returns the distance from the laserCAN in millimeters
     Measurement measurement = laser.getMeasurement();
-    if (measurement == null || measurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-      return 1000;
-    } else {
+    if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
       return measurement.distance_mm;
+    } else {
+      return 1000;
     }
   }
 
@@ -80,6 +88,7 @@ public class Indexer extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println(laser.getMeasurement());
     SmartDashboard.putNumber("LaserCAN Distance", getLaserCanDistance());
   }
 }
