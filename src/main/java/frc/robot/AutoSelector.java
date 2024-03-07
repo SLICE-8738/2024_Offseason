@@ -9,8 +9,9 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Indexer.RunIndexerCommand;
+import frc.robot.commands.Indexer.StoreNote;
 import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -127,10 +128,9 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        NamedCommands.registerCommand("Shoot", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
-        NamedCommands.registerCommand("Run Intake In", new RunIntakeCommand(m_intake, 0.5));
-        NamedCommands.registerCommand("Run Indexer Up", new RunIndexerCommand(m_indexer, 0.3));
-        
+        NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
+        NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
+
     }
 
     public void updateAutoSelector() {
@@ -164,7 +164,7 @@ public class AutoSelector {
         catch(Exception e) {
 
             DriverStation.reportError(
-                "Could not construct a valid PathPlannerauto for selected starting position and mode. Error: " + e.toString() + " " + e.getMessage(), true);
+                "Could not construct a valid PathPlannerAuto for selected starting position and mode. Error: " + e.toString() + " " + e.getMessage(), true);
             return Optional.empty();
 
         }
