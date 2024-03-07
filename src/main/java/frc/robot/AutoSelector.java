@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.robot.commands.Indexer.RunIndexerCommand;
 import frc.robot.commands.Intake.RunIntakeCommand;
+import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 import java.util.Optional;
 
@@ -84,12 +86,14 @@ public class AutoSelector {
     public double initialAutoPoseRotationOffset = 0;
 
     private final Drivetrain m_drivetrain;
+    private final Shooter m_shooter;
     private final Intake m_intake;
     private final Indexer m_indexer;
 
-    public AutoSelector(Drivetrain drivetrain, Intake intake, Indexer indexer) {
+    public AutoSelector(Drivetrain drivetrain, Shooter shooter, Intake intake, Indexer indexer) {
 
         m_drivetrain = drivetrain;
+        m_shooter = shooter;
         m_intake = intake;
         m_indexer = indexer;
 
@@ -123,6 +127,7 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
+        NamedCommands.registerCommand("Shoot", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Run Intake In", new RunIntakeCommand(m_intake, 0.5));
         NamedCommands.registerCommand("Run Indexer Up", new RunIndexerCommand(m_indexer, 0.3));
         

@@ -23,11 +23,19 @@ import frc.robot.subsystems.Shooter;
  * Prepares the shooter for shooting, aligns the robot with the speaker (while maintaining driver control of translation) and then fires when everything is ready
  */
 public class ShootCommand extends ParallelDeadlineGroup {
-  /** Creates a new ShootCommand. */
+  /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
     super(new SequentialCommandGroup(new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
     AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
+    addCommands(prepareShooter, alignWithSpeakerCommand);
+  }
+
+  /** Creates a new ShootCommand for autonomous. */
+  public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
+    super(new SequentialCommandGroup(new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
+    PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
+    AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
     addCommands(prepareShooter, alignWithSpeakerCommand);
   }
 

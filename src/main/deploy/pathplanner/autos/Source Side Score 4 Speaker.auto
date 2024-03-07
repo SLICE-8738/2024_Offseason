@@ -20,9 +20,21 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Souce Side Speaker To Note 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
                       }
                     },
                     {
@@ -32,9 +44,27 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Note 2 To Note 3"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Score Note 3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
                       }
                     }
                   ]
