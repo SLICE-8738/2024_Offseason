@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
-/** 
-Store the note in the intake and runs both the intake and ramp intake
-*/
+/**
+ * Store the note in the intake and runs both the intake and ramp intake
+ */
 public class StoreNote extends Command {
-  //creates private variables 
+  // creates private variables
   private final Indexer indexer;
   private final Intake intake;
 
-
   public StoreNote(Indexer indexer, Intake intake) {
-    //from the indexer and intake subsystems, gets the motors without making a new one 
+    // from the indexer and intake subsystems, gets the motors without making a new
+    // one
     addRequirements(indexer);
     addRequirements(intake);
     this.indexer = indexer;
@@ -28,21 +28,28 @@ public class StoreNote extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //spins the motors
+    // spins the motors
+    if (indexer.getLaserCanDistance() < 50) {
+      indexer.spinIndex(-.3);
+    } else if (indexer.getLaserCanDistance() > 150) {
+      indexer.spinIndex(.3);
+    } else {
+      indexer.spinIndex(.3);
+    }
 
-    indexer.spinIndex(.3);
     intake.runRampIntakeOnly(.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //stops the motors
+    // stops the motors
     indexer.spinIndex(0);
     intake.runRampIntakeOnly(0);
 
@@ -51,9 +58,9 @@ public class StoreNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //ends the command
+    // ends the command
     if (indexer.isStored()) {
-      return true; //ends the command if stored is true (stored is a constructor in indexer)
+      return true; // ends the command if stored is true (stored is a constructor in indexer)
     } else {
       return false;
     }

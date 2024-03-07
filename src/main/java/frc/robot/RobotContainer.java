@@ -17,23 +17,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.commands.Drivetrain.*;
-import frc.robot.commands.Indexer.ManualIndexerCommand;
-import frc.robot.commands.Indexer.NudgeIndexer;
-import frc.robot.commands.Indexer.RunIndexerCommand;
-import frc.robot.commands.Intake.RunIntakeCommand;
-import frc.robot.commands.Shooter.ManualShooterCommand;
-import frc.robot.commands.Shooter.PrepareShooterCommand;
-import frc.robot.commands.Shooter.ResetAlternateAngleCommand;
-import frc.robot.commands.Shooter.ShootCommand;
-import frc.robot.commands.Shooter.StowShooterCommand;
-import frc.robot.commands.Shooter.ToAmpPositionCommand;
-import frc.robot.commands.Shooter.ToClimbPositionCommand;
+import frc.robot.commands.Indexer.*;
+import frc.robot.commands.Intake.*;
+import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -47,12 +42,13 @@ public class RobotContainer {
 
   public final Drivetrain m_drivetrain = new Drivetrain();
   public final Shooter m_shooter = new Shooter();
-  public final Intake m_intake = new Intake();  
+  public final Intake m_intake = new Intake();
   public final Indexer m_indexer = new Indexer();
   public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
 
   public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain, m_intake, m_indexer);
-  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter, m_intake/*, m_indexer*/, m_autoSelector);
+  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter,
+      m_intake/* , m_indexer */, m_autoSelector);
 
   // ==========================
   // Commands
@@ -60,18 +56,23 @@ public class RobotContainer {
 
   /* Drivetrain */
   public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true);
-  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false);
+  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController,
+      false);
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.5, 0.5);
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-  public final Command m_pathfindToSource = AutoBuilder.pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToSource = AutoBuilder
+      .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)),
+      Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
   public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
   public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
   public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
-  //public final ConditionalCommand m_limelightAlign = new ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
+  // public final ConditionalCommand m_limelightAlign = new
+  // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
   public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController, false, false);
+  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
+      false, false);
 
   /* Shooter */
   public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
@@ -80,19 +81,24 @@ public class RobotContainer {
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
-  //public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+  // public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer,
+  // m_drivetrain, driverController);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -1);
 
   /* Indexer */
-  public final RunIndexerCommand m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.3);
+  // public final RunIndexerCommand m_runIndexerUp = new
+  // RunIndexerCommand(m_indexer, 0.3); // Manual Stow
+  public final StoreNote m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
   public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
   public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
 
     // Configure the trigger bindings
@@ -105,12 +111,17 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureDebugBindings() {
@@ -144,22 +155,21 @@ public class RobotContainer {
   }
 
   private void configureDriveBindings() {
-    //================
+    // ================
     // Driver Controls
-    //================
+    // ================
 
-    //Button.rightTrigger1.whileTrue(m_shoot);
-    //Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
-    //Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
-    //Button.leftTrigger1.onTrue(m_stow);
-    //Button.x.onTrue(m_runIntakeIn);
-    //Button.circle.onTrue(m_runIntakeOut);
+    // Button.rightTrigger1.whileTrue(m_shoot);
+    // Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
+    // Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
+    // Button.leftTrigger1.onTrue(m_stow);
+    // Button.x.onTrue(m_runIntakeIn);
+    // Button.circle.onTrue(m_runIntakeOut);
 
-    //==================
+    // ==================
     // Operator Controls
-    //==================
+    // ==================
 
-    
   }
 
   /**
@@ -170,7 +180,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     return m_autoSelector.getAutoRoutine();
-    
+
   }
 
 }
