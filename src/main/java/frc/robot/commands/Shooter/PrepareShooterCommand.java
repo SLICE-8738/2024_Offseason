@@ -63,15 +63,15 @@ public class PrepareShooterCommand extends Command {
     ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
     // Sets the flywheel speed and aim angle to the appropriate values 
     double speed = shotDetails.getFlywheelVelocity();
-    originalVelocityWidget.getEntry().setDouble(speed);
+    // originalVelocityWidget.getEntry().setDouble(speed);
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
 
-    desiredSpeedWidget.getEntry().setDouble(speed);
-    desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
-    currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
-    topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
-    bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
+    // desiredSpeedWidget.getEntry().setDouble(speed);
+    // desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
+    // currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
+    // topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
+    // bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
   }
 
   // Called once the command ends or is interrupted.

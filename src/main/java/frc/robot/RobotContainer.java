@@ -59,29 +59,29 @@ public class RobotContainer {
   public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController,
       false);
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.5, 0.5);
-  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-  public final Command m_pathfindToSource = AutoBuilder
-      .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)),
-      Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
-  public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
-  public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
-  public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
+  // public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+  // public final Command m_pathfindToSource = AutoBuilder
+  //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  // public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)),
+  //     Constants.kDrivetrain.PATH_CONSTRAINTS);
+  // public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
+  // public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
+  // public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
+  // public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
   // public final ConditionalCommand m_limelightAlign = new
   // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
-  public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
-      false, false);
+  // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
+  // public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
+  //     false, false);
 
   /* Shooter */
-  public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
+  // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
-  public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
+  // public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
-  // public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+  public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
 
   /* Intake */
@@ -91,10 +91,10 @@ public class RobotContainer {
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new
   // RunIndexerCommand(m_indexer, 0.3); // Manual Stow
-  public final StoreNote m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
-  public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
+  // public final StoreNote m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
+  // public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
-  public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
+  // public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -102,7 +102,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Configure the trigger bindings
-    configureDebugBindings();
+    configureDriveBindings();
 
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_indexer.setDefaultCommand(m_manualIndexer);
@@ -126,31 +126,31 @@ public class RobotContainer {
    */
   private void configureDebugBindings() {
 
-    /* Drivetrain Bindings */
-    Button.square.whileTrue(m_setDrivePercentOutput);
-    Button.triangle.onTrue(m_resetFieldOrientedHeading);
-    Button.controlPadRight1.whileTrue(m_pathfindToSource);
-    Button.controlPadLeft1.whileTrue(m_pathfindToAmp);
-    Button.rightBumper1.and(Button.triangle).whileTrue(m_driveQuasistaicForward);
-    Button.rightBumper1.and(Button.square).whileTrue(m_driveQuasistaicReverse);
-    Button.rightBumper1.and(Button.cross).whileTrue(m_driveDynamicForward);
-    Button.rightBumper1.and(Button.circle).whileTrue(m_driveDynamicReverse);
-    Button.leftBumper1.onTrue(m_resetToAprilTagPose);
-    Button.circle.whileTrue(m_alignWithSpeaker);
+    // /* Drivetrain Bindings */
+    // Button.square.whileTrue(m_setDrivePercentOutput);
+    // Button.triangle.onTrue(m_resetFieldOrientedHeading);
+    // Button.controlPadRight1.whileTrue(m_pathfindToSource);
+    // Button.controlPadLeft1.whileTrue(m_pathfindToAmp);
+    // Button.rightBumper1.and(Button.triangle).whileTrue(m_driveQuasistaicForward);
+    // Button.rightBumper1.and(Button.square).whileTrue(m_driveQuasistaicReverse);
+    // Button.rightBumper1.and(Button.cross).whileTrue(m_driveDynamicForward);
+    // Button.rightBumper1.and(Button.circle).whileTrue(m_driveDynamicReverse);
+    // Button.leftBumper1.onTrue(m_resetToAprilTagPose);
+    // Button.circle.whileTrue(m_alignWithSpeaker);
 
-    /* Shooter Bindings */
-    Button.x.toggleOnTrue(m_prepareShooter);
-    Button.leftBumper2.onTrue(m_resetAlternateAngle);
-    Button.rightBumper2.toggleOnTrue(m_toAmpAngle);
-    Button.leftTrigger2.toggleOnTrue(m_nudgeIndexer);
-    Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
+    // /* Shooter Bindings */
+    // Button.x.toggleOnTrue(m_prepareShooter);
+    // Button.leftBumper2.onTrue(m_resetAlternateAngle);
+    // Button.rightBumper2.toggleOnTrue(m_toAmpAngle);
+    // Button.leftTrigger2.toggleOnTrue(m_nudgeIndexer);
+    // Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
-    /* Intake Bindings */
-    Button.b.toggleOnTrue(m_runIntakeIn);
-    Button.a.whileTrue(m_runIntakeOut);
+    // /* Intake Bindings */
+    // Button.b.toggleOnTrue(m_runIntakeIn);
+    // Button.a.whileTrue(m_runIntakeOut);
 
-    /* Indexer Bindings */
-    Button.y.whileTrue(m_runIndexerUp);
+    // /* Indexer Bindings */
+    // Button.y.whileTrue(m_runIndexerUp);
 
   }
 
@@ -159,19 +159,19 @@ public class RobotContainer {
     // Driver Controls
     // ================
 
-    // Button.rightTrigger1.whileTrue(m_shoot);
-    // Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
-    // Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
-    // Button.leftTrigger1.onTrue(m_stow);
-    // Button.x.or(Button.a).onTrue(m_runIntakeIn);
-    // Button.circle.or(Button.b).onTrue(m_runIntakeOut);
+    Button.rightTrigger1.whileTrue(m_shoot);
+    Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
+    Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
+    Button.leftTrigger1.onTrue(m_stow);
+    Button.x.or(Button.a).onTrue(m_runIntakeIn);
+    Button.circle.or(Button.b).onTrue(m_runIntakeOut);
 
     // ==================
     // Operator Controls
     // ==================
 
-    // Button.leftTrigger2.onTrue(m_lockClimber);
-    // Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
+    Button.leftTrigger2.onTrue(m_lockClimber);
+    Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
   }
 
