@@ -81,8 +81,8 @@ public class RobotContainer {
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
-  // public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer,
-  // m_drivetrain, driverController);
+  // public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+  public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
@@ -163,12 +163,15 @@ public class RobotContainer {
     // Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
     // Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
     // Button.leftTrigger1.onTrue(m_stow);
-    // Button.x.onTrue(m_runIntakeIn);
-    // Button.circle.onTrue(m_runIntakeOut);
+    // Button.x.or(Button.a).onTrue(m_runIntakeIn);
+    // Button.circle.or(Button.b).onTrue(m_runIntakeOut);
 
     // ==================
     // Operator Controls
     // ==================
+
+    // Button.leftTrigger2.onTrue(m_lockClimber);
+    // Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
 
   }
 

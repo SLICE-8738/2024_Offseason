@@ -60,7 +60,7 @@ public class StoreNote extends Command {
   public boolean isFinished() {
     // ends the command
     if (indexer.isStored()) {
-      return true; // ends the command if stored is true (stored is a constructor in indexer)
+      return true; // ends the command if stored is true (stored is a method in indexer)
     } else {
       return false;
     }
