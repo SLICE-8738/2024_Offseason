@@ -56,9 +56,9 @@ public class Indexer extends SubsystemBase {
   public boolean isStored() {
     // checks if the laserCan distance is more than 150 millimeters or less than 150
     // millimeters
-    if (getLaserCanDistance() <= 150) {
+    if (getLaserCanDistance() <= 150 && getLaserCanDistance() >= 50) {
       // if the laserCAN distance is less than 150 millimeters, returns true and there
-      // is a note at the high index motor
+      // is a note stored in the high index motor
       return true;
     } else {
       // if the laserCAN distance is more than 150 millimeters, returns false and
