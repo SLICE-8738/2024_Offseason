@@ -315,6 +315,17 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public boolean atAllianceWing() {
+    Alliance alliance = DriverStation.getAlliance().get();
+    double x = m_swerveDrivetrainOdometry.getEstimatedPosition().getX();
+
+    if (alliance == Alliance.Blue) {
+      return x < 5.87248;
+    } else {
+      return x > 16.54 - 5.87248;
+    }
+  }
+
   /**
    * Obtains and returns the current positions of all drivetrain swerve modules.
    * 

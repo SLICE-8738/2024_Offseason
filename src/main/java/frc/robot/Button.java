@@ -13,10 +13,10 @@ public class Button {
     public static GenericHID controller2 = new GenericHID(1);
 
     /* Controller 1 Buttons */
-    public static Trigger square = new JoystickButton(controller1, 1); //Controller 1 Square
-    public static Trigger cross = new JoystickButton(controller1, 2); //Controller 1 Cross
-    public static Trigger circle = new JoystickButton(controller1, 3); //Controller 1 Circle
-    public static Trigger triangle = new JoystickButton(controller1, 4); //Controller 1 Triangle
+    public static Trigger square1 = new JoystickButton(controller1, 1); //Controller 1 Square
+    public static Trigger cross1 = new JoystickButton(controller1, 2); //Controller 1 Cross
+    public static Trigger circle1 = new JoystickButton(controller1, 3); //Controller 1 Circle
+    public static Trigger triangle1 = new JoystickButton(controller1, 4); //Controller 1 Triangle
     public static Trigger leftBumper1 = new JoystickButton(controller1, 5); //Controller 1 Left Bumper
     public static Trigger rightBumper1 = new JoystickButton(controller1, 6); //Controller 1 Right Bumper
     public static Trigger leftTrigger1 = new JoystickButton(controller1, 7); //Controller 1 Left Trigger
@@ -33,10 +33,10 @@ public class Button {
     public static Trigger controlPadDown1 = new POVButton(controller1, 180); //Controller 1 Control Pad Down
 
     /* Controller 2 Buttons */
-    public static Trigger x = new JoystickButton(controller2, 1); //Controller 2 X
-    public static Trigger a = new JoystickButton(controller2, 2); //Controller 2 A
-    public static Trigger b = new JoystickButton(controller2, 3); //Controller 2 B
-    public static Trigger y = new JoystickButton(controller2, 4); //Controller 2 Y
+    public static Trigger square2 = new JoystickButton(controller2, 1); //Controller 2 X
+    public static Trigger cross2 = new JoystickButton(controller2, 2); //Controller 2 A
+    public static Trigger circle2 = new JoystickButton(controller2, 3); //Controller 2 B
+    public static Trigger triangle2 = new JoystickButton(controller2, 4); //Controller 2 Y
     public static Trigger leftBumper2 = new JoystickButton(controller2, 5); //Controller 2 Left Bumper
     public static Trigger rightBumper2 = new JoystickButton(controller2, 6); //Controller 2 Right Bumper
     public static Trigger leftTrigger2 = new JoystickButton(controller2, 7); //Controller 2 Left Trigger

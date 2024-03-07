@@ -18,7 +18,8 @@ public class StowShooterCommand extends Command {
   /** Creates a new SpinUp. */
   public StowShooterCommand(Shooter shooter) {
     m_shooter = shooter;
-    // No requirements needed since it uses PIDs
+    
+    addRequirements(m_shooter);
   }
 
   // Called when the command is initially scheduled.

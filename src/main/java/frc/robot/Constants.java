@@ -204,7 +204,7 @@ public final class Constants {
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
 
-    public static final double FLYWHEEL_KP = 0.000675;
+    public static final double FLYWHEEL_KP = 0.000685;
     public static final double FLYWHEEL_KI = 0.00000000450;
     public static final double FLYWHEEL_KD = 0;
     public static final double FLYWHEEL_FEED_FORWARD = 0.0018;
@@ -238,10 +238,10 @@ public final class Constants {
     public static final double PIVOT_Y = 0.61595; // Hieght of the shooter pivot from "robot center"
     public static final double PIVOT_X = -0.065952; // Distance (front to back) of the shooter pivot from "robot center"
 
-    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 20; // The maximum error allowed in the flywheel RPM
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 25; // The maximum error allowed in the flywheel RPM
     public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle
                                                                   // vertically, in degrees
-    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle
+    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 4; // The maximum error allowed in the shooter angle
                                                                     // horizontally (controlled by drivetrain). in
                                                                     // degrees
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can

@@ -77,6 +77,13 @@ public class SwerveDriveCommand extends Command {
 
     m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
 
+    if (!m_isFieldRelative) {
+      translationX *= 0.5;
+      translationY *= 0.5;
+      rotationFF *= 0.5;
+      rotationFeedback *= 0.5;
+    }
+
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),
         m_isOpenLoop,

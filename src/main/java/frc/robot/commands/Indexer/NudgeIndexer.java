@@ -38,7 +38,7 @@ public class NudgeIndexer extends Command {
   @Override
   public void execute() {
     //starts the spin the motor 
-    indexer.spinIndex(0.3);
+    indexer.spinIndex(1);
   }
 
   // Called once the command ends or is interrupted.

@@ -59,7 +59,7 @@ public class RobotContainer {
   public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController,
       false);
   public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.5, 0.5);
-  // public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
   // public final Command m_pathfindToSource = AutoBuilder
   //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   // public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)),
@@ -76,7 +76,7 @@ public class RobotContainer {
 
   /* Shooter */
   // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
-  public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, operatorController);
+  public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, m_drivetrain, m_indexer, operatorController);
   // public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
@@ -87,6 +87,8 @@ public class RobotContainer {
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -1);
+  public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
+  public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer);
 
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new
@@ -107,6 +109,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(m_swerveDriveClosedLoop);
     m_indexer.setDefaultCommand(m_manualIndexer);
     m_shooter.setDefaultCommand(m_manualShooter);
+    m_intake.setDefaultCommand(m_reverseWhileNoteStored);
 
   }
 
@@ -160,11 +163,10 @@ public class RobotContainer {
     // ================
 
     Button.rightTrigger1.whileTrue(m_shoot);
-    Button.rightBumper1.whileTrue(m_setDrivePercentOutput);
     Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
     Button.leftTrigger1.onTrue(m_stow);
-    Button.x.or(Button.a).onTrue(m_runIntakeIn);
-    Button.circle.or(Button.b).onTrue(m_runIntakeOut);
+    Button.cross1.onTrue(m_storeNote);
+    Button.triangle1.onTrue(m_resetFieldOrientedHeading);
 
     // ==================
     // Operator Controls
@@ -172,6 +174,7 @@ public class RobotContainer {
 
     Button.leftTrigger2.onTrue(m_lockClimber);
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
+    Button.triangle2.onTrue(m_runIntakeOut);
 
   }
 
