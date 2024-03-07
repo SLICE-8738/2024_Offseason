@@ -21,11 +21,15 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -76,7 +80,7 @@ public final class Constants {
     public static final double CLOSED_LOOP_RAMP = 0.0;
 
     /* Status Frame Rates/Periods */
-    //TODO: Tune status frames
+    // TODO: Tune status frames
     public static final int DRIVE_VELOCITY_FRAME_RATE_HZ = 22;
     public static final int DRIVE_POSITION_FRAME_RATE_HZ = 5;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
@@ -89,13 +93,13 @@ public final class Constants {
     public static final double ANGLE_KFF = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double DRIVE_KP = 0.12; //TODO: Tune drive motor PID gains
+    public static final double DRIVE_KP = 0.12; // TODO: Tune drive motor PID gains
     public static final double DRIVE_KI = 0.0;
     public static final double DRIVE_KD = 0.0;
     public static final double DRIVE_KFF = 0.0;
 
     /* Drive Motor Characterization Values */
-    public static final double DRIVE_KS = 0.0; //TODO: Possibly tune feedforward gains
+    public static final double DRIVE_KS = 0.0; // TODO: Possibly tune feedforward gains
     public static final double DRIVE_KV = 2.4103;
     public static final double DRIVE_KA = 0.0;
 
@@ -110,7 +114,7 @@ public final class Constants {
         / 60.0;
 
     /* Swerve Profiling Values */
-    //TODO: Find maximum velocities
+    // TODO: Find maximum velocities
     public static final double MAX_LINEAR_VELOCITY = 4.5; // meters per second
     public static final double MAX_ANGULAR_VELOCITY = 7; // radians per second
 
@@ -184,7 +188,7 @@ public final class Constants {
   public static final class kShooter {
 
     /* Idle Mode */
-    public static final IdleMode FLYWHEEL_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode FLYWHEEL_IDLE_MODE = IdleMode.kBrake;
     public static final IdleMode AIM_IDLE_MODE = IdleMode.kBrake;
 
     /* Motor Invert */
@@ -218,21 +222,30 @@ public final class Constants {
     public static final double SHOOTER_CLIMB_START_ANGLE = 84;
 
     // Shooter Measurements
-    public static final double ANGLE_BETWEEN_FLYWHEELS = 17.222; // Angle between the flywheels from the pivot point of the shooter
-    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 124.818; // Angle between the high flywheel and pivot point from the low flywheel
-    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3873627; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
-    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2902966; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
+    public static final double ANGLE_BETWEEN_FLYWHEELS = 17.222; // Angle between the flywheels from the pivot point of
+                                                                 // the shooter
+    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 124.818; // Angle between the high flywheel and
+                                                                                // pivot point from the low flywheel
+    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3873627; // Center distance from pivot point to higher
+                                                                        // flywheel of shooter (in meters) (14")
+    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2902966; // Center distance from pivot point to lower
+                                                                       // flywheel of shooter (in meters) (10.5")
 
     // The constant you subtract the launch angle from to get the shooter angle
-    public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
+    public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180
+        - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
 
     public static final double PIVOT_Y = 0.61595; // Hieght of the shooter pivot from "robot center"
     public static final double PIVOT_X = -0.065952; // Distance (front to back) of the shooter pivot from "robot center"
 
     public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 20; // The maximum error allowed in the flywheel RPM
-    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
-    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
-    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
+    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle
+                                                                  // vertically, in degrees
+    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle
+                                                                    // horizontally (controlled by drivetrain). in
+                                                                    // degrees
+    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can
+                                                                        // move at and shoot
 
   }
 
