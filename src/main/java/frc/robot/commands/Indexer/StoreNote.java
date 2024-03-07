@@ -77,7 +77,7 @@ public class StoreNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Button.circle1.getAsBoolean() || Button.circle2.getAsBoolean()) {
+    if (Button.circle1.getAsBoolean() || Button.circle2.getAsBoolean() || Button.rightTrigger1.getAsBoolean() || Button.cross1.getAsBoolean() || Button.rightTrigger2.getAsBoolean()) {
       return true;
     }
     // ends the command

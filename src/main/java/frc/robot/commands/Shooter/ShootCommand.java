@@ -32,7 +32,6 @@ public class ShootCommand extends ParallelDeadlineGroup {
   private static final SimpleWidget verticallyAimedWidget =  shootDebugTab.add("Vertically Aimed", false);
   private static final SimpleWidget horizontallyAimedWidget = shootDebugTab.add("Horizontally Aimed", false);
   private static final SimpleWidget stoppedWidget = shootDebugTab.add("Stopped", false);
-  private static final SimpleWidget flywheelErrorWIdget = shootDebugTab.add("Flywheel Error", false);
 
   /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {

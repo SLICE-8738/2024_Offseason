@@ -77,7 +77,7 @@ public class RobotContainer {
   /* Shooter */
   // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, m_drivetrain, m_indexer, operatorController);
-  // public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
+  public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
@@ -163,9 +163,9 @@ public class RobotContainer {
     // ================
 
     Button.rightTrigger1.whileTrue(m_shoot);
-    Button.leftBumper1.toggleOnTrue(m_toAmpAngle);
+    Button.leftBumper1.or(Button.cross2).onTrue(m_storeNote);
     Button.leftTrigger1.onTrue(m_stow);
-    Button.cross1.onTrue(m_storeNote);
+    Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
 
     // ==================
@@ -175,6 +175,7 @@ public class RobotContainer {
     Button.leftTrigger2.onTrue(m_lockClimber);
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
     Button.triangle2.onTrue(m_runIntakeOut);
+    Button.square2.onTrue(m_resetAlternateAngle);
 
   }
 

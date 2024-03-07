@@ -186,6 +186,7 @@ public class Shooter extends SubsystemBase {
   public boolean atTargetSpeed(double acceptableError){
     double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
     currentSpeed = (currentSpeed + flyBottomEncoder.getVelocity()) / 2; // Get the current speed of the other flywheel and average
+    SmartDashboard.putNumber("Flywheel Speed Error", speedTarget - currentSpeed);
     if (Math.abs(speedTarget - currentSpeed) <= acceptableError){ // Is the current speed within the acceptable error?
       return true; // if so, true.
     }

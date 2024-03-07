@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
@@ -66,6 +67,9 @@ public class PrepareShooterCommand extends Command {
     // originalVelocityWidget.getEntry().setDouble(speed);
     m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
+
+    SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
+    SmartDashboard.putNumber("Flywheel Target Velocity", speed);
 
     // desiredSpeedWidget.getEntry().setDouble(speed);
     // desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
