@@ -23,6 +23,7 @@ import frc.robot.subsystems.Shooter;
 public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
   private final Drivetrain m_drivetrain;
+  private boolean flywheelsStopped;
 
   // private final ShuffleboardTab shooterTestTab;
   // private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
@@ -43,6 +44,8 @@ public class PrepareShooterCommand extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
+
+    flywheelsStopped = true;
   }
 
   // Called when the command is initially scheduled.
@@ -65,7 +68,15 @@ public class PrepareShooterCommand extends Command {
     // Sets the flywheel speed and aim angle to the appropriate values 
     double speed = shotDetails.getFlywheelVelocity();
     // originalVelocityWidget.getEntry().setDouble(speed);
-    m_shooter.spinFlywheels(speed);
+    if (m_drivetrain.inShootingRange()) {
+      m_shooter.spinFlywheels(speed);
+      flywheelsStopped = false;
+    }
+    else if (!flywheelsStopped) {
+      m_shooter.spinFlywheels(0);
+      flywheelsStopped = true;
+    }
+
     m_shooter.aimShooter(shotDetails.getShooterAngle());
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
