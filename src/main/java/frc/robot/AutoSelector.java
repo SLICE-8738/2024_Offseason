@@ -128,8 +128,8 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
+        NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
 
     }
 
@@ -156,18 +156,7 @@ public class AutoSelector {
 
     private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        try {
-
-            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
-
-        }
-        catch(Exception e) {
-
-            DriverStation.reportError(
-                "Could not construct a valid PathPlannerAuto for selected starting position and mode. Error: " + e.toString() + " " + e.getMessage(), true);
-            return Optional.empty();
-
-        }
+        return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
  
     }
 

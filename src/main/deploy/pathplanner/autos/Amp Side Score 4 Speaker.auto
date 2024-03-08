@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.53
+      "x": 0.71,
+      "y": 6.76
     },
-    "rotation": 180.0
+    "rotation": -120.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Speaker To Note 1"
+                  "pathName": "Amp Side Speaker To Note 1"
                 }
               },
               {
