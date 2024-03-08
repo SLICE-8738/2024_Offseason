@@ -68,15 +68,16 @@ public class PrepareShooterCommand extends Command {
     // Sets the flywheel speed and aim angle to the appropriate values 
     double speed = shotDetails.getFlywheelVelocity();
     // originalVelocityWidget.getEntry().setDouble(speed);
-    if (m_drivetrain.inShootingRange()) {
+    /*if (m_drivetrain.inShootingRange()) {
       m_shooter.spinFlywheels(speed);
       flywheelsStopped = false;
     }
     else if (!flywheelsStopped) {
       m_shooter.spinFlywheels(0);
       flywheelsStopped = true;
-    }
+    }*/
 
+    m_shooter.spinFlywheels(speed);
     m_shooter.aimShooter(shotDetails.getShooterAngle());
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);

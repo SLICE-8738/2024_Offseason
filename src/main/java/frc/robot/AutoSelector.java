@@ -153,18 +153,8 @@ public class AutoSelector {
 
     private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        try {
+        return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
 
-            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
-
-        }
-        catch(Exception e) {
-
-            DriverStation.reportError(
-                e.toString() + " " + e.getMessage(), true);
-            return Optional.empty();
-
-        } 
     }
 
     public void updateInitialAutoPoseOffset(StartingPosition position, DesiredMode mode) {

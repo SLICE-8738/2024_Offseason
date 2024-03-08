@@ -75,10 +75,17 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+    double translationX = 0;
+    double translationY = 0;
 
-    double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-    double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+    if (m_driverController != null) {
+    
+      double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+
+      translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+      translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+
+    }
 
     // find the angle to speaker
     Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
