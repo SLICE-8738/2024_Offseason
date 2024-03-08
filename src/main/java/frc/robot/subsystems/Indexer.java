@@ -4,19 +4,17 @@
 
 package frc.robot.subsystems;
 
-import java.time.chrono.IsoChronology;
-
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.LaserCan.Measurement;
 import au.grapplerobotics.LaserCan.RangingMode;
 import au.grapplerobotics.LaserCan.TimingBudget;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
 
@@ -56,7 +54,7 @@ public class Indexer extends SubsystemBase {
   public boolean isStored() {
     // checks if the laserCan distance is more than 150 millimeters or less than 150
     // millimeters
-    if (getLaserCanDistance() <= 150 && getLaserCanDistance() >= 50) {
+    if (getLaserCanDistance() <= 125 && getLaserCanDistance() >= 25) {
       // if the laserCAN distance is less than 150 millimeters, returns true and there
       // is a note stored in the high index motor
       return true;

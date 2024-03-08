@@ -164,7 +164,7 @@ public class RobotContainer {
 
     Button.rightTrigger1.whileTrue(m_shoot);
     Button.leftBumper1.or(Button.cross2).onTrue(m_storeNote);
-    Button.leftTrigger1.onTrue(m_stow);
+    Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
 

@@ -4,8 +4,6 @@
 
 package frc.robot.commands.Indexer;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 

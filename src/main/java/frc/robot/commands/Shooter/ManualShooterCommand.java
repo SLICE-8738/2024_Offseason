@@ -5,13 +5,11 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
@@ -19,27 +17,24 @@ import frc.slicelibs.util.config.JoystickFilterConfig;
 public class ManualShooterCommand extends Command {
 
   private final Shooter m_shooter;
-  private final Drivetrain m_drivetrain;
   private final Indexer m_indexer;
+  private final Drivetrain m_drivetrain;
   private final GenericHID m_operatorController;
   private final PolarJoystickFilter speedFilter;
 
-  private final SimpleWidget flywheelSpeedWidget;
-
-  private final double BASE_FLYWHEEL_SPEED = 500;
+  private final double BASE_FLYWHEEL_SPEED = 1500;
 
   /** Creates a new AimShooterCommand. */
   public ManualShooterCommand(Shooter shooter, Drivetrain drivetrain, Indexer indexer, GenericHID operatorController) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     m_shooter = shooter;
-    m_drivetrain = drivetrain;
     m_indexer = indexer;
+    m_drivetrain = drivetrain;
     m_operatorController = operatorController;
 
     speedFilter = new PolarJoystickFilter(new JoystickFilterConfig(0.08));
 
-    flywheelSpeedWidget = Shuffleboard.getTab("Debug Tab").add("Set Flywheel Speed", 0);
   }
 
   // Called when the command is initially scheduled.

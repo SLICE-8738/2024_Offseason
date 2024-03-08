@@ -4,21 +4,18 @@
 
 package frc.robot.commands.Shooter;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.ShooterMath;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 
 public class SpinFlywheelCommand extends Command {
   private final Shooter m_shooter;
-  private final Drivetrain m_drivetrain;
+  private final double speed;
 
   /** Creates a new SpinFlywheelCommand. */
-  public SpinFlywheelCommand(Shooter shooter, Drivetrain drivetrain) {
+  public SpinFlywheelCommand(Shooter shooter, double speed) {
     m_shooter = shooter;
-    m_drivetrain = drivetrain;
+    this.speed = speed;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -31,10 +28,9 @@ public class SpinFlywheelCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
-    double distanceToSpeaker = Math.hypot(directionToSpeaker.getX(), directionToSpeaker.getY());
-    double flywheelVelocity = ShooterMath.getShot(distanceToSpeaker).getFlywheelVelocity();
-    m_shooter.spinFlywheels(flywheelVelocity);
+
+    m_shooter.spinFlywheels(speed);
+
   }
 
   // Called once the command ends or is interrupted.

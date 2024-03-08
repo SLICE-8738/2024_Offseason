@@ -45,6 +45,12 @@
                 "data": {
                   "name": "Store Note"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin Flywheels High"
+                }
               }
             ]
           }
@@ -83,6 +89,12 @@
                 "data": {
                   "name": "Store Note"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin Flywheels Low"
+                }
               }
             ]
           }
@@ -120,6 +132,12 @@
                 "type": "named",
                 "data": {
                   "name": "Store Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Spin Flywheels Low"
                 }
               }
             ]

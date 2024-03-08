@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.robot.commands.Indexer.StoreNote;
 import frc.robot.commands.Shooter.ShootCommand;
+import frc.robot.commands.Shooter.SpinFlywheelCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -127,6 +128,8 @@ public class AutoSelector {
 
         NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
+        NamedCommands.registerCommand("Spin Flywheels High", new SpinFlywheelCommand(m_shooter, 4000));
+        NamedCommands.registerCommand("Spin Flywheels Low", new SpinFlywheelCommand(m_shooter, 3900));
 
     }
 

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -21,7 +20,7 @@ public class ShuffleboardData {
 
     private final ShuffleboardTab driverTab, debugTab, modulesTab, autoTab;
 
-    public ShuffleboardData(Drivetrain drivetrain, Shooter shooter, Intake intake/*, Indexer indexer*/, AutoSelector autoSelector) {
+    public ShuffleboardData(Drivetrain drivetrain, Shooter shooter, Intake intake, AutoSelector autoSelector) {
 
         driverTab = Shuffleboard.getTab("Driver Tab");
         debugTab = Shuffleboard.getTab("Debug Tab");
@@ -30,7 +29,6 @@ public class ShuffleboardData {
 
         new DrivetrainData(drivetrain);
         new ShooterData(shooter);
-        //new IndexerData(indexer);
         new AutoData(autoSelector);
     }
 

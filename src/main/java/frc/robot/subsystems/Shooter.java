@@ -247,5 +247,7 @@ public class Shooter extends SubsystemBase {
       aimMotorRight.setVoltage(feedback);
     }
 
+    SmartDashboard.putNumber("Flywheel Speed", getFlywheelSpeed());
+
   }
 }

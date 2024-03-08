@@ -44,12 +44,12 @@ public class StoreNote extends Command {
   public void execute() {
     // spins the motors
     double distance = indexer.getLaserCanDistance();
-    if (distance < 50) {
+    if (distance < 75) {
       indexer.spinIndex(-.1);
-    } else if (distance > 150 && distance < 300) {
+    } else if (distance > 125 && distance < 300) {
       indexer.spinIndex(.1);
     } else if (distance > 300) {
-      indexer.spinIndex(.3);
+      indexer.spinIndex(.2);
     } else {
       indexer.spinIndex(0);
     }
