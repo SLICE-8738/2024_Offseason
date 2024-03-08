@@ -4,65 +4,73 @@
 
 package frc.robot.testing.routines;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
 public class IntakeTestCommand extends Command {
   /** Creates a new IntakeTestCommand. */
-  private Intake m_intake;
-  private double[] m_currents;
-  private double m_averageCurrent;
-  private double m_maxCurrent;
-  private double[] m_speeds;
-  private double m_averageSpeed;
+  private Intake intake;
+  private double[] averageCurrent = {0,0};
+  private double[] maxCurrent = {0,0};
+  private double[] averageSpeed = {0,0};
+  private int executes = 0;
+  private final Timer timer;
+  
   public IntakeTestCommand(Intake intake) {
     addRequirements(intake);
-    m_intake = intake;
+    this.intake = intake;
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    intake.intakeEntrance.set(1);
+    intake.intakeRamp.set(1);
+    timer.restart();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.intakeEntrance.set(1);
-    m_intake.intakeRamp.set(1);
-
-    m_currents[0] = m_intake.intakeEntrance.getOutputCurrent();
-    m_currents[1] = m_intake.intakeRamp.getOutputCurrent();
-    m_maxCurrent = m_currents[0];
-    for (int i = 0; i < m_currents.length; i++){
-      m_averageCurrent += m_currents[i];
-      if (m_currents[i] > m_maxCurrent){
-        m_maxCurrent = m_currents[i];
-      }
+    executes += 1;
+    averageCurrent[0] += intake.intakeEntrance.getOutputCurrent();
+    averageCurrent[1] += intake.intakeRamp.getOutputCurrent();
+    if(intake.intakeEntrance.getOutputCurrent() > maxCurrent[0]){
+      maxCurrent[0] = intake.intakeEntrance.getOutputCurrent();
     }
-    m_speeds[0] = m_intake.intakeEntranceEncoder.getVelocity();
-    m_speeds[1] = m_intake.intakeRampEncoder.getVelocity();
-    for(int i = 0; i < m_speeds.length; i++){
-      m_averageCurrent += m_speeds[i];
+    if(intake.intakeRamp.getOutputCurrent() > maxCurrent[1]){
+      maxCurrent[1] = intake.intakeRamp.getOutputCurrent();
     }
-    m_intake.intakeEntrance.set(0);
-    m_intake.intakeRamp.set(0);
-
-    m_averageCurrent /= m_currents.length;
-    m_averageSpeed /= m_speeds.length;
-
-    System.out.println("Intake Tests:");
-    System.out.println("Average Current: " + m_averageCurrent);
-    System.out.println("Max Current: " + m_maxCurrent);
-    System.out.println("Average Speed: " + m_averageSpeed);
+    averageSpeed[0] = intake.intakeEntranceEncoder.getVelocity();
+    averageSpeed[1] = intake.intakeRampEncoder.getVelocity();
+    
+    if(timer.get() >= 2){
+      isFinished();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.intakeEntrance.set(0);
+    intake.intakeRamp.set(0);
+
+    for(int i = 0; i < 2; i++){
+      averageCurrent[i] /= executes;
+      averageSpeed[i] /= executes;
+    }
+
+    System.out.println("Intake Tests:");
+    System.out.println("Average Current: " + averageCurrent);
+    System.out.println("Max Current: " + maxCurrent);
+    System.out.println("Average Speed: " + averageSpeed);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
