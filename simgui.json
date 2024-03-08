@@ -15,6 +15,9 @@
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
@@ -30,6 +33,11 @@
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
+      "/Shuffleboard/Autonomous/Auto Mode": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/Debug Tab/Field": {
         "bottom": 1476,
         "builtin": "",
@@ -47,6 +55,12 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
+        "Autonomous": {
+          "Auto Mode": {
+            "open": true
+          },
+          "open": true
+        },
         "Debug Tab": {
           "Angle Motor PIDF": {
             "Update": {
@@ -57,8 +71,7 @@
         },
         "Joystick Filters": {
           "open": true
-        },
-        "open": true
+        }
       },
       "SmartDashboard": {
         "open": true
@@ -66,6 +79,12 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

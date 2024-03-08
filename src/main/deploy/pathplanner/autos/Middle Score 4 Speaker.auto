@@ -97,6 +97,12 @@
           "data": {
             "name": "Shoot Note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score To Note 5"
+          }
         }
       ]
     }

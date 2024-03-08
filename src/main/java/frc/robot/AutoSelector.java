@@ -9,10 +9,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Indexer.RunIndexerCommand;
+
 import frc.robot.commands.Indexer.StoreNote;
-import frc.robot.commands.Intake.RunIntakeCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
@@ -23,7 +21,6 @@ import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-//import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -156,8 +153,18 @@ public class AutoSelector {
 
     private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
- 
+        try {
+
+            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
+
+        }
+        catch(Exception e) {
+
+            DriverStation.reportError(
+                e.toString() + " " + e.getMessage(), true);
+            return Optional.empty();
+
+        } 
     }
 
     public void updateInitialAutoPoseOffset(StartingPosition position, DesiredMode mode) {
