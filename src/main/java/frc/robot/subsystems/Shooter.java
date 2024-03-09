@@ -57,6 +57,8 @@ public class Shooter extends SubsystemBase {
 
   public boolean pidAimControl;
 
+  public boolean shooterDisabled;
+
   public Shooter() {
 
     shooterTestTab = Shuffleboard.getTab("Shooter Testing");
@@ -105,6 +107,8 @@ public class Shooter extends SubsystemBase {
     flyBottomPID.setD(kShooter.FLYWHEEL_KD);
 
     pidAimControl = false;
+
+    shooterDisabled = false;
 
   }
 
@@ -248,6 +252,12 @@ public class Shooter extends SubsystemBase {
     }
 
     SmartDashboard.putNumber("Flywheel Speed", getFlywheelSpeed());
+
+    double alternatePosition = aimAlternateEncoder.getPosition();
+    double relativePosition = (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2; 
+    if (Math.abs(alternatePosition - relativePosition) > 15) {
+      shooterDisabled = true;
+    }
 
   }
 }

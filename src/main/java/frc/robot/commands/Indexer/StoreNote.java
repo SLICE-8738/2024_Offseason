@@ -60,7 +60,8 @@ public class StoreNote extends Command {
       indexer.spinIndex(0);
     }
 
-    intake.runIntake(.5);
+    intake.runIntakeEntranceOnly(.5);
+    intake.runRampIntakeOnly(1/3.0);
 
     boolean stored = indexer.isStored();
     if (stored && !timerRunning) {
