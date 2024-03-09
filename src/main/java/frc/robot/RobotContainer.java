@@ -83,12 +83,13 @@ public class RobotContainer {
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
+  public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -1);
   public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
-  public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer);
+  public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
 
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new
@@ -176,6 +177,7 @@ public class RobotContainer {
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
     Button.triangle2.onTrue(m_runIntakeOut);
     Button.square2.onTrue(m_resetAlternateAngle);
+    Button.rightBumper2.whileTrue(m_reverseFlywheels);
 
   }
 

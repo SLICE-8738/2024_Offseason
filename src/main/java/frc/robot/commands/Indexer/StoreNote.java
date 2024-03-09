@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Indexer;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Button;
@@ -49,7 +50,12 @@ public class StoreNote extends Command {
     } else if (distance > 125 && distance < 300) {
       indexer.spinIndex(.1);
     } else if (distance > 300) {
-      indexer.spinIndex(.2);
+      if (DriverStation.isAutonomousEnabled()) {
+        indexer.spinIndex(.2);
+      }else {
+        indexer.spinIndex(.3);
+      }
+
     } else {
       indexer.spinIndex(0);
     }

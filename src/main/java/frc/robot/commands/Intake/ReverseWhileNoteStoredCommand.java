@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -12,11 +13,12 @@ public class ReverseWhileNoteStoredCommand extends Command {
 
   Intake m_intake;
   Indexer m_indexer;
-
+  GenericHID operatorController;
   /** Creates a new ReverseWhileNoteStoredCommand. */
-  public ReverseWhileNoteStoredCommand(Intake intake, Indexer indexer) {
+  public ReverseWhileNoteStoredCommand(Intake intake, Indexer indexer, GenericHID operatorController) {
     m_intake = intake;
     m_indexer = indexer;
+    this.operatorController = operatorController;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intake);
@@ -30,9 +32,14 @@ public class ReverseWhileNoteStoredCommand extends Command {
   @Override
   public void execute() {
     if (m_indexer.isStored()) {
-      m_intake.runIntakeEntranceOnly(-0.1);
+      if (Math.abs(operatorController.getRawAxis(5)) < 0.1) {
+        m_intake.runIntakeEntranceOnly(-0.1);
+      }else {
+        m_intake.runIntake(-operatorController.getRawAxis(5) * 0.2);
+      }
+      
     }else {
-      m_intake.runIntakeEntranceOnly(0);
+      m_intake.runIntake(-operatorController.getRawAxis(5) * 0.2);
     }
   }
 
