@@ -265,5 +265,9 @@ public class Shooter extends SubsystemBase {
     //   System.out.println("SHOOTER DISABLED");
     // }
 
+    SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
+    SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
+
+
   }
 }
