@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -44,13 +45,18 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   /** Creates a new ShootCommand for autonomous. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
-    super(new SequentialCommandGroup(new WaitCommand(0.1), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
+    super(
+      new SequentialCommandGroup(new WaitCommand(0.1),
+      new ParallelRaceGroup(new WaitCommand(4), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+      new NudgeIndexer(indexer))
+    );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
     AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
     addCommands(prepareShooter, alignWithSpeakerCommand);
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
+
     // Check if the flywheels are spinning fast enough
     boolean atSpeed = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
     // Check if the shooter is aimed vertically accurately enough

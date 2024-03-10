@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
     differential = shooterTesting.add("Differential Testing: Top Flywheel", 0);
 
     // Define the above objects
-    flywheelTop = SparkMaxFactory.createSparkMax(10, REVConfigs.shooterFlywheelSparkMaxConfig);
+    flywheelTop = SparkMaxFactory.createSparkMax(31, REVConfigs.shooterFlywheelSparkMaxConfig);
     flywheelBottom = SparkMaxFactory.createSparkMax(11, REVConfigs.shooterFlywheelSparkMaxConfig);
     aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
     aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(false));
@@ -117,6 +117,8 @@ public class Shooter extends SubsystemBase {
    * @param speed Target speed.
    */
   public void spinFlywheels(double speed){
+    if (shooterDisabled) return;
+
     double differentialMultiplier = 0;
     speedTarget = speed;
     flyTopPID.setReference(speed * (1 + differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
@@ -136,6 +138,8 @@ public class Shooter extends SubsystemBase {
    * @param speed power to run the flywheel at from -1 to 1
    */
   public void dutyCycleSpinFlywheel(double speed) {
+    if (shooterDisabled) return;
+
     flywheelTop.set(-speed);
     flywheelBottom.set(-speed);
   }
@@ -245,7 +249,7 @@ public class Shooter extends SubsystemBase {
 
     currentAngleWidget.getEntry().setDouble(getAlternateAngle());
 
-    if (pidAimControl) {
+    if (pidAimControl && !shooterDisabled) {
       double feedback = aimPID.calculate(getAlternateAngle(), angleTarget);
       aimMotorLeft.setVoltage(feedback);
       aimMotorRight.setVoltage(feedback);
@@ -255,9 +259,11 @@ public class Shooter extends SubsystemBase {
 
     double alternatePosition = aimAlternateEncoder.getPosition();
     double relativePosition = (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2; 
-    if (Math.abs(alternatePosition - relativePosition) > 15) {
-      shooterDisabled = true;
-    }
+    // if (Math.abs(alternatePosition - relativePosition) > 10) {
+    //   shooterDisabled = true;
+    //   dutyCycleAimShooter(0);
+    //   System.out.println("SHOOTER DISABLED");
+    // }
 
   }
 }
