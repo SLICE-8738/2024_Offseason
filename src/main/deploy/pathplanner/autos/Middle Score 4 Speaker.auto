@@ -49,16 +49,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Spin Flywheels High"
+                  "name": "Spin Flywheels Low"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 1"
           }
         },
         {
@@ -78,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score To Note 2"
+                        "pathName": "Note 1 To Note 2"
                       }
                     },
                     {
@@ -106,12 +100,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 2"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot Note"
@@ -128,7 +116,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score To Note 3"
+                        "pathName": "Note 2 To Note 3"
                       }
                     },
                     {

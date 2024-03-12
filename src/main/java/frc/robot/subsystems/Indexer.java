@@ -87,5 +87,7 @@ public class Indexer extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("LaserCAN Distance", getLaserCanDistance());
+
+    SmartDashboard.putBoolean("Have Note", getLaserCanDistance() < 250);
   }
 }

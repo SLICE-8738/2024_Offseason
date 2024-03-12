@@ -99,16 +99,17 @@ public class AutoSelector {
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
-        startingPositionChooser.setDefaultOption("Source Side", StartingPosition.SOURCE_SIDE);
 
-        startingPositionChooser.addOption("Middle", StartingPosition.MIDDLE);
+        startingPositionChooser.setDefaultOption("Middle", StartingPosition.MIDDLE);
+
+        startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
         startingPositionChooser.addOption("Amp Side", StartingPosition.AMP_SIDE);
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
+        modeChooser.setDefaultOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
 
-        modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER.value, DesiredMode.SCORE_3_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);

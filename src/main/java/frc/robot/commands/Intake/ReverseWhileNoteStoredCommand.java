@@ -33,7 +33,7 @@ public class ReverseWhileNoteStoredCommand extends Command {
   public void execute() {
     if (m_indexer.isStored()) {
       if (Math.abs(operatorController.getRawAxis(5)) < 0.1) {
-        m_intake.runIntakeEntranceOnly(-0.1);
+        m_intake.runIntakeEntranceOnly(0);
       }else {
         m_intake.runIntake(-operatorController.getRawAxis(5) * 0.2);
       }

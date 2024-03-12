@@ -258,7 +258,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Flywheel Speed", getFlywheelSpeed());
 
     double alternatePosition = aimAlternateEncoder.getPosition();
-    double relativePosition = (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2; 
+    double relativePosition = (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2;
+
+    double alternateVelocity = aimAlternateEncoder.getVelocity();
+    double relativeVelocity = (aimRelativeEncoderLeft.getVelocity() + aimRelativeEncoderRight.getVelocity()) / 2;
     // if (Math.abs(alternatePosition - relativePosition) > 10) {
     //   shooterDisabled = true;
     //   dutyCycleAimShooter(0);
@@ -267,7 +270,10 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
     SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
-
+    SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
+    SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
+    SmartDashboard.putNumber("Shooter Position Error", alternatePosition - relativePosition);
+    SmartDashboard.putNumber("Shooter Velocity Error", alternateVelocity - relativeVelocity);
 
   }
 }

@@ -6,8 +6,10 @@ package frc.robot.commands.Indexer;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Button;
+import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
@@ -38,6 +40,7 @@ public class StoreNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SmartDashboard.putBoolean("Intaking", true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -60,7 +63,7 @@ public class StoreNote extends Command {
       indexer.spinIndex(0);
     }
 
-    intake.runIntakeEntranceOnly(.5);
+    intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
     intake.runRampIntakeOnly(1/3.0);
 
     boolean stored = indexer.isStored();
@@ -78,6 +81,8 @@ public class StoreNote extends Command {
     // stops the motors
     indexer.spinIndex(0);
     intake.runIntake(0);
+
+    SmartDashboard.putBoolean("Intaking", false);
 
   }
 
