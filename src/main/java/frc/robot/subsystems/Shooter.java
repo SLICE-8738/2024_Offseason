@@ -38,12 +38,12 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
  */
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private CANSparkMax flywheelTop, flywheelBottom; // Create the flywheel motors
+  private CANSparkMax flywheelBottom;//, flywheelTop; // Create the flywheel motors
   private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
-  private RelativeEncoder flyTopEncoder, flyBottomEncoder; // Encoder for both...
+  private RelativeEncoder /*flyTopEncoder,8*/ flyBottomEncoder; // Encoder for both...
   private RelativeEncoder aimRelativeEncoderLeft, aimRelativeEncoderRight; // ...
   private RelativeEncoder aimAlternateEncoder; // ...
-  private SparkPIDController flyTopPID, flyBottomPID; // PIDs for both...
+  private SparkPIDController /*flyTopPID,*/ flyBottomPID; // PIDs for both...
   private PIDController aimPID;// ...
   private SimpleMotorFeedforward flyFeedforward;
   private double speedTarget; // Target speed of flywheel
@@ -68,18 +68,18 @@ public class Shooter extends SubsystemBase {
     differential = shooterTesting.add("Differential Testing: Top Flywheel", 0);
 
     // Define the above objects
-    flywheelTop = SparkMaxFactory.createSparkMax(31, REVConfigs.shooterFlywheelSparkMaxConfig);
+    //flywheelTop = SparkMaxFactory.createSparkMax(31, REVConfigs.shooterFlywheelSparkMaxConfig);
     flywheelBottom = SparkMaxFactory.createSparkMax(11, REVConfigs.shooterFlywheelSparkMaxConfig);
     aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
     aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(false));
 
-    flyTopEncoder = flywheelTop.getEncoder();
+    //flyTopEncoder = flywheelTop.getEncoder();
     flyBottomEncoder = flywheelBottom.getEncoder();
     aimRelativeEncoderLeft = aimMotorLeft.getEncoder();
     aimRelativeEncoderRight = aimMotorRight.getEncoder();
     aimAlternateEncoder = aimMotorLeft.getAlternateEncoder(4096);
     aimAlternateEncoder.setInverted(true);
-    flyTopPID = flywheelTop.getPIDController();
+    //flyTopPID = flywheelTop.getPIDController();
     flyBottomPID = flywheelBottom.getPIDController();
     aimPID = new PIDController(Constants.kShooter.AIM_KP, Constants.kShooter.AIM_KI, Constants.kShooter.AIM_KD);
     flyFeedforward = new SimpleMotorFeedforward(0, kShooter.FLYWHEEL_FEED_FORWARD);
@@ -98,9 +98,9 @@ public class Shooter extends SubsystemBase {
     aimAlternateEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
 
     // Set PID of flywheel and aim motors.
-    flyTopPID.setP(kShooter.FLYWHEEL_KP);
-    flyTopPID.setI(kShooter.FLYWHEEL_KI);
-    flyTopPID.setD(kShooter.FLYWHEEL_KD);
+    // flyTopPID.setP(kShooter.FLYWHEEL_KP);
+    // flyTopPID.setI(kShooter.FLYWHEEL_KI);
+    // flyTopPID.setD(kShooter.FLYWHEEL_KD);
 
     flyBottomPID.setP(kShooter.FLYWHEEL_KP);
     flyBottomPID.setI(kShooter.FLYWHEEL_KI);
@@ -121,7 +121,7 @@ public class Shooter extends SubsystemBase {
 
     double differentialMultiplier = 0;
     speedTarget = speed;
-    flyTopPID.setReference(speed * (1 + differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
+    //flyTopPID.setReference(speed * (1 + differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
     flyBottomPID.setReference(speed * (1 - differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
   }
 
@@ -129,7 +129,7 @@ public class Shooter extends SubsystemBase {
    * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
    */
   public void stopFlywheels() {
-    flywheelTop.set(0);
+    //flywheelTop.set(0);
     flywheelBottom.set(0);
   }
 
@@ -140,7 +140,7 @@ public class Shooter extends SubsystemBase {
   public void dutyCycleSpinFlywheel(double speed) {
     if (shooterDisabled) return;
 
-    flywheelTop.set(-speed);
+    //flywheelTop.set(-speed);
     flywheelBottom.set(-speed);
   }
 
@@ -192,8 +192,8 @@ public class Shooter extends SubsystemBase {
    * @return True if at the correct speed, false otherwise.
    */
   public boolean atTargetSpeed(double acceptableError){
-    double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
-    currentSpeed = (currentSpeed + flyBottomEncoder.getVelocity()) / 2; // Get the current speed of the other flywheel and average
+    //double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
+    double currentSpeed = (flyBottomEncoder.getVelocity()); // Get the current speed of the other flywheel and average
     SmartDashboard.putNumber("Flywheel Speed Error", speedTarget - currentSpeed);
     if (Math.abs(speedTarget - currentSpeed) <= acceptableError){ // Is the current speed within the acceptable error?
       return true; // if so, true.
@@ -202,8 +202,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getFlywheelSpeed() {
-    double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
-    currentSpeed = (currentSpeed + flyBottomEncoder.getVelocity()) / 2; // Get the current speed of the other flywheel and average
+    //double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
+    double currentSpeed = (flyBottomEncoder.getVelocity()); // Get the current speed of the other flywheel and average
     return currentSpeed;
   }
 
@@ -230,7 +230,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getTopOutputCurrent(){
-    return flywheelTop.getOutputCurrent();
+    //return flywheelTop.getOutputCurrent();
+    return 0;
   }
   public double getBottomOutputCurrent(){
     return flywheelBottom.getOutputCurrent();
