@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Indexer;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,8 @@ public class StoreNote extends Command {
 
   private boolean timerRunning;
 
+  private final PIDController pid;
+
   public StoreNote(Indexer indexer, Intake intake) {
     // from the indexer and intake subsystems, gets the motors without making a new
     // one
@@ -35,12 +38,16 @@ public class StoreNote extends Command {
 
     timer = new Timer();
 
+    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, 0, 0);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("Intaking", true);
+    timer.reset();
+    timer.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,19 +55,14 @@ public class StoreNote extends Command {
   public void execute() {
     // spins the motors
     double distance = indexer.getLaserCanDistance();
-    if (distance < 75) {
-      indexer.spinIndex(-.1);
-    } else if (distance > 125 && distance < 300) {
-      indexer.spinIndex(.1);
-    } else if (distance > 300) {
-      if (DriverStation.isAutonomousEnabled()) {
-        indexer.spinIndex(.2);
-      }else {
-        indexer.spinIndex(.3);
-      }
 
-    } else {
+    if (indexer.isStored()) {
       indexer.spinIndex(0);
+    } else if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
+      indexer.spinIndex(0.3);
+    } else {
+      double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
+      indexer.spinIndex(-output);
     }
 
     intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
@@ -69,9 +71,11 @@ public class StoreNote extends Command {
     boolean stored = indexer.isStored();
     if (stored && !timerRunning) {
       timer.restart();
+      timerRunning = true;
     }else if (!stored && timerRunning) {
       timer.reset();
       timer.stop();
+      timerRunning = false;
     }
   }
 

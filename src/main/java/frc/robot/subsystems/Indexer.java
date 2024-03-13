@@ -14,7 +14,7 @@ import au.grapplerobotics.LaserCan.TimingBudget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
 
@@ -31,7 +31,7 @@ public class Indexer extends SubsystemBase {
     try {
       // configures settings for the laserCan
       laser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
-      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS); // checks every 50 milliseconds for the measurement of the
+      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS); // checks every 33 milliseconds for the measurement of the
                                                               // laser
       laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense
                                                                               // objects
@@ -54,7 +54,7 @@ public class Indexer extends SubsystemBase {
   public boolean isStored() {
     // checks if the laserCan distance is more than 150 millimeters or less than 150
     // millimeters
-    if (getLaserCanDistance() <= 125 && getLaserCanDistance() >= 75) {
+    if (getLaserCanDistance() <= Constants.kIndexer.STORE_NOTE_TARGET + Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE && getLaserCanDistance() >= Constants.kIndexer.STORE_NOTE_TARGET - Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
       // if the laserCAN distance is less than 150 millimeters, returns true and there
       // is a note stored in the high index motor
       return true;
