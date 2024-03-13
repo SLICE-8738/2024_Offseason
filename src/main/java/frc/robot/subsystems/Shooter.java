@@ -123,7 +123,7 @@ public class Shooter extends SubsystemBase {
 
     speedTarget = speed;
 
-    flywheelVelocity.Velocity = Conversions.RPMToTalon(speed, Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    //flywheelVelocity.Velocity = Conversions.RPMToTalon(speed, Constants.kShooter.FLYWHEEL_GEAR_RATIO);
     flywheelVelocity.FeedForward = flyFeedforward.calculate(speed);
     flywheelTop.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
     flywheelBottom.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
