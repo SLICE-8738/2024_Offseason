@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
 
 /**
@@ -18,6 +18,8 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static CTREConfigs ctreConfigs = new CTREConfigs();
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;

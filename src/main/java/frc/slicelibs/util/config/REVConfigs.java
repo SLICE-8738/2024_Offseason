@@ -99,20 +99,9 @@ public final class REVConfigs {
         Constants.kDrivetrain.ANGLE_FRAME_1_PERIOD_MS, 
         Constants.kDrivetrain.ANGLE_FRAME_2_PERIOD_MS);
 
-    public static final SparkMaxConfiguration shooterFlywheelSparkMaxConfig = new SparkMaxConfiguration(
-        Constants.kShooter.FLYWHEEL_IDLE_MODE, 
-        Constants.kShooter.INVERT, 
-        false, 
-        12, 
-        0.0, 
-        0.0, 
-        25, 
-        Constants.kShooter.FRAME_1_PERIOD_MS, 
-        Constants.kShooter.FRAME_2_PERIOD_MS);
-
     public static final SparkMaxConfiguration shooterAimSparkMaxConfig = new SparkMaxConfiguration(
         Constants.kShooter.AIM_IDLE_MODE, 
-        Constants.kShooter.INVERT, 
+        Constants.kShooter.AIM_INVERT, 
         false, 
         12, 
         0.0, 

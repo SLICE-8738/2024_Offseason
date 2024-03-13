@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -38,8 +37,6 @@ public class SwerveModule {
     private TalonFXSimState driveMotorSim;
     private RelativeEncoder integratedAngleEncoder;
     private CANcoder angleEncoder;
-
-    private final CTREConfigs ctreConfigs = new CTREConfigs();
 
     private final SparkPIDController angleController;
 
@@ -137,7 +134,7 @@ public class SwerveModule {
     }
 
     private void configAngleEncoder(){    
-        angleEncoder.getConfigurator().apply(ctreConfigs.swerveCANcoderConfig);
+        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
     }
 
     private void configAngleMotor(){
@@ -150,7 +147,7 @@ public class SwerveModule {
     }
 
     private void configDriveMotor(){
-        driveMotor.getConfigurator().apply(ctreConfigs.swerveDriveFXConfig);
+        driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         driveMotor.getConfigurator().setPosition(0);
         driveMotor.getVelocity().setUpdateFrequency(Constants.kDrivetrain.DRIVE_VELOCITY_FRAME_RATE_HZ);
         driveMotor.getPosition().setUpdateFrequency(Constants.kDrivetrain.DRIVE_POSITION_FRAME_RATE_HZ);

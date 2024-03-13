@@ -187,19 +187,34 @@ public final class Constants {
 
   public static final class kShooter {
 
+    /* Motor IDs */
+    public static final int FLYWHEEL_TOP_ID = 10;
+    public static final int FLYWHEEL_BOTTOM_ID = 11;
+
     /* Idle Mode */
-    public static final IdleMode FLYWHEEL_IDLE_MODE = IdleMode.kBrake;
+    public static final NeutralModeValue FLYWHEEL_IDLE_MODE = NeutralModeValue.Brake;
     public static final IdleMode AIM_IDLE_MODE = IdleMode.kBrake;
 
-    /* Motor Invert */
-    public static final boolean INVERT = false;
+    /* Motor Inverts */
+    public static final InvertedValue FLYWHEEL_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final boolean AIM_INVERT = false;
+
+    /* Flywheel Current Limiting */
+    public static final int FLYWHEEL_CURRENT_LIMIT = 30;
+    public static final int FLYWHEEL_CURRENT_THRESHOLD = 60;
+    public static final double FLYWHEEL_CURRENT_THRESHOLD_TIME = 0.1;
+    public static final boolean FLYWHEEL_ENABLE_CURRENT_LIMIT = true;
+
+    public static final double FLYWHEEL_CLOSED_LOOP_RAMP = 0.25;
+    public static final double FLYWHEEL_OPEN_LOOP_RAMP = 0.25;
 
     /* Status Frame Periods */
     public static final int FRAME_1_PERIOD_MS = 500;
     public static final int FRAME_2_PERIOD_MS = 100;
 
     /* Encoder Conversion Values */
-    public static final double AIM_GEAR_RATIO = (250); // 250:1
+    public static final double FLYWHEEL_GEAR_RATIO = 0.5; // 1:2
+    public static final double AIM_GEAR_RATIO = 250; // 250:1
 
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
     public static final double AIM_VELOCITY_CONVERSION_FACTOR = AIM_POSITION_CONVERSION_FACTOR / 60;
