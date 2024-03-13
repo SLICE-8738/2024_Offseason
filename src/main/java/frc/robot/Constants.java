@@ -288,7 +288,7 @@ public final class Constants {
 
     public static final double STORE_NOTE_TARGET = 105;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
-    public static final double STORE_NOTE_KP = 0.009;
+    public static final double STORE_NOTE_KP = 0.0018;
     public static final double DEFAULT_LASERCAN_DISTANCE = 325;
 
   }

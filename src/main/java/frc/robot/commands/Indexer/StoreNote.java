@@ -56,9 +56,7 @@ public class StoreNote extends Command {
     // spins the motors
     double distance = indexer.getLaserCanDistance();
 
-    if (indexer.isStored()) {
-      indexer.spinIndex(0);
-    } else if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
+    if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
       indexer.spinIndex(0.3);
     } else {
       double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
