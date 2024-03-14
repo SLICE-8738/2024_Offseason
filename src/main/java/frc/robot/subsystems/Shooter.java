@@ -150,6 +150,13 @@ public class Shooter extends SubsystemBase {
     flywheelBottom.setControl(flywheelDutyCycle);
   }
 
+  public void voltageSpinFlywheel(double volts) {
+    if (shooterDisabled) return;
+
+    flywheelTop.setVoltage(volts);
+    flywheelBottom.setVoltage(volts);
+  }
+
   /**
    * This function begins to move the shooter to a target angle.
    * @param angle Target angle.
