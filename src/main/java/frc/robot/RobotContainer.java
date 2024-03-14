@@ -100,6 +100,8 @@ public class RobotContainer {
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
   // public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
 
+  public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -182,6 +184,8 @@ public class RobotContainer {
     Button.triangle2.onTrue(m_runIntakeOut);
     Button.square2.onTrue(m_resetAlternateAngle);
     Button.rightBumper2.whileTrue(m_reverseFlywheels);
+
+    Button.leftStickClick2.onTrue(m_ffData);
 
   }
 

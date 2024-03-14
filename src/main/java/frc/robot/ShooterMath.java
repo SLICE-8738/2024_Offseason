@@ -5,7 +5,7 @@ package frc.robot;
  */
 public final class ShooterMath {
     
-  private static final double OOMF = 1.8;
+  private static final double OOMF = 2.2;
 
     public static class ShotDetails {
 
@@ -57,10 +57,10 @@ public final class ShooterMath {
 
         private double getMultiplier(double originalVelocity) {
             //return 0.00000267806 * Math.pow(originalVelocity, 2) + -0.00839714 * originalVelocity + 8.42241;
-            if (originalVelocity > 1796.5) {
-              return 2.1;
-            }
-            return 2;
+            // if (originalVelocity > 1796.5) {
+            //   return 2.1;
+            // }
+            return 1;
         }
     }
 

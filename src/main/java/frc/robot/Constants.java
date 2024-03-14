@@ -222,7 +222,9 @@ public final class Constants {
     public static final double FLYWHEEL_KP = 0.000685;
     public static final double FLYWHEEL_KI = 0.000000006;
     public static final double FLYWHEEL_KD = 0;
-    public static final double FLYWHEEL_FEED_FORWARD = 0.0009;
+    // Feedforward for flywheel (found by collecting data and creating a linear regression)
+    public static final double FLYWHEEL_FF_KV = 0.00102129;
+    public static final double FLYWHEEL_FF_KS = 0.282459;
 
     public static final double AIM_KP = 0.5;
     public static final double AIM_KI = 0;
@@ -304,6 +306,7 @@ public final class Constants {
     public static final double STORE_NOTE_TARGET = 105;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
     public static final double STORE_NOTE_KP = 0.0018;
+    public static final double STORE_NOTE_KD = 0;
     public static final double DEFAULT_LASERCAN_DISTANCE = 325;
 
   }

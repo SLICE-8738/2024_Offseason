@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
     aimAlternateEncoder = aimMotorLeft.getAlternateEncoder(4096);
     aimAlternateEncoder.setInverted(true);
     aimPID = new PIDController(Constants.kShooter.AIM_KP, Constants.kShooter.AIM_KI, Constants.kShooter.AIM_KD);
-    flyFeedforward = new SimpleMotorFeedforward(0, kShooter.FLYWHEEL_FEED_FORWARD);
+    flyFeedforward = new SimpleMotorFeedforward(kShooter.FLYWHEEL_FF_KS, kShooter.FLYWHEEL_FF_KV);
 
     flywheelTop.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
     flywheelBottom.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
@@ -120,6 +120,10 @@ public class Shooter extends SubsystemBase {
    */
   public void spinFlywheels(double speed){
     if (shooterDisabled) return;
+
+    if (speed > 8000) {
+      speed = 8000;
+    }
 
     speedTarget = speed;
 
@@ -207,7 +211,7 @@ public class Shooter extends SubsystemBase {
   public boolean atTargetSpeed(double acceptableError){
     double currentSpeed = getFlywheelSpeed(); // Get the current speed of the flywheel
     SmartDashboard.putNumber("Flywheel Speed Error", speedTarget - currentSpeed);
-    if (Math.abs(speedTarget - currentSpeed) <= acceptableError){ // Is the current speed within the acceptable error?
+    if (speedTarget - currentSpeed <= acceptableError){ // Is the current speed within the acceptable error?
       return true; // if so, true.
     }
     return false; // otherwise, false.

@@ -17,6 +17,7 @@ public class RecordFFDataCommand extends Command {
   private double voltage;
   private final Timer timer;
   private List<Double> speeds;
+  private double speed;
   /** Creates a new RecordFFDataCommand. */
   public RecordFFDataCommand(Shooter shooter) {
     m_shooter = shooter;
@@ -43,7 +44,7 @@ public class RecordFFDataCommand extends Command {
     if (timer.get() > 0.25) {
       timer.restart();
       voltage += 0.1;
-      double speed = m_shooter.getFlywheelSpeed();
+      speed = m_shooter.getFlywheelSpeed();
       m_shooter.voltageSpinFlywheel(voltage);
       speeds.add(speed);
     }
@@ -63,6 +64,6 @@ public class RecordFFDataCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return voltage >= 12;
+    return voltage >= 12 || speed >= 8000;
   }
 }

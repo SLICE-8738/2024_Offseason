@@ -25,22 +25,24 @@ public class PrepareShooterCommand extends Command {
   private final Drivetrain m_drivetrain;
   private boolean flywheelsStopped;
 
-  // private final ShuffleboardTab shooterTestTab;
+  private final ShuffleboardTab shooterTestTab;
   // private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
+  private final SimpleWidget angleWidget, originalVelocityWidget;
+  
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
     m_shooter = shooter;
     m_drivetrain  = drivetrain;
 
-    // shooterTestTab = Shuffleboard.getTab("Shooter Testing");
+    shooterTestTab = Shuffleboard.getTab("Shooter Testing");
     // distanceWidget = shooterTestTab.add("Robot Distance", 0);
     // desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     // desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
-    // currentFlywheelSpeed = shooterTestTab.add("Current Flywheel Velocity", 0);
     // topFlywheelCurrent = shooterTestTab.add("Top Flywheel Current", 0);
     // bottomFlywheelCurrent = shooterTestTab.add("Bottom Flywheel Current", 0);
-    // multiplierWidget = shooterTestTab.add("Velocity Multiplier", 0);
-    // originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
+    //multiplierWidget = shooterTestTab.add("Velocity Multiplier", 1);
+    originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
+    angleWidget = shooterTestTab.add("Go To This Angle", 0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -64,10 +66,10 @@ public class PrepareShooterCommand extends Command {
 
     // distanceWidget.getEntry().setDouble(distanceToSpeaker);
     // Uses distance info the calculate optimal shot
-    ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
+    //ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
     // Sets the flywheel speed and aim angle to the appropriate values 
-    double speed = shotDetails.getFlywheelVelocity();
-    // originalVelocityWidget.getEntry().setDouble(speed);
+    //double speed = shotDetails.getFlywheelVelocity();
+    //originalVelocityWidget.getEntry().setDouble(speed);
     /*if (m_drivetrain.inShootingRange()) {
       m_shooter.spinFlywheels(speed);
       flywheelsStopped = false;
@@ -77,15 +79,19 @@ public class PrepareShooterCommand extends Command {
       flywheelsStopped = true;
     }*/
 
-    m_shooter.spinFlywheels(speed);
-    m_shooter.aimShooter(shotDetails.getShooterAngle());
+    //speed *= multiplierWidget.getEntry().getDouble(1);
+
+    m_shooter.spinFlywheels(4500);
+    m_shooter.aimShooter(angleWidget.getEntry().getDouble(0));
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
-    SmartDashboard.putNumber("Flywheel Target Velocity", speed);
+    SmartDashboard.putNumber("Flywheel Target Velocity", 4500);
+
+    SmartDashboard.putNumber("Flywheel Current Speed", m_shooter.getFlywheelSpeed());
+
 
     // desiredSpeedWidget.getEntry().setDouble(speed);
     // desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
-    // currentFlywheelSpeed.getEntry().setDouble(m_shooter.getFlywheelSpeed());
     // topFlywheelCurrent.getEntry().setDouble(m_shooter.getTopOutputCurrent());
     // bottomFlywheelCurrent.getEntry().setDouble(m_shooter.getBottomOutputCurrent());
   }

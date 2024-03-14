@@ -28,6 +28,10 @@ public class StoreNote extends Command {
 
   private final PIDController pid;
 
+  private boolean outputCurrentThreshold;
+
+  private boolean forceStop;
+
   public StoreNote(Indexer indexer, Intake intake) {
     // from the indexer and intake subsystems, gets the motors without making a new
     // one
@@ -38,7 +42,7 @@ public class StoreNote extends Command {
 
     timer = new Timer();
 
-    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, 0, 0);
+    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, Constants.kIndexer.STORE_NOTE_KD, 0);
 
   }
 
@@ -48,6 +52,9 @@ public class StoreNote extends Command {
     SmartDashboard.putBoolean("Intaking", true);
     timer.reset();
     timer.stop();
+
+    outputCurrentThreshold = false;
+    forceStop = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,13 +62,26 @@ public class StoreNote extends Command {
   public void execute() {
     // spins the motors
     double distance = indexer.getLaserCanDistance();
-
-    if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
-      indexer.spinIndex(0.3);
+    if (indexer.laserCanOnline()) {
+      if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
+        indexer.spinIndex(0.3);
+      } else {
+        double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
+        indexer.spinIndex(-output);
+      }
     } else {
-      double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
-      indexer.spinIndex(-output);
+      if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
+        outputCurrentThreshold = true;
+      }
+
+      if (!outputCurrentThreshold) {
+        indexer.spinIndex(0.3);
+      } else {
+        indexer.spinIndex(0);
+        forceStop = true;
+      }
     }
+
 
     intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
     intake.runRampIntakeOnly(1/3.0);
@@ -91,6 +111,10 @@ public class StoreNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (forceStop) {
+      return true;
+    }
+    
     if (Button.circle1.getAsBoolean() || Button.circle2.getAsBoolean() || Button.rightTrigger1.getAsBoolean() || Button.cross1.getAsBoolean() || Button.rightTrigger2.getAsBoolean()) {
       return true;
     }

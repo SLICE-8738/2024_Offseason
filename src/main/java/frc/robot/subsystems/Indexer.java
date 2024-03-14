@@ -23,10 +23,13 @@ public class Indexer extends SubsystemBase {
   // Creates private variables
   private CANSparkMax highIndexMotor;
   private LaserCan laser;
+  private boolean online;
 
   public Indexer() {
     highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
     laser = new LaserCan(19); // creates new laserCan
+
+    online = true;
 
     try {
       // configures settings for the laserCan
@@ -73,11 +76,16 @@ public class Indexer extends SubsystemBase {
   public double getLaserCanDistance() {
     // returns the distance from the laserCAN in millimeters
     Measurement measurement = laser.getMeasurement();
+    online = measurement != null;
     if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
       return measurement.distance_mm;
     } else {
       return 1000;
     }
+  }
+
+  public boolean laserCanOnline() {
+    return online;
   }
 
   public double getOutputCurrent() {

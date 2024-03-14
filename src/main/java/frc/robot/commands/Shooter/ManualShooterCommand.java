@@ -55,7 +55,7 @@ public class ManualShooterCommand extends Command {
     if (-m_operatorController.getRawAxis(5) > -0.1) {
       m_shooter.spinFlywheels(flywheelSpeed);
     } else {
-      m_shooter.dutyCycleSpinFlywheel(m_operatorController.getRawAxis(5) * 0.1);
+      m_shooter.dutyCycleSpinFlywheel(-m_operatorController.getRawAxis(5) * 0.1);
     }
 
 
