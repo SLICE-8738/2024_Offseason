@@ -81,7 +81,7 @@ public class PrepareShooterCommand extends Command {
     double angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
 
     m_shooter.spinFlywheels(distanceToSpeaker < 3.8 ? 4500 : 5000);
-    m_shooter.aimShooter(angleWidget.getEntry().getDouble(0));
+    m_shooter.aimShooter(angle);
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
     SmartDashboard.putNumber("Flywheel Target Velocity", distanceToSpeaker < 3.8 ? 4500 : 5000);
