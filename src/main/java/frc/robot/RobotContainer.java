@@ -88,7 +88,7 @@ public class RobotContainer {
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
-  public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -1);
+  public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
   public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
 

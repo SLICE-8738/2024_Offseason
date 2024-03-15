@@ -22,7 +22,7 @@ public class ManualShooterCommand extends Command {
   private final GenericHID m_operatorController;
   private final PolarJoystickFilter speedFilter;
 
-  private final double BASE_FLYWHEEL_SPEED = 1500;
+  private final double BASE_FLYWHEEL_SPEED = 0;
 
   /** Creates a new AimShooterCommand. */
   public ManualShooterCommand(Shooter shooter, Drivetrain drivetrain, Indexer indexer, GenericHID operatorController) {

@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Button;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -40,6 +42,6 @@ public class RunIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Button.circle2.getAsBoolean();
   }
 }
