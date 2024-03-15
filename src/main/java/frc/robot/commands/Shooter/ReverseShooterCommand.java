@@ -41,7 +41,7 @@ public class ReverseShooterCommand extends Command {
     } 
 
     // Run the flywheels and indexer in reverse
-    m_shooter.dutyCycleSpinFlywheel(-0.5);
+    m_shooter.dutyCycleSpinFlywheels(-0.5);
     m_indexer.spinIndex(-0.5);
   }
 

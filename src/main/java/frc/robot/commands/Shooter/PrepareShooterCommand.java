@@ -81,7 +81,7 @@ public class PrepareShooterCommand extends Command {
 
     //speed *= multiplierWidget.getEntry().getDouble(1);
 
-    m_shooter.spinFlywheels(4500);
+    m_shooter.spinFlywheels(4500, distanceToSpeaker >= 3.8);
     m_shooter.aimShooter(angleWidget.getEntry().getDouble(0));
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);

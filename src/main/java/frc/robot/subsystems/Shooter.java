@@ -99,15 +99,6 @@ public class Shooter extends SubsystemBase {
     aimAlternateEncoder.setVelocityConversionFactor(3);
     aimAlternateEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
 
-    // Set PID of flywheel and aim motors.
-    // flyTopPID.setP(kShooter.FLYWHEEL_KP);
-    // flyTopPID.setI(kShooter.FLYWHEEL_KI);
-    // flyTopPID.setD(kShooter.FLYWHEEL_KD);
-
-    //flyBottomPID.setP(kShooter.FLYWHEEL_KP);
-    //flyBottomPID.setI(kShooter.FLYWHEEL_KI);
-    //flyBottomPID.setD(kShooter.FLYWHEEL_KD);
-
     pidAimControl = false;
 
     shooterDisabled = false;
@@ -118,7 +109,7 @@ public class Shooter extends SubsystemBase {
    * This function begins to spin up the fly wheels to a target speed.
    * @param speed Target speed.
    */
-  public void spinFlywheels(double speed){
+  public void spinFlywheels(double speed, boolean usePID){
     if (shooterDisabled) return;
 
     if (speed > 8000) {
@@ -127,26 +118,19 @@ public class Shooter extends SubsystemBase {
 
     speedTarget = speed;
 
-    //flywheelVelocity.Velocity = Conversions.RPMToTalon(speed, Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    if (usePID) {
+      flywheelVelocity.Velocity = Conversions.RPMToTalon(speed, Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    }
     flywheelVelocity.FeedForward = flyFeedforward.calculate(speed);
     flywheelTop.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
     flywheelBottom.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
-  }
-
-  /** 
-   * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
-   */
-  public void stopFlywheels() {
-    flywheelDutyCycle.Output = 0;
-    flywheelTop.setControl(flywheelDutyCycle);
-    flywheelBottom.setControl(flywheelDutyCycle);
   }
 
   /**
    * Spins the flywheel using normal duty cycle control instead of velocity PID
    * @param speed power to run the flywheel at from -1 to 1
    */
-  public void dutyCycleSpinFlywheel(double speed) {
+  public void dutyCycleSpinFlywheels(double speed) {
     if (shooterDisabled) return;
 
     flywheelDutyCycle.Output = speed;
@@ -154,11 +138,19 @@ public class Shooter extends SubsystemBase {
     flywheelBottom.setControl(flywheelDutyCycle);
   }
 
-  public void voltageSpinFlywheel(double volts) {
+  public void voltageSpinFlywheels(double volts) {
     if (shooterDisabled) return;
 
     flywheelTop.setVoltage(volts);
     flywheelBottom.setVoltage(volts);
+  }
+
+  
+  /** 
+   * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
+   */
+  public void stopFlywheels() {
+    dutyCycleSpinFlywheels(0);
   }
 
   /**
