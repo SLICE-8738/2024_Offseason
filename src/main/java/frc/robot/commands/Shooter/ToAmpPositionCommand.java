@@ -33,7 +33,7 @@ public class ToAmpPositionCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.dutyCycleSpinFlywheel(-0.3);
+    m_shooter.dutyCycleSpinFlywheels(-0.3);
   }
 
   // Called once the command ends or is interrupted.

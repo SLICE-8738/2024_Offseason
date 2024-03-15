@@ -327,4 +327,11 @@ public final class Constants {
 
   }
 
+  public static final class kLEDs {
+    public static final int LED_PWM_PORT = 9;
+    public static final int LED_LENGTH = 60;
+  }
 }
+
+
+

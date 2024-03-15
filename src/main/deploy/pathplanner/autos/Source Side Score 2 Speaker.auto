@@ -50,22 +50,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Score Note 8"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Spin Flywheels Low"
-                }
-              }
-            ]
+            "pathName": "Score Note 8"
           }
         },
         {

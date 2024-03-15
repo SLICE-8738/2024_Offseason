@@ -35,7 +35,7 @@ public class RecordFFDataCommand extends Command {
     voltage = 0;
 
     timer.restart();
-    m_shooter.voltageSpinFlywheel(0);
+    m_shooter.voltageSpinFlywheels(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,7 +45,7 @@ public class RecordFFDataCommand extends Command {
       timer.restart();
       voltage += 0.1;
       speed = m_shooter.getFlywheelSpeed();
-      m_shooter.voltageSpinFlywheel(voltage);
+      m_shooter.voltageSpinFlywheels(voltage);
       speeds.add(speed);
     }
   }
@@ -53,7 +53,7 @@ public class RecordFFDataCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.voltageSpinFlywheel(0);
+    m_shooter.voltageSpinFlywheels(0);
     String message = "";
     for (double s : speeds) {
       message += s + "\n";

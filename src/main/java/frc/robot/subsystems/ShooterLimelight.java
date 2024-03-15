@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import frc.robot.LimelightBase;
 
 public class ShooterLimelight extends LimelightBase {
+
   /** Creates a new ShooterLimelight. */
   public ShooterLimelight() {
 
