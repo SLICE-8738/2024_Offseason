@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Intake.*;
+import frc.robot.commands.LEDs.RainbowLEDs;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
 
@@ -46,6 +47,7 @@ public class RobotContainer {
   public final Intake m_intake = new Intake();
   public final Indexer m_indexer = new Indexer();
   public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
+  public final LEDs m_leds = new LEDs();
 
   public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);
   public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter,
@@ -102,6 +104,9 @@ public class RobotContainer {
 
   public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
 
+  /* LEDs */
+  public final RainbowLEDs m_rainbowLEDs = new RainbowLEDs(m_leds);
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -114,6 +119,7 @@ public class RobotContainer {
     m_indexer.setDefaultCommand(m_manualIndexer);
     m_shooter.setDefaultCommand(m_manualShooter);
     m_intake.setDefaultCommand(m_reverseWhileNoteStored);
+    m_leds.setDefaultCommand(m_rainbowLEDs);
 
   }
 

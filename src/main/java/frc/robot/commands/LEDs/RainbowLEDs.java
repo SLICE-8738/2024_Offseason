@@ -2,6 +2,7 @@ package frc.robot.commands.LEDs;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.LEDs;
 
 public class RainbowLEDs extends Command {
@@ -22,8 +23,8 @@ public class RainbowLEDs extends Command {
 
     @Override
     public void execute() {
-        for(int i = 0; i < 77; i++) {
-            final int hue = (m_rainbowFirstPixelHue + (i * 180 / 77 )) % 180;
+        for(int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
+            final int hue = (m_rainbowFirstPixelHue + (i * 180 / Constants.kLEDs.LED_LENGTH )) % 180;
             leds.setLEDhsv(i, hue, 255, 128);
         }
 
