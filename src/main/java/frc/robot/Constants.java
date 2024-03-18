@@ -127,9 +127,9 @@ public final class Constants {
     public static final double ROTATION_KP = 2.5;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 4.0;
+    public static final double kPSpeakerAlignRotation = 3.8;
     public static final double kISpeakerAlignRotation = 0;
-    public static final double kDSpeakerAlignRotation = 0;
+    public static final double kDSpeakerAlignRotation = 0.4;
 
     /* Neutral Modes */
     public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
@@ -264,6 +264,11 @@ public final class Constants {
     public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can
                                                                         // move at and shoot
 
+    public static final int REED_SWITCH_STOW_1 = 0;
+    public static final int REED_SWITCH_STOW_2 = 0;
+    public static final int REED_SWITCH_AMP_1 = 0;
+    public static final int REED_SWITCH_AMP_2 = 0;
+
   }
 
   public static final class kIntake {
@@ -307,7 +312,7 @@ public final class Constants {
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
     public static final double STORE_NOTE_KP = 0.0018;
     public static final double STORE_NOTE_KD = 0.00018;
-    public static final double DEFAULT_LASERCAN_DISTANCE = 325;
+    public static final double DEFAULT_LASERCAN_DISTANCE = 300;
 
   }
 

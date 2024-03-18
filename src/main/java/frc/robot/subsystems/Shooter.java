@@ -23,6 +23,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -62,6 +63,8 @@ public class Shooter extends SubsystemBase {
   public boolean pidAimControl;
 
   public boolean shooterDisabled;
+
+  //public DigitalInput reedSwitchStow1, reedSwitchStow2, reedSwitchAmp1, reedSwitchAmp2;
 
   public Shooter() {
 

@@ -21,6 +21,7 @@ import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Intake.*;
 import frc.robot.commands.LEDs.RainbowLEDs;
+import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
 
@@ -105,7 +106,7 @@ public class RobotContainer {
   public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
 
   /* LEDs */
-  public final RainbowLEDs m_rainbowLEDs = new RainbowLEDs(m_leds);
+  public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -119,7 +120,7 @@ public class RobotContainer {
     m_indexer.setDefaultCommand(m_manualIndexer);
     m_shooter.setDefaultCommand(m_manualShooter);
     m_intake.setDefaultCommand(m_reverseWhileNoteStored);
-    m_leds.setDefaultCommand(m_rainbowLEDs);
+    m_leds.setDefaultCommand(m_signalStoreNote);
 
   }
 

@@ -32,7 +32,7 @@ public class ManualIndexerCommand extends Command {
   @Override
   public void execute() {
     //starts the spin the motor 
-    indexer.spinIndex(-controller.getRawAxis(5) * 0.2);
+    indexer.spinIndex(-controller.getRawAxis(5) * 0.32);
   }
 
   // Called once the command ends or is interrupted.

@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -96,12 +97,16 @@ public class AlignWithSpeakerCommand extends Command {
     }
 
     // Run PID Controller
-    double turnAmount = rotationController.calculate(m_drivetrain.getPose().getRotation().getDegrees(), targetDegrees);
+    double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
+    double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
+
+    SmartDashboard.putNumber("Target Angle", targetDegrees);
+    SmartDashboard.putNumber("Current Angle", currentAngle);
 
   }
 

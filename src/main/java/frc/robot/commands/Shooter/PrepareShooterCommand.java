@@ -27,7 +27,7 @@ public class PrepareShooterCommand extends Command {
   private static final ShuffleboardTab shooterTestTab = Shuffleboard.getTab("Shooter Testing");
   // private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
   private static final SimpleWidget originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
-  private static final SimpleWidget angleWidget = shooterTestTab.add("Go To This Angle", 0);
+  private static final SimpleWidget angleWidget = shooterTestTab.add("Angle Adjustment", 0);
   
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
@@ -80,11 +80,17 @@ public class PrepareShooterCommand extends Command {
 
     double angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
 
-    m_shooter.spinFlywheels(distanceToSpeaker < 3.8 ? 4500 : 5000, false);
+    double angleAdjust = angleWidget.getEntry().getDouble(0);
+
+    angle += angleAdjust;
+
+    double speed = distanceToSpeaker < 2.5 ? 3500 : distanceToSpeaker < 3.8 ? 4500 : 5000;
+
+    m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
-    SmartDashboard.putNumber("Flywheel Target Velocity", distanceToSpeaker < 3.8 ? 4500 : 5000);
+    SmartDashboard.putNumber("Flywheel Target Velocity", speed);
 
     SmartDashboard.putNumber("Target Angle", angle);
 
