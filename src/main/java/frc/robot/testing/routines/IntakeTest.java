@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class IntakeTestCommand extends Command {
+public class IntakeTest extends Command {
   /** Creates a new IntakeTestCommand. */
   private Intake intake;
   private double[] averageCurrent = {0,0};
@@ -17,7 +17,7 @@ public class IntakeTestCommand extends Command {
   private int executes = 0;
   private final Timer timer;
   
-  public IntakeTestCommand(Intake intake) {
+  public IntakeTest(Intake intake) {
     addRequirements(intake);
     this.intake = intake;
     timer = new Timer();

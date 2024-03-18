@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FullTestRoutine extends SequentialCommandGroup {
+
+  public static final boolean USE_SHUFFLEBOARD = false;
+
   /** Creates a new FullTestRoutine. */
   public FullTestRoutine(Subsystem subsystem) {
     // Add your commands in the addCommands() call, e.g.
