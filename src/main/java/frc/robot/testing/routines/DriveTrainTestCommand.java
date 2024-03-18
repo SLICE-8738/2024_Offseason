@@ -84,13 +84,13 @@ public class DriveTrainTestCommand extends Command{
       driveAverageSpeed[i] /= driveExecutes;
     }
     System.out.println("Drivetrain Tests:");
-    System.out.println("Average swivel output current: " + swivelAverageCurrent);
-    System.out.println("Max swivel output current: " + swivelMaxCurrent);
-    System.out.println("Average swivel speed: " + swivelAverageSpeed);
+    System.out.println(String.format("Average swivel output current: \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", swivelAverageCurrent[0], swivelAverageCurrent[1], swivelAverageCurrent[2], swivelAverageCurrent[3]));
+    System.out.println(String.format("Max swivel output current: \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", swivelMaxCurrent[0], swivelMaxCurrent[1], swivelMaxCurrent[2], swivelMaxCurrent[3]));
+    System.out.println(String.format("Average swivel speed:  \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", swivelAverageSpeed[0], swivelAverageSpeed[1], swivelAverageSpeed[2], swivelAverageSpeed[3]));
 
-    System.out.println("Average drive output current: " + driveAverageCurrent);
-    System.out.println("Max drive output current: " + driveMaxCurrent);
-    System.out.println("Average drive Speed: " + driveAverageSpeed);
+    System.out.println(String.format("Average drive output current: \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", driveAverageCurrent[0], driveAverageCurrent[1], driveAverageCurrent[2], driveAverageCurrent[3]));
+    System.out.println(String.format("Max drive output current: \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", driveMaxCurrent[0], driveMaxCurrent[1], driveMaxCurrent[2], driveMaxCurrent[3]));
+    System.out.println(String.format("Average drive Speed: \nMotor A: %s \nMotor B: %s \nMotor C: %s \nMotor D; %s", driveAverageSpeed[0], driveAverageSpeed[1], driveAverageSpeed[2], driveAverageSpeed[3]));
 }
   // Returns true when the command should end.
   @Override

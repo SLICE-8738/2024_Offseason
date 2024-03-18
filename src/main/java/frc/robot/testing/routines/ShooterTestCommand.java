@@ -65,9 +65,9 @@ public class ShooterTestCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.flywheelTop.set(1);
-    shooter.flywheelBottom.set(1);
-    shooter.aimMotor.set(1);
+    shooter.flywheelTop.set(0);
+    shooter.flywheelBottom.set(0);
+    shooter.aimMotor.set(0);
 
     for(int i = 0; i < 3; i++){
       averageCurrent[i] /= executes;
@@ -75,9 +75,9 @@ public class ShooterTestCommand extends Command {
     }
 
     System.out.println("Shooter Tests");
-    System.out.println("Average Current: " + averageCurrent);
-    System.out.println("Max Current: " + maxCurrent);
-    System.out.println("Average Speed: " + averageSpeed);
+    System.out.println(String.format("Average Current: \nTop Motor: %s \nBottom Motor: %s \nAim Motor: %s", averageCurrent[0], averageCurrent[1], averageCurrent[2]));
+    System.out.println(String.format("Max Current: \nTop Motor: %s \nBottom Motor: %s \nAim Motor: %s", maxCurrent[0], maxCurrent[1], maxCurrent[2]));
+    System.out.println(String.format("Average Speed: \nTop Motor: %s \nBottom Motor: %s \nAim Motor: %s", averageSpeed[0], averageSpeed[1], averageSpeed[2]));
   }
 
   // Returns true when the command should end.

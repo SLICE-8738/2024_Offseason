@@ -63,9 +63,9 @@ public class IntakeTestCommand extends Command {
     }
 
     System.out.println("Intake Tests:");
-    System.out.println("Average Current: " + averageCurrent);
-    System.out.println("Max Current: " + maxCurrent);
-    System.out.println("Average Speed: " + averageSpeed);
+    System.out.println(String.format("Average Current: \nIntake Entrance: %s \nIntake Ramp: %s", averageCurrent[0], averageCurrent[1]));
+    System.out.println(String.format("Max Current: \nIntake Enterance: %s \nIntake Ramp %s", maxCurrent[0], maxCurrent[1]));
+    System.out.println(String.format("Average Speed: \nIntake Enterance: %s \nIntake Ramp: %s", averageSpeed[0], averageSpeed[1]));
   }
 
   // Returns true when the command should end.
