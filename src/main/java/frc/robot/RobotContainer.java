@@ -20,8 +20,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    System.out.println(ShooterMath.getShot(3));
-  }
+      } 
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -33,7 +32,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    
   }
 
   /**
