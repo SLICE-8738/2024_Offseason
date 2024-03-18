@@ -19,7 +19,8 @@ public class LEDs extends SubsystemBase {
 
     RAINBOW,
     SOLID_ORANGE,
-    FLASHING_ORANGE
+    FLASHING_ORANGE,
+    STROBE_GREEN
 
   }
 
@@ -43,6 +44,7 @@ public class LEDs extends SubsystemBase {
 
     ledModeChooser.addOption("Solid Orange", LEDMode.SOLID_ORANGE);
     ledModeChooser.addOption("Flashing Orange", LEDMode.FLASHING_ORANGE);
+    ledModeChooser.addOption("Strobe Green", LEDMode.STROBE_GREEN);
 
     teleopTab.add("LED Mode", ledModeChooser).
     withPosition(3, 1).
