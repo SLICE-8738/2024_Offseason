@@ -58,6 +58,10 @@ public class ShooterTestCommand extends Command {
     averageCurrent[1] += shooter.flywheelBottom.getOutputCurrent();
     averageCurrent[2] += shooter.aimMotor.getOutputCurrent();
 
+    flywheelTopCurrenWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
+    flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
+    aimMotorCurrentWidget.getEntry().setDouble(shooter.aimMotor.getOutputCurrent());
+
     if(shooter.flywheelTop.getOutputCurrent() > maxCurrent[0]){
       maxCurrent[0] = shooter.flywheelTop.getOutputCurrent();
     }
@@ -72,9 +76,10 @@ public class ShooterTestCommand extends Command {
     averageSpeed[1] += shooter.flyBottomEncoder.getVelocity();
     averageSpeed[2] += shooter.aimEncoder.getVelocity();
 
-    flywheelTopCurrenWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
-    flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
-    aimMotorCurrentWidget.getEntry().setDouble(shooter.aimMotor.getOutputCurrent());
+    flywheelTopVelocityWidget.getEntry().setDouble(shooter.flyTopEncoder.getVelocity());
+    flywheelBottomVelocityWidget.getEntry().setDouble(shooter.flyBottomEncoder.getVelocity());
+    aimMotorVelocityWidget.getEntry().setDouble(shooter.aimEncoder.getVelocity());
+
 
     if(timer.get() >= 2){
       isFinished();
