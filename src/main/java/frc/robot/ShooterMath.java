@@ -63,7 +63,8 @@ public final class ShooterMath {
      */
   public static double getDistanceBasedShooterAngle(double distance) {
     if (distance < 3.8) {
-      return 2.86197 * distance * distance * distance - 28.3338 * distance * distance + 97.0734 * distance - 87.1182;
+      return 3.50404 * distance * distance * distance - 32.5363 * distance * distance + 105.954 * distance - 93.1821;
+      //return 2.86197 * distance * distance * distance - 28.3338 * distance * distance + 97.0734 * distance - 87.1182;
     } else {
       return 30.25;
     }

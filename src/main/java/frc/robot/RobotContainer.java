@@ -65,8 +65,8 @@ public class RobotContainer {
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
   // public final Command m_pathfindToSource = AutoBuilder
   //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  // public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 7.67, Rotation2d.fromDegrees(90)),
-  //     Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 5.67, Rotation2d.fromDegrees(90)),
+       Constants.kDrivetrain.PATH_CONSTRAINTS);
   // public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
   // public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
   // public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
@@ -177,6 +177,7 @@ public class RobotContainer {
     Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
+    Button.square1.whileTrue(m_pathfindToAmp);
 
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));

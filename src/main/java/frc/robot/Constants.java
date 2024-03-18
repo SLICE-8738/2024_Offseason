@@ -82,7 +82,7 @@ public final class Constants {
     /* Status Frame Rates/Periods */
     // TODO: Tune status frames
     public static final int DRIVE_VELOCITY_FRAME_RATE_HZ = 22;
-    public static final int DRIVE_POSITION_FRAME_RATE_HZ = 5;
+    public static final int DRIVE_POSITION_FRAME_RATE_HZ = 22;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
     public static final int ANGLE_FRAME_2_PERIOD_MS = 300;
 
@@ -123,7 +123,7 @@ public final class Constants {
 
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
 
-    public static final double TRANSLATION_KP = 3.5;
+    public static final double TRANSLATION_KP = 4.5;
     public static final double ROTATION_KP = 2.5;
 
     /* Speaker Alignment Values */

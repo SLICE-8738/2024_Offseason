@@ -274,7 +274,7 @@ public class Drivetrain extends SubsystemBase {
 
     if(visionPose != null && ShooterLimelight.getTargetDetected()) {
       
-      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 2.5 && !DriverStation.isAutonomousEnabled()) {
+      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 2.0 && !DriverStation.isAutonomousEnabled()) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
