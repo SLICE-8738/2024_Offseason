@@ -5,6 +5,9 @@
 package frc.robot.testing.routines;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
@@ -16,11 +19,21 @@ public class IntakeTestCommand extends Command {
   private double[] averageSpeed = {0,0};
   private int executes = 0;
   private final Timer timer;
+
+  private ShuffleboardTab testingTab;
+  private SimpleWidget intakeEntranceCurrentWidget, intakeRampCurrentWidget, intakeEntranceVelocityWidget, intakeRampVelocityWidget; 
   
   public IntakeTestCommand(Intake intake) {
     addRequirements(intake);
     this.intake = intake;
     timer = new Timer();
+
+    // Shuffleboard elements
+    testingTab = Shuffleboard.getTab("Test Routine");
+    intakeEntranceCurrentWidget = testingTab.add("Intake Entrance Motor Current", 0);
+    intakeRampCurrentWidget = testingTab.add("Intake Ramp Current", 0);
+    intakeEntranceVelocityWidget = testingTab.add("Intake Entrance Velocity", 0);
+    intakeRampVelocityWidget = testingTab.add("Intake Ramp Velocity", 0);
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +50,11 @@ public class IntakeTestCommand extends Command {
     executes += 1;
     averageCurrent[0] += intake.intakeEntrance.getOutputCurrent();
     averageCurrent[1] += intake.intakeRamp.getOutputCurrent();
+
+    // Outputting to Shuffleboard
+    intakeEntranceCurrentWidget.getEntry().setDouble(intake.intakeEntrance.getOutputCurrent());
+    intakeRampCurrentWidget.getEntry().setDouble(intake.intakeRamp.getOutputCurrent());
+
     if(intake.intakeEntrance.getOutputCurrent() > maxCurrent[0]){
       maxCurrent[0] = intake.intakeEntrance.getOutputCurrent();
     }
@@ -45,6 +63,10 @@ public class IntakeTestCommand extends Command {
     }
     averageSpeed[0] = intake.intakeEntranceEncoder.getVelocity();
     averageSpeed[1] = intake.intakeRampEncoder.getVelocity();
+
+    // Outputting to Shuffleboard
+    intakeEntranceVelocityWidget.getEntry().setDouble(intake.intakeEntranceEncoder.getVelocity());
+    intakeRampVelocityWidget.getEntry().setDouble(intake.intakeRampEncoder.getVelocity());
     
     if(timer.get() >= 2){
       isFinished();

@@ -30,6 +30,7 @@ public class ShooterTestCommand extends Command {
   this.shooter = shooter;
   timer = new Timer();
 
+  // Shuffleboard Elements
   testRoutine = Shuffleboard.getTab("Test Routine");
   flywheelTopCurrenWidget = testRoutine.add("Top Flywheel Current", 0);
   flywheelBottomCurrentWidget = testRoutine.add("Bottom Flywheel Current", 0);
@@ -58,6 +59,7 @@ public class ShooterTestCommand extends Command {
     averageCurrent[1] += shooter.flywheelBottom.getOutputCurrent();
     averageCurrent[2] += shooter.aimMotor.getOutputCurrent();
 
+    // Outputting to Shuffleboard
     flywheelTopCurrenWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
     flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
     aimMotorCurrentWidget.getEntry().setDouble(shooter.aimMotor.getOutputCurrent());
@@ -76,6 +78,7 @@ public class ShooterTestCommand extends Command {
     averageSpeed[1] += shooter.flyBottomEncoder.getVelocity();
     averageSpeed[2] += shooter.aimEncoder.getVelocity();
 
+    // Outputting to Shuffleboard
     flywheelTopVelocityWidget.getEntry().setDouble(shooter.flyTopEncoder.getVelocity());
     flywheelBottomVelocityWidget.getEntry().setDouble(shooter.flyBottomEncoder.getVelocity());
     aimMotorVelocityWidget.getEntry().setDouble(shooter.aimEncoder.getVelocity());
