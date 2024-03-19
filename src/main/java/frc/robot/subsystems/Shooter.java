@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
 
   public boolean shooterDisabled;
 
-  //public DigitalInput reedSwitchStow1, reedSwitchStow2, reedSwitchAmp1, reedSwitchAmp2;
+  public DigitalInput /*reedSwitchStow1, reedSwitchStow2, */reedSwitchAmp1/* , reedSwitchAmp2*/;
 
   public Shooter() {
 
@@ -105,6 +105,8 @@ public class Shooter extends SubsystemBase {
     pidAimControl = false;
 
     shooterDisabled = false;
+
+    reedSwitchAmp1 = new DigitalInput(1);
 
   }
 
@@ -172,6 +174,7 @@ public class Shooter extends SubsystemBase {
    * @param speed Power to run the aim motors at from -1 to 1
    */
   public void dutyCycleAimShooter(double speed) {
+    if (speed > 0 && reedSwitchAmp1.get()) return;
     aimMotorLeft.set(speed);
     aimMotorRight.set(speed);
 
@@ -266,8 +269,10 @@ public class Shooter extends SubsystemBase {
 
     if (pidAimControl && !shooterDisabled) {
       double feedback = aimPID.calculate(getAlternateAngle(), angleTarget);
-      aimMotorLeft.setVoltage(feedback);
-      aimMotorRight.setVoltage(feedback);
+      if (feedback < 0 || !reedSwitchAmp1.get()) {
+        aimMotorLeft.setVoltage(feedback);
+        aimMotorRight.setVoltage(feedback);
+      }
     }
 
     SmartDashboard.putNumber("Flywheel Speed", getFlywheelSpeed());
