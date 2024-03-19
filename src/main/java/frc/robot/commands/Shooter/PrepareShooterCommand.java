@@ -84,7 +84,8 @@ public class PrepareShooterCommand extends Command {
 
     angle += angleAdjust;
 
-    double speed = distanceToSpeaker < 2.5 ? 3500 : distanceToSpeaker < 3.8 ? 4500 : 5000;
+    double speed = distanceToSpeaker < 3.12 ? 3500 : distanceToSpeaker < 3.8 ? 4500 : 5000;
+    speed = 3500;
 
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);
@@ -92,7 +93,7 @@ public class PrepareShooterCommand extends Command {
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
     SmartDashboard.putNumber("Flywheel Target Velocity", speed);
 
-    SmartDashboard.putNumber("Target Angle", angle);
+    SmartDashboard.putNumber("Target SHooter Angle", angle);
 
 
     // desiredSpeedWidget.getEntry().setDouble(speed);

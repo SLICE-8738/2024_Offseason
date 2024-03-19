@@ -41,7 +41,7 @@ public class JoystickFilterConfig {
     */
     public JoystickFilterConfig(double deadzone) {
         this.deadzone = deadzone;
-        this.smoothing = 1000;
+        this.smoothing = 0;
         this.exponent = 1;
         this.exponentPercent = 1;
     }

@@ -117,7 +117,7 @@ public class AlignWithAmpCommand extends Command {
   @Override
   public boolean isFinished() {
 
-    return false;
+    return Math.abs(m_driverController.getRawAxis(2)) > 0.1;
 
   }
 

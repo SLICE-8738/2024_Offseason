@@ -127,9 +127,9 @@ public final class Constants {
     public static final double ROTATION_KP = 2.5;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 3.8;
+    public static final double kPSpeakerAlignRotation = 3.6;
     public static final double kISpeakerAlignRotation = 0;
-    public static final double kDSpeakerAlignRotation = 0.4;
+    public static final double kDSpeakerAlignRotation = 0.8;
 
     /* Neutral Modes */
     public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
@@ -310,8 +310,8 @@ public final class Constants {
 
     public static final double STORE_NOTE_TARGET = 115;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
-    public static final double STORE_NOTE_KP = 0.0018;
-    public static final double STORE_NOTE_KD = 0.00018;
+    public static final double STORE_NOTE_KP = 0.0016;
+    public static final double STORE_NOTE_KD = 0.00024;
     public static final double DEFAULT_LASERCAN_DISTANCE = 300;
 
   }

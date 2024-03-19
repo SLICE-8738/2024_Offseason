@@ -174,7 +174,7 @@ public class Shooter extends SubsystemBase {
    * @param speed Power to run the aim motors at from -1 to 1
    */
   public void dutyCycleAimShooter(double speed) {
-    if (speed > 0 && reedSwitchAmp1.get()) return;
+    if (speed > 0 && atAmp()) return;
     aimMotorLeft.set(speed);
     aimMotorRight.set(speed);
 
@@ -262,6 +262,10 @@ public class Shooter extends SubsystemBase {
     aimPID.setP(Constants.kShooter.AIM_KP);
   }
 
+  public boolean atAmp() {
+    return reedSwitchAmp1.get();
+  }
+
   @Override
   public void periodic() {
 
@@ -269,7 +273,7 @@ public class Shooter extends SubsystemBase {
 
     if (pidAimControl && !shooterDisabled) {
       double feedback = aimPID.calculate(getAlternateAngle(), angleTarget);
-      if (feedback < 0 || !reedSwitchAmp1.get()) {
+      if (feedback < 0 || !atAmp()) {
         aimMotorLeft.setVoltage(feedback);
         aimMotorRight.setVoltage(feedback);
       }
@@ -289,11 +293,12 @@ public class Shooter extends SubsystemBase {
     // }
 
     SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
-    SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
-    SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
-    SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
-    SmartDashboard.putNumber("Shooter Position Error", alternatePosition - relativePosition);
-    SmartDashboard.putNumber("Shooter Velocity Error", alternateVelocity - relativeVelocity);
+    SmartDashboard.putBoolean("Amp Angle Reed Switch", atAmp());
+    // SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
+    // SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
+    // SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
+    // SmartDashboard.putNumber("Shooter Position Error", alternatePosition - relativePosition);
+    // SmartDashboard.putNumber("Shooter Velocity Error", alternateVelocity - relativeVelocity);
 
   }
 }
