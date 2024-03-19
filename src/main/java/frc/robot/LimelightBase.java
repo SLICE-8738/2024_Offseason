@@ -8,9 +8,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Class for interfacing with a Limelight connected to NetworkTables. */
@@ -33,9 +36,10 @@ public class LimelightBase extends SubsystemBase {
   protected double currentAprilTagID;
   protected double lastAprilTagID;
 
-  protected final NetworkTableEntry ledMode;
-  protected final NetworkTableEntry cameraMode;
-  protected final NetworkTableEntry pipeline;
+  protected static NetworkTableEntry ledMode;
+  protected static NetworkTableEntry cameraMode;
+  protected static NetworkTableEntry pipeline;
+  protected static NetworkTableEntry priorityID;
 
   /**
    * Creates a new Limelight.
@@ -49,6 +53,7 @@ public class LimelightBase extends SubsystemBase {
     ledMode = table.getEntry("ledMode");
     cameraMode = table.getEntry("cameraMode");
     pipeline = table.getEntry("pipeline");
+    priorityID = table.getEntry("priorityid");
 
   }
 
@@ -145,6 +150,22 @@ public class LimelightBase extends SubsystemBase {
   }
 
   /**
+   * Returns the current pose of either the blue or red speaker
+   * relative to the robot depending on the selected team station.
+   * 
+   * @return The current robot-relative pose of the speaker.
+   */
+  public static Translation2d getSpeakerPosition() {
+
+    Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
+    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getLastBotPoseBlue().getTranslation())
+    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getLastBotPoseBlue().getTranslation());
+
+    return difference;
+
+  }
+
+  /**
    * @return The last received non-empty robot pose with the target as the origin if any.
    *         All-zero pose if none has been received yet.
    */
@@ -183,7 +204,7 @@ public class LimelightBase extends SubsystemBase {
    * <p>2: Force blink
    * <p>3: Force on
    */
-  public void setLedMode(Number mode) {
+  public static void setLedMode(Number mode) {
 
     ledMode.setNumber(mode);
 
@@ -197,7 +218,7 @@ public class LimelightBase extends SubsystemBase {
    * <p>0: Vision processor
    * <p>1: Driver camera (Increases exposure, disables vision processing)
    */
-  public void setCameraMode(Number mode) {
+  public static void setCameraMode(Number mode) {
 
     cameraMode.setNumber(mode);
 
@@ -208,9 +229,15 @@ public class LimelightBase extends SubsystemBase {
    * 
    * @param pipelineNumber The desired pipeline number (0-9)
    */
-  public void setPipeline(Number pipelineNumber) {
+  public static void setPipeline(Number pipelineNumber) {
 
     pipeline.setNumber(pipelineNumber);
+
+  }
+
+  public static void setPriorityID(Number id) {
+
+    priorityID.setNumber(id);
 
   }
 
