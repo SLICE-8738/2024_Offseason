@@ -205,4 +205,8 @@ public class SwerveModule {
         driveMotorSim.addRotorPosition(Conversions.metersToTalon(driveMotorSim.getMotorVoltage() * (Constants.kDrivetrain.MAX_LINEAR_VELOCITY / 12) * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
     }
+    //returns the output current of driveMotor 
+    public double getDriveOutputCurrent(){
+       return driveMotor.getTorqueCurrent().getValueAsDouble();
+    }
 }

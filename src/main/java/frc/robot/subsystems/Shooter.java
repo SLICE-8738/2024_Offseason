@@ -42,7 +42,7 @@ import frc.slicelibs.util.math.Conversions;
  */
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private TalonFX flywheelTop, flywheelBottom; // Create the flywheel motors
+  public TalonFX flywheelTop, flywheelBottom; // Create the flywheel motors
   private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
   private RelativeEncoder aimRelativeEncoderLeft, aimRelativeEncoderRight; // ...
   private RelativeEncoder aimAlternateEncoder; // ...
@@ -251,10 +251,16 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getTopOutputCurrent(){
-    return flywheelTop.getSupplyCurrent().getValue();
+    return flywheelTop.getTorqueCurrent().getValueAsDouble();
   }
   public double getBottomOutputCurrent(){
-    return flywheelBottom.getSupplyCurrent().getValue();
+    return flywheelBottom.getTorqueCurrent().getValueAsDouble();
+  }
+  public double getTopSpeed(){
+    return Conversions.talonToRPM(flywheelTop.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+  }
+  public double getBottomSpeed(){
+    return Conversions.talonToRPM(flywheelBottom.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
   }
 
   public void slowDownAim() {
