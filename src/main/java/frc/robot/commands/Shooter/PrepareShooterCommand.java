@@ -5,6 +5,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -15,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.ShooterMath;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterLimelight;
 
 /**
  * Aims and spins up the flywheels to prepare for a shot into the speaker
@@ -58,7 +60,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    Translation2d distanceTranslation = m_drivetrain.getSpeakerPosition();
+    Translation2d distanceTranslation = DriverStation.isAutonomousEnabled()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
     double distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
 
     // distanceWidget.getEntry().setDouble(distanceToSpeaker);
@@ -82,7 +84,10 @@ public class PrepareShooterCommand extends Command {
 
     double angleAdjust = angleWidget.getEntry().getDouble(0);
 
+    angle += angleAdjust;
+
     double speed = distanceToSpeaker < 3.12 ? 3500 : distanceToSpeaker < 3.8 ? 4500 : 5000;
+    speed = 4500;
 
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);

@@ -14,8 +14,8 @@
     "Score 3 Speaker",
     "Score 4 Speaker"
   ],
-  "defaultMaxVel": 3.5,
-  "defaultMaxAccel": 2.5,
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 360.0,
   "maxModuleSpeed": 3.5

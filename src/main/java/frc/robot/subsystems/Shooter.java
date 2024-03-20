@@ -266,7 +266,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean atAmp() {
-    return reedSwitchAmp2.get();
+    return false;
+    //return reedSwitchAmp2.get();
   }
 
   public boolean atStow() {
