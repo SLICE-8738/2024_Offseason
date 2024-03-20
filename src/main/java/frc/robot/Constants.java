@@ -46,6 +46,48 @@ public final class Constants {
 
   }
 
+<<<<<<< HEAD
+  public static final class kShooter {
+
+    public static final double FLYWHEEL_KP = 0.000685;
+    public static final double FLYWHEEL_KI = 0.000000006;
+    public static final double FLYWHEEL_KD = 0;
+    public static final double FLYWHEEL_FEED_FORWARD = 0.0018;
+
+    public static final double AIM_KP = 0.5;
+    public static final double AIM_KI = 0;
+    public static final double AIM_KD = 0;
+
+    // Flywheel Speed
+    public static final double FLYWHEEL_RPM = 60;
+
+    // Stow Angle for picking up game pieces
+    public static final double SHOOTER_STOW_ANGLE = 0;
+
+    // Shooter Measurements
+    public static final double ANGLE_BETWEEN_FLYWHEELS = 20.153; // Angle between the flywheels from the pivot point of the shooter
+    public static final double ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT = 118.719; // Angle between the high flywheel and pivot point from the low flywheel
+    public static final double DISTANCE_TO_HIGHER_FLYWHEEL = 0.3556; // Center distance from pivot point to higher flywheel of shooter (in meters) (14")
+    public static final double DISTANCE_TO_LOWER_FLYWHEEL = 0.2667; // Center distance from pivot point to lower flywheel of shooter (in meters) (10.5")
+
+    // The constant you subtract the launch angle from to get the shooter angle
+    public static final double LAUNCH_ANGLE_TO_SHOOTER_ANGLE = 180 - (270 - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS - Constants.kShooter.ANGLE_BETWEEN_HIGH_FLYWHEEL_AND_PIVOT);
+
+    public static final double PIVOT_Y = 0; // Hieght of the shooter pivot from "robot center"
+    public static final double PIVOT_X = 0; // Distance (front to back) of the shooter pivot from "robot center"
+
+    public static final double FLYWHEEL_RPM_ACCEPTABLE_ERROR = 5; // The maximum error allowed in the flywheel RPM
+    public static final double VERTICAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle vertically, in degrees
+    public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 2; // The maximum error allowed in the shooter angle horizontally (controlled by drivetrain). in degrees
+    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can move at and shoot
+  }
+
+  public static final class kElevator {
+    public static final double CLIMB_HEIGHT = 0.5;
+  }
+
+=======
+>>>>>>> 09932ee68f8577a2557742319b7334ce5329ebfc
   public static final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;

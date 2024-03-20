@@ -5,7 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-//import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -15,7 +16,8 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
  * An intake pulls in the ring (or "note") that will later be launched.
  */
 public class Intake extends SubsystemBase {
-  private CANSparkMax intakeEntrance, intakeRamp;
+  public CANSparkMax intakeEntrance, intakeRamp;
+  public RelativeEncoder intakeEntranceEncoder, intakeRampEncoder; 
   /** Creates a new Intake. */
   public Intake() {
     this.intakeEntrance = SparkMaxFactory.createSparkMax(13, REVConfigs.intakeEntranceSparkMaxConfig);
