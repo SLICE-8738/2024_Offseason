@@ -66,7 +66,7 @@ public final class ShooterMath {
       return polynomial(7.58551, -58.185, 155.671, -123.304, distance);
       //return 3.50404 * distance * distance * distance - 32.5363 * distance * distance + 105.954 * distance - 93.1821;
     } else if (distance < 3.8) {
-      return polynomial(0, -1.14727, 12.8871, -2.86291, distance);
+      return polynomial(0, -0.79447, 10.5891, 0.693683, distance);
     }else {
       return 31;
     }

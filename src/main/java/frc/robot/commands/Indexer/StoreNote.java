@@ -65,6 +65,8 @@ public class StoreNote extends Command {
     if (indexer.laserCanOnline()) {
       if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
         indexer.spinIndex(0.3);
+      } else if (Math.abs(distance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
+        indexer.spinIndex(0);
       } else {
         double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
         indexer.spinIndex(-output);
@@ -119,7 +121,7 @@ public class StoreNote extends Command {
       return true;
     }
     // ends the command
-    if (indexer.isStored() && timerRunning && timer.get() > 0.5) {
+    if (indexer.isStored() && timerRunning && timer.get() > 0.2) {
       return true; // ends the command if stored is true (stored is a method in indexer)
     } else {
       return false;
