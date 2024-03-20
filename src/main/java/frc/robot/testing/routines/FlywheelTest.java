@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterTestCommand extends Command {
+public class FlywheelTest extends Command {
   /** Creates a new ShooterTestCommand. */
   private Shooter shooter;
   private double[] averageCurrent = {0,0};
@@ -22,17 +22,16 @@ public class ShooterTestCommand extends Command {
   private final Timer timer;
 
   private ShuffleboardTab testRoutine;
-  private SimpleWidget flywheelTopCurrenWidget, flywheelBottomCurrentWidget, flywheelTopVelocityWidget, flywheelBottomVelocityWidget;
+  private SimpleWidget flywheelTopCurrentWidget, flywheelBottomCurrentWidget, flywheelTopVelocityWidget, flywheelBottomVelocityWidget;
   
-  public ShooterTestCommand(Shooter shooter) {
+  public FlywheelTest(Shooter shooter) {
   
   addRequirements(shooter);
   this.shooter = shooter;
   timer = new Timer();
 
-  // Shuffleboard Elements
   testRoutine = Shuffleboard.getTab("Test Routine");
-  flywheelTopCurrenWidget = testRoutine.add("Top Flywheel Current", 0);
+  flywheelTopCurrentWidget = testRoutine.add("Top Flywheel Current", 0);
   flywheelBottomCurrentWidget = testRoutine.add("Bottom Flywheel Current", 0);
   flywheelTopVelocityWidget = testRoutine.add("Top Flywheel Velocity", 0);
   flywheelBottomVelocityWidget = testRoutine.add("Bottom flywheel; Velocity", 0);
@@ -42,8 +41,8 @@ public class ShooterTestCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.flywheelTop.set(1);
-    shooter.flywheelBottom.set(1);
+    shooter.flywheelTop.set(0.5);
+    shooter.flywheelBottom.set(0.5);
     timer.restart();
   }
 
@@ -55,9 +54,11 @@ public class ShooterTestCommand extends Command {
     averageCurrent[0] += shooter.flywheelTop.getOutputCurrent();
     averageCurrent[1] += shooter.flywheelBottom.getOutputCurrent();
 
-    // Outputting to Shuffleboard
-    flywheelTopCurrenWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
-    flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
+    if (FullTestRoutine.USE_SHUFFLEBOARD) {
+      flywheelTopCurrentWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
+      flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
+    }
+
 
     if(shooter.flywheelTop.getOutputCurrent() > maxCurrent[0]){
       maxCurrent[0] = shooter.flywheelTop.getOutputCurrent();
@@ -74,19 +75,14 @@ public class ShooterTestCommand extends Command {
     flywheelBottomVelocityWidget.getEntry().setDouble(shooter.flyBottomEncoder.getVelocity());
 
 
-    if(timer.get() >= 2){
-      isFinished();
-    }
-
   }
 
   // Called once the command ends or is interrupted.
-  @Override
   public void end(boolean interrupted) {
     shooter.flywheelTop.set(0);
     shooter.flywheelBottom.set(0);
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 2; i++){
       averageCurrent[i] /= executes;
       averageSpeed[i] /= executes;
     }
@@ -100,6 +96,6 @@ public class ShooterTestCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return timer.get() >= 2;
   }
 }

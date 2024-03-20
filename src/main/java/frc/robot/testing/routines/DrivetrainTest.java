@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveTrainTestCommand extends Command{
+public class DrivetrainTest extends Command{
     Drivetrain driveTrain;
     double[] currents;
     double[] swivelAverageCurrent = {0,0,0,0};
@@ -20,7 +20,7 @@ public class DriveTrainTestCommand extends Command{
 
     private final Timer timer;
 
-    public DriveTrainTestCommand(Drivetrain driveTrain){
+    public DrivetrainTest(Drivetrain driveTrain){
         this.driveTrain = driveTrain;
 
         timer = new Timer();

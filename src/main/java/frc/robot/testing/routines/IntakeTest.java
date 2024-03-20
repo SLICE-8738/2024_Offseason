@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class IntakeTestCommand extends Command {
+public class IntakeTest extends Command {
   /** Creates a new IntakeTestCommand. */
   private Intake intake;
   private double[] averageCurrent = {0,0};
@@ -23,7 +23,7 @@ public class IntakeTestCommand extends Command {
   private ShuffleboardTab testingTab;
   private SimpleWidget intakeEntranceCurrentWidget, intakeRampCurrentWidget, intakeEntranceVelocityWidget, intakeRampVelocityWidget; 
   
-  public IntakeTestCommand(Intake intake) {
+  public IntakeTest(Intake intake) {
     addRequirements(intake);
     this.intake = intake;
     timer = new Timer();
@@ -39,8 +39,8 @@ public class IntakeTestCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.intakeEntrance.set(1);
-    intake.intakeRamp.set(1);
+    intake.intakeEntrance.set(0.5);
+    intake.intakeRamp.set(0.5);
     timer.restart();
   }
 
@@ -67,10 +67,7 @@ public class IntakeTestCommand extends Command {
     // Outputting to Shuffleboard
     intakeEntranceVelocityWidget.getEntry().setDouble(intake.intakeEntranceEncoder.getVelocity());
     intakeRampVelocityWidget.getEntry().setDouble(intake.intakeRampEncoder.getVelocity());
-    
-    if(timer.get() >= 2){
-      isFinished();
-    }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -93,6 +90,6 @@ public class IntakeTestCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+      return timer.get() >= 2;
+    }
   }
-}
