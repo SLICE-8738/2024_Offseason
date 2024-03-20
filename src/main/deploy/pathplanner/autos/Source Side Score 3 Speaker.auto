@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.75,
+      "y": 4.34
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Souce Side Speaker To Note 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 To Note 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Score 3 Speaker",
+  "choreoAuto": false
+}

@@ -6,41 +6,40 @@ package frc.robot.commands.Drivetrain;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.ShooterLimelight;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * Maintains driver control of robot translation, but automatically turns to face the speaker.
  */
 public class AlignWithSpeakerCommand extends Command {
-  /** Creates a new SwerveDriveCommand. */
+
   private final Drivetrain m_drivetrain;
 
-  private final GenericHID m_driverController;
-  private final PolarJoystickFilter translationFilter;
+  private GenericHID m_driverController;
+  private PolarJoystickFilter translationFilter;
 
   private final boolean m_isOpenLoop;
   private final boolean m_isFieldRelative;
 
   private final PIDController rotationController;
 
+  /** Creates a new AlignWithSpeakerCommand for teleop. */
   public AlignWithSpeakerCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
 
-    m_drivetrain = drivetrain;
+    this(drivetrain, isOpenLoop, isFieldRelative);
 
     m_driverController = driverController;
-
-    m_isOpenLoop = isOpenLoop;
-    m_isFieldRelative = isFieldRelative;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
@@ -48,8 +47,22 @@ public class AlignWithSpeakerCommand extends Command {
         Constants.OperatorConstants.driveExponent,
         Constants.OperatorConstants.driveExponentPercent));
 
-    rotationController = new PIDController(Constants.kAutonomous.kPSpeakerAlignRotation, Constants.kAutonomous.kISpeakerAlignRotation, Constants.kAutonomous.kDSpeakerAlignRotation);
+  }
+
+  /** Creates a new AlignWithSpeakerCommand for autonomous. */
+  public AlignWithSpeakerCommand(Drivetrain drivetrain, boolean isOpenLoop, boolean isFieldRelative) {
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
+
+    m_drivetrain = drivetrain;
+
+    m_isOpenLoop = isOpenLoop;
+    m_isFieldRelative = isFieldRelative;
+
+    rotationController = new PIDController(Constants.kDrivetrain.kPSpeakerAlignRotation, Constants.kDrivetrain.kISpeakerAlignRotation, Constants.kDrivetrain.kDSpeakerAlignRotation);
     rotationController.enableContinuousInput(0, 360);
+
   }
 
   // Called when the command is initially scheduled.
@@ -64,23 +77,37 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void execute() {
 
-    double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
+    double translationX = 0;
+    double translationY = 0;
 
-    double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-    double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+    if (m_driverController != null) {
+    
+      double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
-    // find the angle to speaker
-    Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
-    Translation2d directionToSpeaker = Constants.kFieldPositions.SPEAKER_POSITION.minus(currentPosition);
+      translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+      translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+
+    }
+
+    // find the angle to speaker;
+    Translation2d directionToSpeaker = ShooterLimelight.getTargetDetected()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
+    double targetDegrees = targetAngle.getDegrees() % 360;
+    if (targetDegrees < 0) {
+      targetDegrees += 360;
+    }
 
     // Run PID Controller
-    double turnAmount = rotationController.calculate(m_drivetrain.getHeading(), targetAngle.getDegrees());
+    double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
+    double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
 
     m_drivetrain.swerveDrive(
-        new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(turnAmount)),
+        new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
+
+    SmartDashboard.putNumber("Target Angle", targetDegrees);
+    SmartDashboard.putNumber("Current Angle", currentAngle);
 
   }
 

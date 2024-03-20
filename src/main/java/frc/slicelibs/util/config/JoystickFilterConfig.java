@@ -7,18 +7,18 @@ import frc.slicelibs.PolarJoystickFilter;
  * @see PolarJoystickFilter
  */
 public class JoystickFilterConfig {
-    public final double deadzone, exponent, exponentPercent, maxAcceleration;
+    public final double deadzone, exponent, exponentPercent, smoothing;
 
     /**
      * Create a new PolarJoystickConfig
      * @param deadzone any joystick input udner this ammount will be set to 0
-     * @param maxAcceleration the maximum amount the joystick input can change in seconds
+     * @param smoothing the maximum amount the joystick input can change in seconds
      * @param exponent the exponent of the polynomial curve the joystick input will be put through 
      * @param exponentPercent what percentage of the polynomial will use the exponent parameter instead of a linear function
      */
-    public JoystickFilterConfig(double deadzone, double maxAcceleration, double exponent, double exponentPercent) {
+    public JoystickFilterConfig(double deadzone, double smoothing, double exponent, double exponentPercent) {
         this.deadzone = deadzone;
-        this.maxAcceleration = maxAcceleration;
+        this.smoothing = smoothing;
         this.exponent = exponent;
         this.exponentPercent = exponentPercent;
     }
@@ -26,13 +26,13 @@ public class JoystickFilterConfig {
     /**
      * Create a new PolarJoystickConfig
      * @param deadzone any joystick input udner this ammount will be set to 0
-     * @param maxAcceleration the maximum amount the joystick input can change in seconds
+     * @param smoothing the maximum amount the joystick input can change in seconds
     */
-    public JoystickFilterConfig(double deadzone, double maxAcceleration) {
+    public JoystickFilterConfig(double deadzone, double smoothing) {
         this.deadzone = deadzone;
-        this.maxAcceleration = maxAcceleration;
+        this.smoothing = smoothing;
         this.exponent = 1;
-        this.exponentPercent = 0;
+        this.exponentPercent = 1;
     }
 
     /**
@@ -41,8 +41,8 @@ public class JoystickFilterConfig {
     */
     public JoystickFilterConfig(double deadzone) {
         this.deadzone = deadzone;
-        this.maxAcceleration = 1000;
+        this.smoothing = 0;
         this.exponent = 1;
-        this.exponentPercent = 0;
+        this.exponentPercent = 1;
     }
 }

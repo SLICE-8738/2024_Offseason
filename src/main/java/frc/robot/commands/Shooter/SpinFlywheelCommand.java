@@ -4,21 +4,18 @@
 
 package frc.robot.commands.Shooter;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.ShooterMath;
-import frc.robot.subsystems.Drivetrain;
+
 import frc.robot.subsystems.Shooter;
 
 public class SpinFlywheelCommand extends Command {
   private final Shooter m_shooter;
-  private final Drivetrain m_drivetrain;
+  private final double speed;
 
   /** Creates a new SpinFlywheelCommand. */
-  public SpinFlywheelCommand(Shooter shooter, Drivetrain drivetrain) {
+  public SpinFlywheelCommand(Shooter shooter, double speed) {
     m_shooter = shooter;
-    m_drivetrain = drivetrain;
+    this.speed = speed;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -26,16 +23,15 @@ public class SpinFlywheelCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    m_shooter.spinFlywheels(speed, false);
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    Translation2d currentPosition = m_drivetrain.getPose().getTranslation();
-    double distanceToSpeaker = currentPosition.getDistance(Constants.kFieldPositions.SPEAKER_POSITION);
-    double flywheelVelocity = ShooterMath.getShot(distanceToSpeaker).getFlywheelVelocity();
-    m_shooter.spinFlywheel(flywheelVelocity);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -44,6 +40,6 @@ public class SpinFlywheelCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

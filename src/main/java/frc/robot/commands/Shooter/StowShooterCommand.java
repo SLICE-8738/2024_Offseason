@@ -18,14 +18,15 @@ public class StowShooterCommand extends Command {
   /** Creates a new SpinUp. */
   public StowShooterCommand(Shooter shooter) {
     m_shooter = shooter;
-    // No requirements needed since it uses PIDs
+    
+    addRequirements(m_shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // Set the shooter angle to stowed
-    m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE + 0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 6.0,
-      "y": 4.0
+      "x": 1.4,
+      "y": 5.53
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Test Path"
+            "pathName": "Middle Speaker To Note 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1 To Note 2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Score 3 Speaker",
   "choreoAuto": false
 }

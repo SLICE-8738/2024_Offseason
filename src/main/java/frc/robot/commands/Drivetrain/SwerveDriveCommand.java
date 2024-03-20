@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Drivetrain;
 
+import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
@@ -12,23 +13,23 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveCommand extends Command {
   /** Creates a new SwerveDriveCommand. */
   private final Drivetrain m_drivetrain;
 
-  private final GenericHID m_driverController;
+  private final PS4Controller m_driverController;
   private final PolarJoystickFilter translationFilter, rotationFilter;
 
   private final boolean m_isOpenLoop;
-  private final boolean m_isFieldRelative;
+  private boolean m_isFieldRelative;
 
   private final PIDController rotationController;
 
-  public SwerveDriveCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
-      boolean isFieldRelative) {
+  public SwerveDriveCommand(Drivetrain drivetrain, PS4Controller driverController, boolean isOpenLoop) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
@@ -37,16 +38,15 @@ public class SwerveDriveCommand extends Command {
     m_driverController = driverController;
 
     m_isOpenLoop = isOpenLoop;
-    m_isFieldRelative = isFieldRelative;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.85,
+        0.9,
         Constants.OperatorConstants.driveExponent,
         Constants.OperatorConstants.driveExponentPercent));
     rotationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
         0.07,
-        0.5,
+        0.6,
         Constants.OperatorConstants.turnExponent,
         Constants.OperatorConstants.turnExponentPercent));
 
@@ -66,13 +66,23 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
 
+    SmartDashboard.putNumber("Raw Y Axis", m_driverController.getRawAxis(0));
     double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
-    double translationX = translation[0] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-    double translationY = translation[1] * Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
+    double translationX = translation[0] * m_drivetrain.maxLinearVelocity;
+    double translationY = translation[1] * m_drivetrain.maxLinearVelocity;
 
-    double rotationFF = rotationFilter.filter(-m_driverController.getRawAxis(2), 0)[0] * Constants.kDrivetrain.MAX_ANGULAR_VELOCITY;
+    double rotationFF = rotationFilter.filter(m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
     double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
+
+    m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
+
+    if (!m_isFieldRelative) {
+      translationX *= 0.5;
+      translationY *= 0.5;
+      rotationFF *= 0.5;
+      rotationFeedback *= 0.5;
+    }
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),

@@ -4,8 +4,6 @@
 
 package frc.robot.commands.Indexer;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -38,7 +36,7 @@ public class NudgeIndexer extends Command {
   @Override
   public void execute() {
     //starts the spin the motor 
-    indexer.spinIndex(.5);
+    indexer.spinIndex(1);
   }
 
   // Called once the command ends or is interrupted.

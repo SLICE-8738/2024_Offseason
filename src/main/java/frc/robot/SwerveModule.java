@@ -1,10 +1,13 @@
-package frc.robot.subsystems;
+package frc.robot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -17,8 +20,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-import frc.robot.Constants;
-import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -33,10 +34,9 @@ public class SwerveModule {
 
     private CANSparkMax angleMotor;
     private TalonFX driveMotor;
+    private TalonFXSimState driveMotorSim;
     private RelativeEncoder integratedAngleEncoder;
     private CANcoder angleEncoder;
-
-    private final CTREConfigs ctreConfigs = new CTREConfigs();
 
     private final SparkPIDController angleController;
 
@@ -44,9 +44,8 @@ public class SwerveModule {
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
+    private final VoltageOut driveVoltage = new VoltageOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
-
-    private double simDistance = 0;
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -64,6 +63,7 @@ public class SwerveModule {
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
+        driveMotorSim = driveMotor.getSimState();
         configDriveMotor();
 
         lastAngle = getState().angle;
@@ -83,6 +83,12 @@ public class SwerveModule {
         driveDutyCycle.Output = drivePercentOutput;
         driveMotor.setControl(driveDutyCycle);
         angleMotor.set(anglePercentOutput);
+    }
+
+    public void setVolts(double driveVolts, double angleVolts) {
+        driveVoltage.Output = driveVolts;
+        driveMotor.setControl(driveVoltage);
+        angleMotor.setVoltage(angleVolts);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
@@ -128,7 +134,7 @@ public class SwerveModule {
     }
 
     private void configAngleEncoder(){    
-        angleEncoder.getConfigurator().apply(ctreConfigs.swerveCANcoderConfig);
+        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
     }
 
     private void configAngleMotor(){
@@ -137,12 +143,11 @@ public class SwerveModule {
         angleController.setI(Constants.kDrivetrain.ANGLE_KI);
         angleController.setD(Constants.kDrivetrain.ANGLE_KD);
         angleController.setFF(Constants.kDrivetrain.ANGLE_KFF);
-        angleMotor.burnFlash();
         resetToAbsolute();
     }
 
     private void configDriveMotor(){
-        driveMotor.getConfigurator().apply(ctreConfigs.swerveDriveFXConfig);
+        driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         driveMotor.getConfigurator().setPosition(0);
         driveMotor.getVelocity().setUpdateFrequency(Constants.kDrivetrain.DRIVE_VELOCITY_FRAME_RATE_HZ);
         driveMotor.getPosition().setUpdateFrequency(Constants.kDrivetrain.DRIVE_POSITION_FRAME_RATE_HZ);
@@ -157,6 +162,24 @@ public class SwerveModule {
     public void setAngleIdleMode(boolean setBrakeMode) {
 
         angleMotor.setIdleMode(setBrakeMode? IdleMode.kBrake : IdleMode.kCoast);
+
+    }
+
+    public void setDrivePID(double kP, double kI, double kD) {
+
+        driveMotor.getConfigurator().apply(new Slot0Configs().
+        withKP(kP).
+        withKI(kI).
+        withKD(kD));
+
+    }
+
+    public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
+
+        angleController.setP(kP);
+        angleController.setI(kI);
+        angleController.setD(kD);
+        angleController.setFF(kFF);
 
     }
 
@@ -179,8 +202,7 @@ public class SwerveModule {
     }
 
     public void setSimulationPosition() {
-        simDistance += driveMotor.getVelocity().getValue() * 0.02;
-        driveMotor.setPosition(simDistance);
+        driveMotorSim.addRotorPosition(Conversions.metersToTalon(driveMotorSim.getMotorVoltage() * (Constants.kDrivetrain.MAX_LINEAR_VELOCITY / 12) * 0.02, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO));
         integratedAngleEncoder.setPosition(lastAngle.getDegrees());
     }
     //returns the output current of driveMotor 

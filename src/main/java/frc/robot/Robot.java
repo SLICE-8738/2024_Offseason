@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.factories.SparkMaxFactory;
 
 /**
@@ -18,6 +18,8 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static CTREConfigs ctreConfigs = new CTREConfigs();
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -34,6 +36,9 @@ public class Robot extends TimedRobot {
 
     Timer.delay(0.2);
     SparkMaxFactory.flashAll();
+
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
   }
 
   /**
@@ -54,10 +59,19 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+
+    m_robotContainer.m_autoSelector.reset();
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+    m_robotContainer.m_autoSelector.updateAutoSelector();
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

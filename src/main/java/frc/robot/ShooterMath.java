@@ -5,12 +5,12 @@ package frc.robot;
  */
 public final class ShooterMath {
     
-  private static final double OOMF = 2;
+  private static final double OOMF = 2.2;
 
     public static class ShotDetails {
 
         private final double xVelocity, yVelocity;
-        public ShotDetails(double xVelocity, double yVelocity) {
+        public ShotDetails(double xVelocity, double yVelocity, double distance) {
             this.xVelocity = xVelocity;
             this.yVelocity = yVelocity;
         }
@@ -39,22 +39,42 @@ public final class ShooterMath {
         /**
          * @return the angle that the note is shot at relative to the ground (in degrees)
          */
-        public double getLaunchAngle() {
+        public double getIdealLaunchAngle() {
             return Math.toDegrees(Math.atan(yVelocity/xVelocity));
         }
 
         /**
          * @return the angle of the line, from the pivot to the high flywheel, to the ground. (in degrees)
          */
-        public double getShooterAngle() {
-            return shooterAngleToLaunchAngle(getLaunchAngle());
+        public double getIdealShooterAngle() {
+            return launchAngleToShooterAngle(getIdealLaunchAngle());
         }
 
         public double getFlywheelVelocity() {
-            return getLaunchVelocity() * (15 * 39.37) / Math.PI;
+            double firstVelocity = getLaunchVelocity() * (15 * 39.37) / Math.PI;
+            return firstVelocity;
         }
+
     }
 
+    /**
+     * @param distance the distance of the robot from the speaker
+     * @return the appropriate shooter angle based on the regression
+     */
+  public static double getDistanceBasedShooterAngle(double distance) {
+    if (distance < 3.2) {
+      return polynomial(7.58551, -58.185, 155.671, -123.304, distance);
+      //return 3.50404 * distance * distance * distance - 32.5363 * distance * distance + 105.954 * distance - 93.1821;
+    } else if (distance < 3.8) {
+      return polynomial(0, -1.14727, 12.8871, -2.86291, distance);
+    }else {
+      return 31;
+    }
+  }
+
+  private static double polynomial(double A, double B, double C, double D, double x) {
+    return A * x * x * x + B * x * x + C * x + D;
+  }
 
   /**
    * @param shooterAngle the angle of the line, from the pivot to the high flywheel, to the ground. (in degrees)
@@ -62,7 +82,10 @@ public final class ShooterMath {
    * @return the horizontal distance from the shooter to the speaker, in meters
    */
   public static double getShooterDistance(double shooterAngle, double robotDistance) {
-    return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle));
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.cos(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
+    return Constants.kShooter.PIVOT_X + robotDistance + (high + low) / 2;
+    //return Constants.kShooter.PIVOT_X + robotDistance + 0.3065 * Math.cos(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -70,7 +93,10 @@ public final class ShooterMath {
    * @return the height of the shooter off the ground, in meters
    */
   public static double getShooterHeight(double shooterAngle) {
-    return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
+    double high = Constants.kShooter.DISTANCE_TO_HIGHER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle));
+    double low = Constants.kShooter.DISTANCE_TO_LOWER_FLYWHEEL * Math.sin(Math.toRadians(shooterAngle - Constants.kShooter.ANGLE_BETWEEN_FLYWHEELS));
+    return Constants.kShooter.PIVOT_Y + (high + low) / 2;
+    //return Constants.kShooter.PIVOT_Y + 0.3065 * Math.sin(Math.toRadians(shooterAngle - 8.622));
   }
 
   /**
@@ -99,13 +125,11 @@ public final class ShooterMath {
    */
   public static ShotDetails getShot(double distance, double height) {
     // see https://www.desmos.com/calculator/sfjrd3ja6f
-    double yVelocity = Math.sqrt( Math.pow(OOMF * 3.2804,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
-    double xVelocity = 32 * (3.28084 * distance) / (yVelocity - OOMF); // x velocity of the note (ft/s)
+    double yVelocity = 0.3048 * Math.sqrt( Math.pow(OOMF * 3.28084,2) + ((80.5/12) - (3.28084 * height)) * 32 * 2); // y velocity of the note (ft/s) 
+    double xVelocity = 0.3048 * 32 * (3.28084 * distance) / (3.28084 * yVelocity - 3.28084 * OOMF); // x velocity of the note (ft/s)
     // Convert back to meters
-    yVelocity *= 0.3048;
-    xVelocity *= 0.3048;
 
-    return new ShotDetails(xVelocity, yVelocity);
+    return new ShotDetails(xVelocity, yVelocity, distance);
   }
 
   /**
@@ -120,7 +144,7 @@ public final class ShooterMath {
 
     for (int i = 0; i < 3; i++) {
         // Calculate the shooter angle according to the current guess for shooter position
-        double shooterAngle = getShot(distance, height).getShooterAngle();
+        double shooterAngle = getShot(distance, height).getIdealShooterAngle();
         // Update the shooter distance and height based on the new angle
         distance = getShooterDistance(shooterAngle, robotDistance);
         height = getShooterHeight(shooterAngle);

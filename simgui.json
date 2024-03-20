@@ -1,0 +1,90 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon FX (v6)[11]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[3]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonomous/Auto Mode": "String Chooser",
+      "/Shuffleboard/Autonomous/Starting Position": "String Chooser",
+      "/Shuffleboard/Debug Tab/Angle Motor PIDF/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drive Motor PID/Update": "Command",
+      "/Shuffleboard/Debug Tab/Drivetrain Max Velocities/Update": "Command",
+      "/Shuffleboard/Debug Tab/Field": "Field2d",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/Autonomous/Auto Mode": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Debug Tab/Field": {
+        "bottom": 1476,
+        "builtin": "",
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "Autonomous": {
+          "Auto Mode": {
+            "open": true
+          },
+          "open": true
+        },
+        "Debug Tab": {
+          "Angle Motor PIDF": {
+            "Update": {
+              "open": true
+            },
+            "open": true
+          }
+        },
+        "Joystick Filters": {
+          "open": true
+        }
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
+    "visible": true
+  }
+}

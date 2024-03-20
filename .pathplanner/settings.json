@@ -1,0 +1,22 @@
+{
+  "robotWidth": 0.9144,
+  "robotLength": 0.91,
+  "holonomicMode": true,
+  "pathFolders": [
+    "Amp To Note",
+    "Mid Field Note Intake",
+    "Note Score",
+    "Wing Note Intake"
+  ],
+  "autoFolders": [
+    "Score 1 Amp And 2 Speaker",
+    "Score 1 Amp And 3 Speaker",
+    "Score 3 Speaker",
+    "Score 4 Speaker"
+  ],
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 2.5,
+  "defaultMaxAngVel": 360.0,
+  "defaultMaxAngAccel": 360.0,
+  "maxModuleSpeed": 3.5
+}

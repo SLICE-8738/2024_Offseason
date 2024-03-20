@@ -4,33 +4,40 @@
 
 package frc.robot.subsystems;
 
-import java.time.chrono.IsoChronology;
-
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.LaserCan.Measurement;
 import au.grapplerobotics.LaserCan.RangingMode;
 import au.grapplerobotics.LaserCan.TimingBudget;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.slicelibs.util.config.REVConfigs;
+import frc.slicelibs.util.factories.SparkMaxFactory;
 
 public class Indexer extends SubsystemBase {
 
-  // Creates private variables 
+  // Creates private variables
   private CANSparkMax highIndexMotor;
   private LaserCan laser;
+  private boolean online;
+
   public Indexer() {
-    highIndexMotor = new CANSparkMax(0, MotorType.kBrushless); //creates new motor
-    laser = new LaserCan(0); //creates new laserCan
+    highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
+    laser = new LaserCan(19); // creates new laserCan
+
+    online = true;
 
     try {
-      //configures settings for the laserCan
-      laser.setRangingMode(RangingMode.SHORT); //sets ranging mode to short distance, which is more accurate
-      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_50MS); //checks every 50 milliseconds for the measurement of the laser
-      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16)); //the area where the laserCan can sense objects
+      // configures settings for the laserCan
+      laser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
+      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS); // checks every 33 milliseconds for the measurement of the
+                                                              // laser
+      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense
+                                                                              // objects
 
     } catch (ConfigurationFailedException e) {
       // displays if the code doesn't work properly
@@ -39,36 +46,56 @@ public class Indexer extends SubsystemBase {
     }
   }
 
-  /** Method that makes the high index motor spin depending on the isStored method */
+  /**
+   * Method that makes the high index motor spin depending on the isStored method
+   */
   public void spinIndex(double speed) {
-    highIndexMotor.set(speed); //sets motor speed
+    highIndexMotor.set(speed); // sets motor speed
   }
 
-  
   /** Method that checks if a note is at the high index motor */
   public boolean isStored() {
-    //checks if the laserCan distance is more than 177.9 millimeters or less than 177.9 millimeters
-     if (getLaserCanDistance() <= 177.8) {
-      //if the laserCAN distance is less than 177.9 millimeters, returns true and there is a note at the high index motor
+    // checks if the laserCan distance is more than 150 millimeters or less than 150
+    // millimeters
+    if (getLaserCanDistance() <= Constants.kIndexer.STORE_NOTE_TARGET + Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE && getLaserCanDistance() >= Constants.kIndexer.STORE_NOTE_TARGET - Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
+      // if the laserCAN distance is less than 150 millimeters, returns true and there
+      // is a note stored in the high index motor
       return true;
-     } else {
-      //if the laserCAN distance is more than 177.9 millimeters, returns false and there is no note at the high index motor
+    } else {
+      // if the laserCAN distance is more than 150 millimeters, returns false and
+      // there is no note at the high index motor
       return false;
-     }
+    }
   }
+
   /**
    * 
    * @return
    */
-  //Method that returns the distance from the laserCAN in millimeters
+  // Method that returns the distance from the laserCAN in millimeters
   public double getLaserCanDistance() {
-    //returns the distance from the laserCAN in millimeters
-    return laser.getMeasurement().distance_mm;
+    // returns the distance from the laserCAN in millimeters
+    Measurement measurement = laser.getMeasurement();
+    online = measurement != null;
+    if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+      return measurement.distance_mm;
+    } else {
+      return 1000;
+    }
   }
 
-  
+  public boolean laserCanOnline() {
+    return online;
+  }
+
+  public double getOutputCurrent() {
+    return highIndexMotor.getOutputCurrent();
+  }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("LaserCAN Distance", getLaserCanDistance());
+
+    SmartDashboard.putBoolean("Have Note", getLaserCanDistance() < 250);
   }
 }

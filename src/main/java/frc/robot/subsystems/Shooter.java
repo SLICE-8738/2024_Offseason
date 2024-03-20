@@ -15,101 +15,147 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Constants.kShooter;
+import frc.slicelibs.util.config.REVConfigs;
+import frc.slicelibs.util.factories.SparkMaxFactory;
+import frc.slicelibs.util.math.Conversions;
 
 /**
  * This subsystem controls the speed of the flywheel and the angle of the shooter. 
  */
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  public CANSparkMax flywheelTop, flywheelBottom; // Create the flywheel motor
-  public CANSparkMax aimMotor; // Create the aiming motor
-  public RelativeEncoder flyTopEncoder, flyBottomEncoder; // Encoder for both...
-  public RelativeEncoder aimEncoder; // ...
-  public SparkPIDController flyTopPID, flyBottomPID; // PIDs for both...
-  public SparkPIDController aimPID; // ...
-  private SimpleMotorFeedforward flyFeedforward; 
+  public TalonFX flywheelTop, flywheelBottom; // Create the flywheel motors
+  private CANSparkMax aimMotorLeft, aimMotorRight; // Create the aiming motors
+  private RelativeEncoder aimRelativeEncoderLeft, aimRelativeEncoderRight; // ...
+  private RelativeEncoder aimAlternateEncoder; // ...
+  private PIDController aimPID;// ...
+  private SimpleMotorFeedforward flyFeedforward;
+
+  private DutyCycleOut flywheelDutyCycle = new DutyCycleOut(0);
+  private VelocityVoltage flywheelVelocity = new VelocityVoltage(0);
+
   private double speedTarget; // Target speed of flywheel
   private double angleTarget; // Target angle of shooter
 
   private ShuffleboardTab shooterTesting;
-  private SimpleWidget differential;
+
+  private final ShuffleboardTab shooterTestTab;
+  private final SimpleWidget currentAngleWidget;
+
+  public boolean pidAimControl;
+
+  public boolean shooterDisabled;
+
+  public DigitalInput /*reedSwitchStow1, reedSwitchStow2, */reedSwitchAmp1/* , reedSwitchAmp2*/;
 
   public Shooter() {
 
+    shooterTestTab = Shuffleboard.getTab("Shooter Testing");
+    currentAngleWidget = shooterTestTab.add("Current Shooter Angle", 0);
+
     shooterTesting = Shuffleboard.getTab("Shooter Testing");
-    differential = shooterTesting.add("Differential Testing: Top Flywheel", 0);
 
     // Define the above objects
-    flywheelTop = new CANSparkMax(18, MotorType.kBrushless);
-    flywheelBottom = new CANSparkMax(17, MotorType.kBrushless);
+    flywheelTop = new TalonFX(Constants.kShooter.FLYWHEEL_TOP_ID);
+    flywheelBottom = new TalonFX(Constants.kShooter.FLYWHEEL_BOTTOM_ID);
+    aimMotorLeft = SparkMaxFactory.createSparkMax(12, REVConfigs.shooterAimSparkMaxConfig.withInvert(true));
+    aimMotorRight = SparkMaxFactory.createSparkMax(9, REVConfigs.shooterAimSparkMaxConfig.withInvert(false));
 
-    aimMotor = new CANSparkMax(0, MotorType.kBrushless);
-    flyTopEncoder = flywheelTop.getEncoder();
-    flyBottomEncoder = flywheelBottom.getEncoder();
-    aimEncoder = aimMotor.getEncoder();
-    flyTopPID = flywheelTop.getPIDController();
-    flyBottomPID = flywheelBottom.getPIDController();
-    aimPID = aimMotor.getPIDController();
-    flyFeedforward = new SimpleMotorFeedforward(0, kShooter.FLYWHEEL_FEED_FORWARD);
+    aimRelativeEncoderLeft = aimMotorLeft.getEncoder();
+    aimRelativeEncoderRight = aimMotorRight.getEncoder();
+    aimAlternateEncoder = aimMotorLeft.getAlternateEncoder(4096);
+    aimAlternateEncoder.setInverted(true);
+    aimPID = new PIDController(Constants.kShooter.AIM_KP, Constants.kShooter.AIM_KI, Constants.kShooter.AIM_KD);
+    flyFeedforward = new SimpleMotorFeedforward(kShooter.FLYWHEEL_FF_KS, kShooter.FLYWHEEL_FF_KV);
+
+    flywheelTop.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
+    flywheelBottom.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
+
+    aimRelativeEncoderLeft.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
+    aimRelativeEncoderLeft.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);
+
+    aimRelativeEncoderRight.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
+    aimRelativeEncoderRight.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);
+
+    aimRelativeEncoderLeft.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
+    aimRelativeEncoderRight.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
     
-    // Set PID of flywheel and aim motors.
-    flyTopPID.setP(kShooter.FLYWHEEL_KP);
-    flyTopPID.setI(kShooter.FLYWHEEL_KI);
-    flyTopPID.setD(kShooter.FLYWHEEL_KD);
+    aimAlternateEncoder.setPositionConversionFactor(180);
+    aimAlternateEncoder.setVelocityConversionFactor(3);
+    aimAlternateEncoder.setPosition(Constants.kShooter.SHOOTER_STOW_ANGLE);
 
-    flyBottomPID.setP(kShooter.FLYWHEEL_KP);
-    flyBottomPID.setI(kShooter.FLYWHEEL_KI);
-    flyBottomPID.setD(kShooter.FLYWHEEL_KD);
+    pidAimControl = false;
 
-    aimPID.setP(kShooter.AIM_KP);
-    aimPID.setI(kShooter.AIM_KI);
-    aimPID.setD(kShooter.AIM_KD);
+    shooterDisabled = false;
 
-    aimEncoder.setPosition(0);
+    reedSwitchAmp1 = new DigitalInput(1);
+
   }
 
   /**
-   * This function begins to spin up the fly wheel to a target speed.
+   * This function begins to spin up the fly wheels to a target speed.
    * @param speed Target speed.
    */
-  public void spinFlywheel(double speed){
-    double differentialMultiplier = differential.getEntry().getDouble(0);
+  public void spinFlywheels(double speed, boolean usePID){
+    if (shooterDisabled) return;
+
+    if (speed > 8000) {
+      speed = 8000;
+    }
+
     speedTarget = speed;
-    flyTopPID.setReference(speed * (1+differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
-    flyBottomPID.setReference(speed * (1-differentialMultiplier), ControlType.kVelocity, 0, flyFeedforward.calculate(speed)); // Spin up the flywheel to the target speed.
-  }
 
-  /** 
-   * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
-   */
-  public void stopFlywheel() {
-
-    flywheelTop.set(0);
-    flywheelBottom.set(0);
-
+    if (usePID) {
+      flywheelVelocity.Velocity = Conversions.RPMToTalon(speed, Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    }
+    flywheelVelocity.FeedForward = flyFeedforward.calculate(speed);
+    flywheelTop.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
+    flywheelBottom.setControl(flywheelVelocity); // Spin up the flywheel to the target speed.
   }
 
   /**
    * Spins the flywheel using normal duty cycle control instead of velocity PID
    * @param speed power to run the flywheel at from -1 to 1
    */
-  public void dutyCycleSpinFlywheel(double speed) {
-    flywheelTop.set(-speed);
-    flywheelBottom.set(-speed);
+  public void dutyCycleSpinFlywheels(double speed) {
+    if (shooterDisabled) return;
 
+    flywheelDutyCycle.Output = speed;
+    flywheelTop.setControl(flywheelDutyCycle);
+    flywheelBottom.setControl(flywheelDutyCycle);
+  }
+
+  public void voltageSpinFlywheels(double volts) {
+    if (shooterDisabled) return;
+
+    flywheelTop.setVoltage(volts);
+    flywheelBottom.setVoltage(volts);
+  }
+
+  
+  /** 
+   * Sets the speed of both flywheels to 0 and cancels any PID setpoints.
+   */
+  public void stopFlywheels() {
+    dutyCycleSpinFlywheels(0);
   }
 
   /**
@@ -118,7 +164,41 @@ public class Shooter extends SubsystemBase {
    */
   public void aimShooter(double angle){
     angleTarget = angle;
-    aimPID.setReference(angle, ControlType.kPosition); // Move the shooter to the target angle.
+    
+    // Move the shooter to the target angle 
+    pidAimControl = true;
+  }
+
+  /**
+   * This function runs the pivot motors at the given percent output.
+   * @param speed Power to run the aim motors at from -1 to 1
+   */
+  public void dutyCycleAimShooter(double speed) {
+    if (speed > 0 && atAmp()) return;
+    aimMotorLeft.set(speed);
+    aimMotorRight.set(speed);
+
+    pidAimControl = false;
+  }
+
+  /**
+   * @return The current absolute angle of the shooter pivot in degrees with no bounds
+   *         read from the alternate encoder.
+   */
+  public double getAlternateAngle() {
+    return aimAlternateEncoder.getPosition();
+  }
+
+  /**
+   * @return The current relative angle of the shooter pivot in degrees with no bounds
+   *         read from the relative encoders.
+   */
+  public double getRelativeAngle() {
+    return (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2;
+  }
+
+  public void setAlternateAngle(double angle) {
+    aimAlternateEncoder.setPosition(angle);
   }
 
   /**
@@ -127,18 +207,22 @@ public class Shooter extends SubsystemBase {
    * @return True if at the correct speed, false otherwise.
    */
   public boolean atTargetSpeed(double acceptableError){
-    double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
-    currentSpeed = (currentSpeed + flyBottomEncoder.getVelocity()) / 2; // Get the current speed of the other flywheel and average
-    if (Math.abs(speedTarget - currentSpeed) <= acceptableError){ // Is the current speed within the acceptable error?
+    double currentSpeed = getFlywheelSpeed(); // Get the current speed of the flywheel
+    SmartDashboard.putNumber("Flywheel Speed Error", speedTarget - currentSpeed);
+    if (speedTarget - currentSpeed <= acceptableError){ // Is the current speed within the acceptable error?
       return true; // if so, true.
     }
     return false; // otherwise, false.
   }
 
+  /**
+   * This function returns the current average speed of the flywheels;
+   * @return The current average flywheel speed in RPM;
+   */
   public double getFlywheelSpeed() {
-    double currentSpeed = flyTopEncoder.getVelocity(); // Get the current speed of the flywheel
-    currentSpeed = (currentSpeed + flyBottomEncoder.getVelocity()) / 2; // Get the current speed of the other flywheel and average
-    return currentSpeed;
+    double topSpeed = Conversions.talonToRPM(flywheelTop.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    double bottomSpeed = Conversions.talonToRPM(flywheelBottom.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+    return (topSpeed + bottomSpeed) / 2; // Get the current average speed of the flywheels
   }
 
 
@@ -148,7 +232,7 @@ public class Shooter extends SubsystemBase {
    * @return True if at the correct angle, false otherwise.
    */
   public boolean detectShooterAngle(double acceptableError){
-    double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
+    double currentAngle = getAlternateAngle(); // Get the current angle of the shooter
     if (Math.abs(angleTarget - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
@@ -156,15 +240,65 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isStowed(double acceptableError) {
-    double currentAngle = aimEncoder.getPosition(); // Get the current angle of the shooter
+    double currentAngle = getAlternateAngle(); // Get the current angle of the shooter
     if (Math.abs(Constants.kShooter.SHOOTER_STOW_ANGLE - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
     return false; // otherwise, false
   }
 
+  public double getTopOutputCurrent(){
+    return flywheelTop.getTorqueCurrent().getValueAsDouble();
+  }
+  public double getBottomOutputCurrent(){
+    return flywheelBottom.getTorqueCurrent().getValueAsDouble();
+  }
+
+  public void slowDownAim() {
+    aimPID.setP(Constants.kShooter.AIM_KP / 2);
+  }
+
+  public void resetAimSpeed() {
+    aimPID.setP(Constants.kShooter.AIM_KP);
+  }
+
+  public boolean atAmp() {
+    return reedSwitchAmp1.get();
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
+    currentAngleWidget.getEntry().setDouble(getAlternateAngle());
+
+    if (pidAimControl && !shooterDisabled) {
+      double feedback = aimPID.calculate(getAlternateAngle(), angleTarget);
+      if (feedback < 0 || !atAmp()) {
+        aimMotorLeft.setVoltage(feedback);
+        aimMotorRight.setVoltage(feedback);
+      }
+    }
+
+    SmartDashboard.putNumber("Flywheel Speed", getFlywheelSpeed());
+
+    double alternatePosition = aimAlternateEncoder.getPosition();
+    double relativePosition = (aimRelativeEncoderLeft.getPosition() + aimRelativeEncoderRight.getPosition()) / 2;
+
+    double alternateVelocity = aimAlternateEncoder.getVelocity();
+    double relativeVelocity = (aimRelativeEncoderLeft.getVelocity() + aimRelativeEncoderRight.getVelocity()) / 2;
+    // if (Math.abs(alternatePosition - relativePosition) > 10) {
+    //   shooterDisabled = true;
+    //   dutyCycleAimShooter(0);
+    //   System.out.println("SHOOTER DISABLED");
+    // }
+
+    SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
+    SmartDashboard.putBoolean("Amp Angle Reed Switch", atAmp());
+    // SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
+    // SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
+    // SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
+    // SmartDashboard.putNumber("Shooter Position Error", alternatePosition - relativePosition);
+    // SmartDashboard.putNumber("Shooter Velocity Error", alternateVelocity - relativeVelocity);
+
   }
 }
