@@ -51,28 +51,28 @@ public class FlywheelTest extends Command {
   public void execute() {
     executes += 1;
 
-    averageCurrent[0] += shooter.flywheelTop.getOutputCurrent();
-    averageCurrent[1] += shooter.flywheelBottom.getOutputCurrent();
+    averageCurrent[0] += shooter.getTopOutputCurrent();
+    averageCurrent[1] += shooter.getBottomOutputCurrent();
 
     if (FullTestRoutine.USE_SHUFFLEBOARD) {
-      flywheelTopCurrentWidget.getEntry().setDouble(shooter.flywheelTop.getOutputCurrent());
-      flywheelBottomCurrentWidget.getEntry().setDouble(shooter.flywheelBottom.getOutputCurrent());
+      flywheelTopCurrentWidget.getEntry().setDouble(shooter.getTopOutputCurrent());
+      flywheelBottomCurrentWidget.getEntry().setDouble(shooter.getBottomOutputCurrent());
     }
 
 
-    if(shooter.flywheelTop.getOutputCurrent() > maxCurrent[0]){
-      maxCurrent[0] = shooter.flywheelTop.getOutputCurrent();
+    if(shooter.getTopOutputCurrent() > maxCurrent[0]){
+      maxCurrent[0] = shooter.getTopOutputCurrent();
     }
-    if(shooter.flywheelBottom.getOutputCurrent() > maxCurrent[1]){
-      maxCurrent[1] = shooter.flywheelBottom.getOutputCurrent();
+    if(shooter.getBottomOutputCurrent() > maxCurrent[1]){
+      maxCurrent[1] = shooter.getBottomOutputCurrent();
     }
 
-    averageSpeed[0] += shooter.flyTopEncoder.getVelocity();
-    averageSpeed[1] += shooter.flyBottomEncoder.getVelocity();
+    averageSpeed[0] += shooter.getTopSpeed();
+    averageSpeed[1] += shooter.getBottomSpeed();
 
     // Outputting to Shuffleboard
-    flywheelTopVelocityWidget.getEntry().setDouble(shooter.flyTopEncoder.getVelocity());
-    flywheelBottomVelocityWidget.getEntry().setDouble(shooter.flyBottomEncoder.getVelocity());
+    flywheelTopVelocityWidget.getEntry().setDouble(shooter.getTopSpeed());
+    flywheelBottomVelocityWidget.getEntry().setDouble(shooter.getBottomSpeed());
 
 
   }

@@ -253,6 +253,12 @@ public class Shooter extends SubsystemBase {
   public double getBottomOutputCurrent(){
     return flywheelBottom.getTorqueCurrent().getValueAsDouble();
   }
+  public double getTopSpeed(){
+    return Conversions.talonToRPM(flywheelTop.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+  }
+  public double getBottomSpeed(){
+    return Conversions.talonToRPM(flywheelBottom.getVelocity().getValue(), Constants.kShooter.FLYWHEEL_GEAR_RATIO);
+  }
 
   public void slowDownAim() {
     aimPID.setP(Constants.kShooter.AIM_KP / 2);
