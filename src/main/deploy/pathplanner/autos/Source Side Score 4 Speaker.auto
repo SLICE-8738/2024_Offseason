@@ -50,6 +50,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Score Note 1"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot Note"
@@ -66,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Note 1 To Note 2"
+                        "pathName": "Score To Note 2"
                       }
                     },
                     {
@@ -88,6 +94,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Score Note 2"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot Note"
@@ -104,7 +116,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Note 2 To Note 3"
+                        "pathName": "Score To Note 3"
                       }
                     },
                     {
