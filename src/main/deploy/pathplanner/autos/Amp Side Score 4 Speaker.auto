@@ -32,9 +32,9 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 0.75
+                        "pathName": "Score Note 1"
                       }
                     }
                   ]
@@ -47,12 +47,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 1"
           }
         },
         {
@@ -76,9 +70,9 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 0.75
+                        "pathName": "Score Note 2"
                       }
                     }
                   ]
@@ -91,12 +85,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 2"
           }
         },
         {
@@ -120,9 +108,9 @@
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 0.75
+                        "pathName": "Score Note 3"
                       }
                     }
                   ]
@@ -135,12 +123,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 3"
           }
         },
         {

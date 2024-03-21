@@ -47,7 +47,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     super(
       new SequentialCommandGroup(new WaitCommand(0.1),
-      new ParallelRaceGroup(new WaitCommand(3.5), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+      new ParallelRaceGroup(new WaitCommand(5), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);

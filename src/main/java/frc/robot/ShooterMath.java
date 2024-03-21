@@ -62,13 +62,10 @@ public final class ShooterMath {
      * @return the appropriate shooter angle based on the regression
      */
   public static double getDistanceBasedShooterAngle(double distance) {
-    if (distance < 3.12) {
-      return polynomial(-4.35129, 27.3318, -44.8783, 19.4024, distance);
-      //return 3.50404 * distance * distance * distance - 32.5363 * distance * distance + 105.954 * distance - 93.1821;
-    } else if (distance < 3.8) {
-      return polynomial(0, -1.28962, 13.7269, -17.0388, distance);
+    if (distance < 3.8) {
+      return polynomial(3.50328, -32.6803, 106.222, -93.3029, distance);
     }else {
-      return 31;
+      return 30.25;
     }
   }
 
