@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.81,
-        "y": 4.08
+        "x": 4.06,
+        "y": 5.02
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.234974273032768,
-        "y": 4.021873571623774
+        "x": 5.640944520323205,
+        "y": 3.895277066947966
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.063357308209279,
-        "y": 5.015169223695506
+        "x": 7.900205219153025,
+        "y": 5.55076982040085
       },
       "prevControl": {
-        "x": 5.679897290992685,
-        "y": 4.002397186289035
+        "x": 6.4394763190475395,
+        "y": 3.9050152596153356
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 168.2614287932777,
+    "rotation": -129.3136674263497,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note Score",
+  "folder": "Mid Field Note Intake",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 168.26,
     "velocity": 0
   },
   "useDefaultConstraints": true
