@@ -30,12 +30,6 @@
                       "data": {
                         "pathName": "Source Side Speaker To Note 8"
                       }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.75
-                      }
                     }
                   ]
                 }

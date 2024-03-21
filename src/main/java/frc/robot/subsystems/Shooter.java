@@ -236,6 +236,7 @@ public class Shooter extends SubsystemBase {
    */
   public boolean detectShooterAngle(double acceptableError){
     double currentAngle = getAlternateAngle(); // Get the current angle of the shooter
+    System.out.println(currentAngle);
     if (Math.abs(angleTarget - currentAngle) <= acceptableError){ // Is the current angle within the acceptable error?
       return true; // if so, true.
     }
@@ -282,7 +283,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     currentAngleWidget.getEntry().setDouble(getAlternateAngle());
 
     if (pidAimControl && !shooterDisabled) {
