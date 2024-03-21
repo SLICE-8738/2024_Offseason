@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -83,7 +84,9 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      VecBuilder.fill(0.1, 0.1, 0.1),
+      VecBuilder.fill(1.3, 1.3, 1.3));
 
     fieldOrientedOffset = new Rotation2d();
 
