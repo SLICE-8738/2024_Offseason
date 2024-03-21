@@ -12,15 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Souce Side Speaker To Note 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note 2 To Note 3"
+            "name": "Shoot Note"
           }
         }
       ]
