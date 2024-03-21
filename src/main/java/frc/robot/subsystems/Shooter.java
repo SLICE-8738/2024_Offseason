@@ -106,10 +106,10 @@ public class Shooter extends SubsystemBase {
 
     shooterDisabled = false;
 
-    reedSwitchAmp1 = new DigitalInput(1);
+    reedSwitchAmp1 = new DigitalInput(3);
     reedSwitchAmp2 = new DigitalInput(4);
     reedSwitchStow1 = new DigitalInput(2);
-    reedSwitchStow2 = new DigitalInput(3);
+    reedSwitchStow2 = new DigitalInput(1);
 
   }
 
@@ -307,6 +307,8 @@ public class Shooter extends SubsystemBase {
     // }
 
     SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
+    
+    SmartDashboard.putBoolean("Amp Reed 1", reedSwitchAmp1.get());
     SmartDashboard.putBoolean("Amp Reed 2", reedSwitchAmp2.get());
     SmartDashboard.putBoolean("Stow Reed 1", reedSwitchStow1.get());
     SmartDashboard.putBoolean("Stow Reed 2", reedSwitchStow2.get());
