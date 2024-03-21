@@ -57,7 +57,7 @@ public class Indexer extends SubsystemBase {
   public boolean isStored() {
     // checks if the laserCan distance is more than 150 millimeters or less than 150
     // millimeters
-    if (getLaserCanDistance() <= Constants.kIndexer.STORE_NOTE_TARGET + Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE && getLaserCanDistance() >= Constants.kIndexer.STORE_NOTE_TARGET - Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
+    if (getLaserCanDistance() <= 250 && getLaserCanDistance() >= 90) { //Constants.kIndexer.STORE_NOTE_TARGET + Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE ;; Constants.kIndexer.STORE_NOTE_TARGET - Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE
       // if the laserCAN distance is less than 150 millimeters, returns true and there
       // is a note stored in the high index motor
       return true;
