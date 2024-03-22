@@ -6,6 +6,7 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,6 +23,7 @@ import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterLimelight;
 
 /**
  * Prepares the shooter for shooting, aligns the robot with the speaker (while maintaining driver control of translation) and then fires when everything is ready
@@ -47,7 +49,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     super(
       new SequentialCommandGroup(new WaitCommand(0.1),
-      new ParallelRaceGroup(new WaitCommand(5), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+      new ParallelRaceGroup(new WaitCommand(2.5), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
@@ -67,7 +69,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
     if (horizontalTarget < 0) {
       horizontalTarget += 360;
     }
-    double horizontalCurrent = drivetrain.getPose().getRotation().getDegrees();
+    double horizontalCurrent = DriverStation.isAutonomousEnabled()? ShooterLimelight.getLastBotPoseBlue().getRotation().getDegrees() : drivetrain.getPose().getRotation().getDegrees();
 
 
     // Find the error in the drivetrain angle

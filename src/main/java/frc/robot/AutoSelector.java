@@ -131,8 +131,7 @@ public class AutoSelector {
 
         NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
-        NamedCommands.registerCommand("Spin Flywheels High", new SpinFlywheelCommand(m_shooter, 4300));
-        NamedCommands.registerCommand("Spin Flywheels Low", new SpinFlywheelCommand(m_shooter, 4300));
+        //NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelCommand(m_shooter, 3500));
 
     }
 
