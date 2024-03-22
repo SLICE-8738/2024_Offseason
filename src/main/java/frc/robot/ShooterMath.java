@@ -62,9 +62,14 @@ public final class ShooterMath {
      * @return the appropriate shooter angle based on the regression
      */
   public static double getDistanceBasedShooterAngle(double distance) {
+    // Regression 5: https://www.desmos.com/calculator/qjryqf5qbx
     if (distance < 3.8) {
-      return polynomial(3.50328, -32.6803, 106.222, -93.3029, distance);
-    }else {
+      //TODO: Regression 5 uses too many parameters for the polynomial method and needs an alternate implementation.
+      //return polynomial(4.1578, -41.7711, 145.2896, -191.5501, 80.9784, distance); // Regression 5
+      return polynomial(3.50328, -32.6803, 106.222, -93.3029, distance); //Regression 4
+    } else if (distance < 4.2) {
+      return 26.164 - (1.25455 * (distance - 3.799)); // Regression 5 long range
+    } else {
       return 30.25;
     }
   }
