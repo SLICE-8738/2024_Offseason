@@ -69,9 +69,9 @@ public final class ShooterMath {
       return polynomial(2.00929, -19.4485, 62.7241, -66.9758, 15.6318, distance); // Regression 5
       //return polynomial(3.50328, -32.6803, 106.222, -93.3029, distance); //Regression 4
     } else if (distance < 4.1) {
-      return polynomial(0, 0, 0, 0, 0, distance);
+      return polynomial(0, 0, 6.0091, -36.7117, 73.8773, distance);
     } else {
-      return 30.25;
+      return 21;
     }
   }
 
