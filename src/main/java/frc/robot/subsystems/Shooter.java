@@ -290,6 +290,8 @@ public class Shooter extends SubsystemBase {
       if (feedback < 0 || !atAmp()) {
         aimMotorLeft.setVoltage(feedback);
         aimMotorRight.setVoltage(feedback);
+      } else {
+        aimPID.reset();
       }
     }
 

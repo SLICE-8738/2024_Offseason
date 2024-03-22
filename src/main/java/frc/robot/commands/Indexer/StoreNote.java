@@ -42,7 +42,7 @@ public class StoreNote extends Command {
 
     timer = new Timer();
 
-    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, Constants.kIndexer.STORE_NOTE_KD, 0);
+    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, 0, Constants.kIndexer.STORE_NOTE_KD);
 
   }
 
