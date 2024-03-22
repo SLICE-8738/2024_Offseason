@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.06,
-        "y": 5.02
+        "x": 3.77,
+        "y": 5.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.640944520323205,
-        "y": 3.895277066947966
+        "x": 5.497435675722416,
+        "y": 3.94453781815365
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.900205219153025,
-        "y": 5.55076982040085
+        "x": 7.88,
+        "y": 5.36
       },
       "prevControl": {
-        "x": 6.4394763190475395,
-        "y": 3.9050152596153356
+        "x": 6.419271099894514,
+        "y": 3.7142454392144857
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Mid Field Note Intake",
   "previewStartingState": {
-    "rotation": 168.26,
+    "rotation": 175.87,
     "velocity": 0
   },
   "useDefaultConstraints": true
