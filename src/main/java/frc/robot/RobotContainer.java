@@ -88,7 +88,8 @@ public class RobotContainer {
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
-  public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
+  //public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
+  public final SubwooferShotCommand m_subwooferShotCommand = new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain, driverController);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
@@ -108,6 +109,8 @@ public class RobotContainer {
 
   /* LEDs */
   public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
+
+  public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -192,9 +195,9 @@ public class RobotContainer {
     Button.rightTrigger2.onTrue(m_ToClimbPositionCommand);
     Button.triangle2.onTrue(m_runIntakeOut);
     Button.square2.onTrue(m_resetAlternateAngle);
-    Button.rightBumper2.whileTrue(m_reverseFlywheels);
-
     Button.leftStickClick2.onTrue(m_ffData);
+    Button.rightBumper2.whileTrue(m_subwooferShotCommand);
+    Button.leftBumper2.onTrue(m_pass);
 
   }
 

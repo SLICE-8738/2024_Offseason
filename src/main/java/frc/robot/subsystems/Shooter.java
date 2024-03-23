@@ -177,11 +177,14 @@ public class Shooter extends SubsystemBase {
    * @param speed Power to run the aim motors at from -1 to 1
    */
   public void dutyCycleAimShooter(double speed) {
-    //if (speed > 0 && atAmp()) return;
+    pidAimControl = false;
+    if (speed > 0 && atAmp()) {
+      aimMotorLeft.set(0);
+      aimMotorRight.set(0);
+      return;
+    }
     aimMotorLeft.set(speed);
     aimMotorRight.set(speed);
-
-    pidAimControl = false;
   }
 
   /**
@@ -272,11 +275,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean atAmp() {
-    return reedSwitchAmp2.get() || reedSwitchAmp1.get();
+    return !reedSwitchAmp2.get() || !reedSwitchAmp1.get();
   }
 
   public boolean atStow() {
-    return (reedSwitchStow1.get() || reedSwitchStow2.get());
+    return (!reedSwitchStow1.get() || !reedSwitchStow2.get());
   }
 
   @Override
@@ -308,10 +311,10 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
     
-    SmartDashboard.putBoolean("Amp Reed 1", reedSwitchAmp1.get());
-    SmartDashboard.putBoolean("Amp Reed 2", reedSwitchAmp2.get());
-    SmartDashboard.putBoolean("Stow Reed 1", reedSwitchStow1.get());
-    SmartDashboard.putBoolean("Stow Reed 2", reedSwitchStow2.get());
+    SmartDashboard.putBoolean("Amp Reed 1", !reedSwitchAmp1.get());
+    SmartDashboard.putBoolean("Amp Reed 2", !reedSwitchAmp2.get());
+    SmartDashboard.putBoolean("Stow Reed 1", !reedSwitchStow1.get());
+    SmartDashboard.putBoolean("Stow Reed 2", !reedSwitchStow2.get());
     // SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
     // SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
     // SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
