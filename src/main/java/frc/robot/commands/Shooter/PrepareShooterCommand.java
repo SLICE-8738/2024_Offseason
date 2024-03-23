@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.ShooterMath;
 import frc.robot.subsystems.Drivetrain;
@@ -108,10 +108,11 @@ public class PrepareShooterCommand extends Command {
       angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
     }
 
+    double optionalAngleAdjust = Button.leftBumper2.getAsBoolean() ? 0 : -3.5;
 
-    double angleAdjust = angleWidget.getEntry().getDouble(0);
+    double angleAdjust = distanceToSpeaker > 1.6 ? optionalAngleAdjust : 0;
 
-    //angle += angleAdjust;
+    angle += angleAdjust;
 
     double speed = distanceToSpeaker < 3.4 ? 3500 : 4500;
     //speed = 4500;

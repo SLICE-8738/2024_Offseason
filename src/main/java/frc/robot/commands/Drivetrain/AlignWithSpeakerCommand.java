@@ -90,7 +90,8 @@ public class AlignWithSpeakerCommand extends Command {
     }
 
     // find the angle to speaker;
-    Translation2d directionToSpeaker = ShooterLimelight.getTargetDetected()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
+    //Translation2d directionToSpeaker = ShooterLimelight.getTargetDetected()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
+    Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
     double targetDegrees = targetAngle.getDegrees() % 360;
     if (targetDegrees < 0) {

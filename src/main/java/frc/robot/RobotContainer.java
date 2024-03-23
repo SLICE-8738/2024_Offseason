@@ -197,7 +197,7 @@ public class RobotContainer {
     Button.square2.onTrue(m_resetAlternateAngle);
     Button.leftStickClick2.onTrue(m_ffData);
     Button.rightBumper2.whileTrue(m_subwooferShotCommand);
-    Button.leftBumper2.onTrue(m_pass);
+    //Button.leftBumper2.onTrue(m_pass);
 
   }
 

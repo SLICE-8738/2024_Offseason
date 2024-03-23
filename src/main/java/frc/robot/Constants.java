@@ -290,7 +290,7 @@ public final class Constants {
 
     public static final double ENTRANCE_CURRENT_THRESHOLD = 33;
 
-    public static double INTAKE_SPEED = 0.6;
+    public static double INTAKE_SPEED = 0.625;
 
   }
 

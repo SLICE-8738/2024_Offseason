@@ -108,13 +108,13 @@ public class ShuffleboardData {
             withSize(3, 2);
         
             //Displays the feed from the USB camera on Shuffleboard
-            /*driverTab.add(CameraServer.startAutomaticCapture()).
+            /*driverTab.add(CameraServer.startAutomaticCapture(0)).
             withWidget(BuiltInWidgets.kCameraStream).
             withPosition(1, 0).
             withSize(3, 3);*/
 
             //Displays the feed from the Limelight on Shuffleboard
-            driverTab.addCamera("Limelight", "limelight-shooter-1", "http://10.87.38.48:5800").
+            driverTab.addCamera("Limelight", "limelight-shooter-1", "http://10.87.38.67:5800").
             withPosition(5, 0).
             withSize(3, 3);
 
