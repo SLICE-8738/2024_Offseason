@@ -34,7 +34,7 @@ import frc.slicelibs.util.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static class OperatorConstants {
+  public final class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
 
@@ -46,7 +46,7 @@ public final class Constants {
 
   }
 
-  public static final class kDrivetrain {
+  public final class kDrivetrain {
 
     public static final Port NAVX_PORT = Port.kUSB;
     public static final boolean INVERT_GYRO = true; // Always ensure Gyro is CCW+ CW-
@@ -144,7 +144,7 @@ public final class Constants {
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
-    public static final class Mod0 {
+    public final class Mod0 {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 30;
       public static final int CANCODER_ID = 21;
@@ -154,7 +154,7 @@ public final class Constants {
     }
 
     /* Back Left Module - Module 1 */
-    public static final class Mod1 {
+    public final class Mod1 {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int CANCODER_ID = 22;
@@ -164,7 +164,7 @@ public final class Constants {
     }
 
     /* Front Right Module - Module 2 */
-    public static final class Mod2 {
+    public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int CANCODER_ID = 20;
@@ -174,7 +174,7 @@ public final class Constants {
     }
 
     /* Back Right Module - Module 3 */
-    public static final class Mod3 {
+    public final class Mod3 {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int CANCODER_ID = 23;
@@ -185,7 +185,7 @@ public final class Constants {
 
   }
 
-  public static final class kShooter {
+  public final class kShooter {
 
     /* Motor IDs */
     public static final int FLYWHEEL_TOP_ID = 10;
@@ -271,7 +271,7 @@ public final class Constants {
 
   }
 
-  public static final class kIntake {
+  public final class kIntake {
 
     /* Idle Modes */
     public static final IdleMode ENTRANCE_IDLE_MODE = IdleMode.kCoast;
@@ -316,26 +316,46 @@ public final class Constants {
 
   }
 
-  public static final class kElevator {
+  public final class kElevator {
 
     public static final double CLIMB_HEIGHT = 0.5;
 
   }
 
-  public static final class kFieldPositions {
+  public final class kFieldPositions {
 
-    public static final Translation2d BLUE_SPEAKER_POSITION = new Translation2d(-0.0381, 5.548);
-    public static final Translation2d RED_SPEAKER_POSITION = new Translation2d(16.579, 5.548);
+    public static final Translation2d[] APRILTAG_POSITIONS = {
+      new Translation2d(15.0795, 0.2459),
+      new Translation2d(16.1851, 0.8837),
+      new Translation2d(16.5793, 4.9827),
+      new Translation2d(16.5793, 5.5479),
+      new Translation2d(14.7008, 8.2042),
+      new Translation2d(1.8415, 8.2042),
+      new Translation2d(-0.0381, 5.5479),
+      new Translation2d(-0.0381, 4.9827),
+      new Translation2d(0.3561, 0.8837),
+      new Translation2d(1.4615, 0.2459),
+      new Translation2d(11.9047, 3.7132),
+      new Translation2d(11.9047, 4.4983),
+      new Translation2d(11.2201, 4.1051),
+      new Translation2d(5.3208, 4.1051),
+      new Translation2d(4.6413, 4.4983),
+      new Translation2d(4.6413, 3.7132)
+    };
+    
+    public static final Translation2d BLUE_SPEAKER_POSITION = APRILTAG_POSITIONS[6];
+    public static final Translation2d RED_SPEAKER_POSITION = APRILTAG_POSITIONS[3];
     public static final Pose2d LEFT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
     public static final Pose2d RIGHT_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
     public static final Pose2d CENTER_STAGE_ALIGNMENT_POSITION = new Pose2d(0, 0, new Rotation2d());
 
   }
 
-  public static final class kLEDs {
+  public final class kLEDs {
     public static final int LED_PWM_PORT = 1;
     public static final int LED_LENGTH = 55;
   }
+  
 }
 
 

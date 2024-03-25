@@ -26,7 +26,7 @@ public class LimelightBase extends SubsystemBase {
   protected double targetXOffset;
   protected double targetYOffset;
 
-  protected static double[] currentBotPoseBlue = new double[0];
+  protected static double[] currentBotPoseBlue = new double[6];
   protected static double[] lastBotPoseBlue = new double[6];
   protected double[] currentRobotTargetSpacePose = new double[6];
   protected static double[] lastRobotTargetSpacePose = new double[6];
@@ -34,7 +34,7 @@ public class LimelightBase extends SubsystemBase {
   protected static double[] lastTargetCameraSpacePose = new double[6];
 
   protected double currentAprilTagID;
-  protected double lastAprilTagID;
+  protected static double lastAprilTagID;
 
   protected static NetworkTableEntry ledMode;
   protected static NetworkTableEntry cameraMode;
@@ -65,13 +65,9 @@ public class LimelightBase extends SubsystemBase {
     targetXOffset = table.getEntry("tx").getDouble(0);
     targetYOffset = table.getEntry("ty").getDouble(0);
 
-    currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[0]);
+    currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
 
-    if(currentBotPoseBlue.length != 0) {
-
-      lastBotPoseBlue = currentBotPoseBlue;
-
-    }
+    handleRawPose(currentBotPoseBlue, lastBotPoseBlue);
 
     currentRobotTargetSpacePose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
 
@@ -81,7 +77,7 @@ public class LimelightBase extends SubsystemBase {
 
     handleRawPose(currentTargetCameraSpacePose, lastTargetCameraSpacePose);
 
-    currentAprilTagID = table.getEntry("tid").getDouble(0);
+    currentAprilTagID = table.getEntry("tid").getInteger(0);
 
     if(currentAprilTagID != 0) {
 
@@ -130,13 +126,13 @@ public class LimelightBase extends SubsystemBase {
 
   /**
    * @return The current robot pose with the origin at the right-hand side of the blue alliance driverstation
-   *         being received if any. Null if received pose is empty.
+   *         being received if any. Null if none is being received.
    */
   public static Pose2d getCurrentBotPoseBlue() {
       
     double[] currentBotPoseBlue = LimelightBase.currentBotPoseBlue;
  
-    if(currentBotPoseBlue.length != 0) {
+    if(currentBotPoseBlue != new double[6]) {
 
       return new Pose2d(currentBotPoseBlue[0], currentBotPoseBlue[1], Rotation2d.fromDegrees(currentBotPoseBlue[5]));
 
@@ -188,7 +184,7 @@ public class LimelightBase extends SubsystemBase {
   /**
    * @return The ID of the last identified primary in-view AprilTag
    */
-  public double getAprilTagID() {
+  public static double getAprilTagID() {
 
     return lastAprilTagID;
 
@@ -243,9 +239,13 @@ public class LimelightBase extends SubsystemBase {
 
   public void handleRawPose(double[] rawPose, double[] processedPose) {
 
-    if(rawPose != new double[6]) {
+    if (rawPose != new double[6]) {
 
-      processedPose = rawPose;
+      for (int i = 0; i < 6; i++) {
+
+        processedPose[i] = rawPose[i];
+
+      }
 
     }
 

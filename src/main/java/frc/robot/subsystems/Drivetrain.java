@@ -42,18 +42,17 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveModule[] swerveMods;
 
   private final SwerveDrivePoseEstimator m_swerveDrivetrainOdometry;
-
   private final AHRS navXGyro;
-
   public final Field2d m_field2d;
 
   private Rotation2d fieldOrientedOffset;
 
   public double speedPercent;
 
-  private Rotation2d angle = new Rotation2d();
+  private Rotation2d simHeading = new Rotation2d();
 
   public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
+
   public double maxLinearVelocity = 4.5;
   public double maxAngularVelocity = 7;
 
@@ -227,7 +226,7 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    angle = angle.plus(transform.getRotation().times(0.02));
+    simHeading = simHeading.plus(transform.getRotation().times(0.02));
 
   }
 
@@ -277,7 +276,7 @@ public class Drivetrain extends SubsystemBase {
 
     if(visionPose != null && ShooterLimelight.getTargetDetected()) {
       
-      if(ShooterLimelight.getRobotTargetSpacePose().getZ() <= 2.0 && !DriverStation.isAutonomousEnabled()) {
+      if(getAprilTagDistance() <= 2.0 && !DriverStation.isAutonomousEnabled()) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
@@ -310,10 +309,19 @@ public class Drivetrain extends SubsystemBase {
   public Translation2d getSpeakerPosition() {
 
     Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
-    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition().getTranslation())
-    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(m_swerveDrivetrainOdometry.getEstimatedPosition().getTranslation());
+    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getPose().getTranslation())
+    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
 
     return difference;
+
+  }
+
+  /**
+   * @return The current distance of the robot from the primary in-view AprilTag
+   */
+  public double getAprilTagDistance() {
+
+    return Constants.kFieldPositions.APRILTAG_POSITIONS[(int) ShooterLimelight.getAprilTagID() - 1].getDistance(getPose().getTranslation());
 
   }
 
@@ -473,7 +481,7 @@ public class Drivetrain extends SubsystemBase {
     Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
       MathUtil.inputModulus(-navXGyro.getYaw(), 0 , 360) 
       : MathUtil.inputModulus(navXGyro.getYaw(), 0, 360)) 
-    : angle;
+    : simHeading;
 
   }
 
