@@ -12,40 +12,7 @@ public class ShooterLimelight extends LimelightBase {
   public ShooterLimelight() {
 
     super("limelight-shooter");
-
-  }
-
-  @Override
-  public void periodic() {
-
-    targetDetected = table.getEntry("tv").getDouble(0);
-
-    targetXOffset = table.getEntry("tx").getDouble(0);
-    targetYOffset = table.getEntry("ty").getDouble(0);
-
-    currentBotPoseBlue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[0]);
-
-    if(currentBotPoseBlue.length != 0) {
-
-      lastBotPoseBlue = currentBotPoseBlue;
-
-    }
-    
-    currentRobotTargetSpacePose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
-
-    handleRawPose(currentRobotTargetSpacePose, lastRobotTargetSpacePose);
-
-    currentTargetCameraSpacePose = table.getEntry("targetpose_cameraspace").getDoubleArray(new double[] {0, 0, 1.178, 0, 0, 0});
-
-    handleRawPose(currentTargetCameraSpacePose, lastTargetCameraSpacePose);
-
-    currentAprilTagID = table.getEntry("tid").getDouble(0);
-
-    if(currentAprilTagID != 0) {
-
-      lastAprilTagID = currentAprilTagID;
-
-    }
+    lastTargetCameraSpacePose = new double[] {0, 0, 1.178, 0, 0, 0};
 
   }
 
