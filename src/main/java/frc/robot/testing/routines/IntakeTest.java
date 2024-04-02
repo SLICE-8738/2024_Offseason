@@ -20,6 +20,10 @@ public class IntakeTest extends Command {
   private int executes = 0;
   private final Timer timer;
 
+  private double[] currentAverage = {5.352, 0.02};
+  private double[] currentMax = {22.531, 0.375};
+  private double[] speedAverage = {4.118, 4.464};
+
   private ShuffleboardTab testingTab;
   private SimpleWidget intakeEntranceCurrentWidget, intakeRampCurrentWidget, intakeEntranceVelocityWidget, intakeRampVelocityWidget; 
   
@@ -81,7 +85,14 @@ public class IntakeTest extends Command {
       averageSpeed[i] /= executes;
     }
 
+    if(averageCurrent[0]){
+      
+    }
+
     System.out.println("Intake Tests:");
+    System.out.println("Deviation from average entrance current is: %s  %s\nRamp deviation: %s  %s");
+    System.out.println("Deviation from Max entrance current is: %s \nRamp deviation is %s")
+    
     System.out.println(String.format("Average Current: \nIntake Entrance: %s \nIntake Ramp: %s", averageCurrent[0], averageCurrent[1]));
     System.out.println(String.format("Max Current: \nIntake Enterance: %s \nIntake Ramp %s", maxCurrent[0], maxCurrent[1]));
     System.out.println(String.format("Average Speed: \nIntake Enterance: %s \nIntake Ramp: %s", averageSpeed[0], averageSpeed[1]));
