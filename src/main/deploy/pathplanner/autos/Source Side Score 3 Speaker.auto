@@ -66,13 +66,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Score To Note 5"
+                        "pathName": "Far Score To Note 5"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 5"
+                        "pathName": "Score Note 5 Far"
                       }
                     }
                   ]

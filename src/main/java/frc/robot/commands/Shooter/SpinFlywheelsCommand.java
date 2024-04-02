@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Shooter;
 
-public class SpinFlywheelCommand extends Command {
+public class SpinFlywheelsCommand extends Command {
   private final Shooter m_shooter;
   private final double speed;
 
   /** Creates a new SpinFlywheelCommand. */
-  public SpinFlywheelCommand(Shooter shooter, double speed) {
+  public SpinFlywheelsCommand(Shooter shooter, double speed) {
     m_shooter = shooter;
     this.speed = speed;
 

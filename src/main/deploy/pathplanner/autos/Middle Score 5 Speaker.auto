@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 6.76
+      "x": 1.4,
+      "y": 5.53
     },
-    "rotation": -120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Speaker To Note 1"
+                        "pathName": "Middle Speaker To Note 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Spin Flywheels"
                       }
                     },
                     {
@@ -70,6 +76,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Spin Flywheels"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 2"
@@ -108,6 +120,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Spin Flywheels"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 3"
@@ -132,14 +150,52 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Close Score To Note 5"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Close Score To Note 5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Spin Flywheels"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Score Note 5 Close"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note"
           }
         }
       ]
     }
   },
-  "folder": "Score 4 Speaker",
+  "folder": "Score 5 Speaker",
   "choreoAuto": false
 }

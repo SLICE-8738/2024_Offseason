@@ -88,7 +88,7 @@ public class RobotContainer {
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
-  public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
+  public final SpinFlywheelsCommand m_reverseFlywheels = new SpinFlywheelsCommand(m_shooter, -500);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);

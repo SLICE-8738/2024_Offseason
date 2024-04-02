@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.057289618731077,
-        "y": 5.55076982040085
+        "x": 3.6543532161797425,
+        "y": 6.6998765551505
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 5.65
+        "x": 7.88,
+        "y": 5.69
       },
       "prevControl": {
-        "x": 2.271529857413215,
-        "y": 5.599460783737701
+        "x": 5.280631391630518,
+        "y": 6.7680439038220905
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0
   },
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Wing Note Intake",
+  "folder": "Mid Field Note Intake",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
