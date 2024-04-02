@@ -30,6 +30,12 @@
                       "data": {
                         "pathName": "Source Side Speaker To Note 8"
                       }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Score Note 8"
+                      }
                     }
                   ]
                 }
@@ -41,12 +47,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score Note 8"
           }
         },
         {

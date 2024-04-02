@@ -290,7 +290,7 @@ public final class Constants {
 
     public static final double ENTRANCE_CURRENT_THRESHOLD = 33;
 
-    public static double INTAKE_SPEED = 0.6;
+    public static double INTAKE_SPEED = 0.625;
 
   }
 
@@ -308,7 +308,7 @@ public final class Constants {
 
     public static final double CURRENT_THRESHOLD = 12;
 
-    public static final double STORE_NOTE_TARGET = 120;
+    public static final double STORE_NOTE_TARGET = 45;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
     public static final double STORE_NOTE_KP = 0.001;
     public static final double STORE_NOTE_KD = 0.0002;
