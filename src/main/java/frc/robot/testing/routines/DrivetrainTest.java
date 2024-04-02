@@ -28,28 +28,29 @@ public class DrivetrainTest extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.setPercentOutput(0.0, 0.5);
     timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currents = driveTrain.driveOutputCurents();
-    swivelExecutes += 1;
-    for(int i = 0; i < 4; i++){
-      swivelAverageCurrent[i] += currents[i];
-    }
-    for(int i = 0; i< 4; i++){
-      if(swivelMaxCurrent[i] < currents[i]){
-        swivelMaxCurrent[i] = currents[i];
+    if(timer.get() < 2){
+      driveTrain.setPercentOutput(0.0, 0.5);
+      currents = driveTrain.driveOutputCurents();
+      swivelExecutes += 1;
+      for(int i = 0; i < 4; i++){
+        swivelAverageCurrent[i] += currents[i];
+      }
+      for(int i = 0; i< 4; i++){
+        if(swivelMaxCurrent[i] < currents[i]){
+          swivelMaxCurrent[i] = currents[i];
+        }
+      }
+      speeds = driveTrain.getStates();
+      for(int i = 0; i < 4; i++){
+        swivelAverageSpeed[i] += currents[i];
       }
     }
-    speeds = driveTrain.getStates();
-    for(int i = 0; i < 4; i++){
-      swivelAverageSpeed[i] += currents[i];
-    }
-
     if(timer.get() >= 2){
       driveTrain.setPercentOutput(0.5, 0.0);
       while(timer.get() < 4){

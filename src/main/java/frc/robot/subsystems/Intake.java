@@ -22,6 +22,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     this.intakeEntrance = SparkMaxFactory.createSparkMax(13, REVConfigs.intakeEntranceSparkMaxConfig);
     this.intakeRamp = SparkMaxFactory.createSparkMax(14, REVConfigs.intakeRampSparkMaxConfig);
+    this.intakeEntranceEncoder = intakeEntrance.getEncoder();
+    this.intakeRampEncoder = intakeRamp.getEncoder();
   }
 
   /**
@@ -49,6 +51,18 @@ public class Intake extends SubsystemBase {
 
   public double getEntranceOutputCurrent() {
     return intakeEntrance.getOutputCurrent();
+  }
+
+  public double getRampOutputCurrent() {
+    return intakeRamp.getOutputCurrent();
+  }
+
+  public double getEntranceVelocity(){
+    return intakeEntranceEncoder.getVelocity();
+  }
+
+  public double getRampVelocity(){
+    return intakeRampEncoder.getVelocity();
   }
 
   @Override

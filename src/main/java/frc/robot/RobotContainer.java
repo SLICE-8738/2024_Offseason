@@ -196,7 +196,7 @@ public class RobotContainer {
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
 
     Button.controlPadLeft1.onTrue(m_flywheelTest);
-    Button.controlPadRight1.onTrue(m_DrivetrainTest);
+    Button.controlPadRight1.onTrue(m_IntakeTest);
   
 
     // ==================

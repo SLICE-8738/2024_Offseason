@@ -39,8 +39,8 @@ public class IntakeTest extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.intakeEntrance.set(0.5);
-    intake.intakeRamp.set(0.5);
+    intake.runIntakeEntranceOnly(0.25);
+    intake.runRampIntakeOnly(0.25);
     timer.restart();
   }
 
@@ -48,33 +48,33 @@ public class IntakeTest extends Command {
   @Override
   public void execute() {
     executes += 1;
-    averageCurrent[0] += intake.intakeEntrance.getOutputCurrent();
-    averageCurrent[1] += intake.intakeRamp.getOutputCurrent();
+    averageCurrent[0] += intake.getEntranceOutputCurrent();
+    averageCurrent[1] += intake.getRampOutputCurrent();
 
     // Outputting to Shuffleboard
-    intakeEntranceCurrentWidget.getEntry().setDouble(intake.intakeEntrance.getOutputCurrent());
-    intakeRampCurrentWidget.getEntry().setDouble(intake.intakeRamp.getOutputCurrent());
+    intakeEntranceCurrentWidget.getEntry().setDouble(intake.getEntranceOutputCurrent());
+    intakeRampCurrentWidget.getEntry().setDouble(intake.getRampOutputCurrent());
 
-    if(intake.intakeEntrance.getOutputCurrent() > maxCurrent[0]){
-      maxCurrent[0] = intake.intakeEntrance.getOutputCurrent();
+    if(intake.getEntranceOutputCurrent() > maxCurrent[0]){
+      maxCurrent[0] = intake.getEntranceOutputCurrent();
     }
-    if(intake.intakeRamp.getOutputCurrent() > maxCurrent[1]){
-      maxCurrent[1] = intake.intakeRamp.getOutputCurrent();
+    if(intake.getRampOutputCurrent() > maxCurrent[1]){
+      maxCurrent[1] = intake.getRampOutputCurrent();
     }
-    averageSpeed[0] = intake.intakeEntranceEncoder.getVelocity();
-    averageSpeed[1] = intake.intakeRampEncoder.getVelocity();
+    averageSpeed[0] = intake.getEntranceVelocity();
+    averageSpeed[1] = intake.getRampVelocity();
 
     // Outputting to Shuffleboard
-    intakeEntranceVelocityWidget.getEntry().setDouble(intake.intakeEntranceEncoder.getVelocity());
-    intakeRampVelocityWidget.getEntry().setDouble(intake.intakeRampEncoder.getVelocity());
+    intakeEntranceVelocityWidget.getEntry().setDouble(intake.getEntranceVelocity());
+    intakeRampVelocityWidget.getEntry().setDouble(intake.getRampVelocity());
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.intakeEntrance.set(0);
-    intake.intakeRamp.set(0);
+    intake.runIntakeEntranceOnly(0);
+    intake.runRampIntakeOnly(0);;
 
     for(int i = 0; i < 2; i++){
       averageCurrent[i] /= executes;
@@ -90,6 +90,6 @@ public class IntakeTest extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return timer.get() >= 2;
+      return timer.get() >= 4;
     }
   }

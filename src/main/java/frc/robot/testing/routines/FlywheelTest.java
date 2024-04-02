@@ -41,8 +41,8 @@ public class FlywheelTest extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.flywheelTop.set(0.5);
-    shooter.flywheelBottom.set(0.5);
+    shooter.flywheelTop.set(0.25);
+    shooter.flywheelBottom.set(0.25);
     timer.restart();
   }
 
@@ -96,6 +96,6 @@ public class FlywheelTest extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >= 2;
+    return timer.get() >= 4;
   }
 }
