@@ -32,12 +32,6 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Spin Flywheels"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 1"
@@ -76,12 +70,6 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "Spin Flywheels"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 2"
@@ -117,12 +105,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "Close Score To Note 3"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Spin Flywheels"
                       }
                     },
                     {

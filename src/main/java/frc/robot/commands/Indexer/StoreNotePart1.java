@@ -96,6 +96,6 @@ public class StoreNotePart1 extends Command {
       return true;
     }
     // ends the command
-    return indexer.getLaserCanDistance() > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
+    return indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
   }
 }

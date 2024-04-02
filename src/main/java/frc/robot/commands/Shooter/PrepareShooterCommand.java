@@ -136,7 +136,9 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_shooter.stopFlywheels();
+    if (!DriverStation.isAutonomousEnabled()) {
+      m_shooter.stopFlywheels();
+    }
     m_shooter.slowDownAim();
     m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE + 0.5);
   }

@@ -121,6 +121,11 @@ public class StoreNotePart2 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+
+    if (!indexer.laserCanOnline()) {
+      return true;
+    }
+
     if (forceStop) {
       return true;
     }

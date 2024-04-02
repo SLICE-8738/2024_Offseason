@@ -55,6 +55,7 @@ public class AutoSelector {
     public enum DesiredMode {
 
         TEST_PATH_MODE("Test Path"),
+        SCORE_5_SPEAKER("Score 5 Speaker"),
         SCORE_4_SPEAKER("Score 4 Speaker"),
         SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker"),
         SCORE_3_SPEAKER("Score 3 Speaker"),
@@ -107,8 +108,9 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
+        modeChooser.setDefaultOption(DesiredMode.SCORE_5_SPEAKER.value, DesiredMode.SCORE_5_SPEAKER);
 
+        modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER.value, DesiredMode.SCORE_3_SPEAKER);

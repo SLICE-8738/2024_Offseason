@@ -124,12 +124,17 @@ public final class Constants {
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
 
     public static final double TRANSLATION_KP = 4.5;
-    public static final double ROTATION_KP = 2.5;
+    public static final double ROTATION_KP = 2.0;
 
     /* Speaker Alignment Values */
     public static final double kPSpeakerAlignRotation = 3.6;
     public static final double kISpeakerAlignRotation = 0;
     public static final double kDSpeakerAlignRotation = 0.8;
+
+    /* Note Alignment Values */
+    public static final double kPNoteAlignRotation = 0.1;
+    public static final double kINoteAlignRotation = 0;
+    public static final double kDNoteAlignRotation = 0;
 
     /* Neutral Modes */
     public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
@@ -312,7 +317,7 @@ public final class Constants {
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
     public static final double STORE_NOTE_KP = 0.001;
     public static final double STORE_NOTE_KD = 0.0002;
-    public static final double DEFAULT_LASERCAN_DISTANCE = 275;
+    public static final double DEFAULT_LASERCAN_DISTANCE = 270;
 
   }
 

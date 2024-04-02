@@ -85,13 +85,13 @@ public class IntakeTest extends Command {
       averageSpeed[i] /= executes;
     }
 
-    if(averageCurrent[0]){
+    /*if(averageCurrent[0]){
       
-    }
+    }*/
 
     System.out.println("Intake Tests:");
     System.out.println("Deviation from average entrance current is: %s  %s\nRamp deviation: %s  %s");
-    System.out.println("Deviation from Max entrance current is: %s \nRamp deviation is %s")
+    System.out.println("Deviation from Max entrance current is: %s \nRamp deviation is %s");
     
     System.out.println(String.format("Average Current: \nIntake Entrance: %s \nIntake Ramp: %s", averageCurrent[0], averageCurrent[1]));
     System.out.println(String.format("Max Current: \nIntake Enterance: %s \nIntake Ramp %s", maxCurrent[0], maxCurrent[1]));

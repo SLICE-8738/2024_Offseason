@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Class for interfacing with a Limelight connected to NetworkTables. */
@@ -130,7 +131,7 @@ public class LimelightBase extends SubsystemBase {
    */
   public static Pose2d getCurrentBotPoseBlue() {
       
-    double[] currentBotPoseBlue = LimelightBase.currentBotPoseBlue;
+    SmartDashboard.putNumber("Limelight Pose X", currentBotPoseBlue[0]);
  
     if(currentBotPoseBlue != new double[6]) {
 
@@ -195,7 +196,7 @@ public class LimelightBase extends SubsystemBase {
    * 
    * @param mode
    * 
-   * <p>0: Use the LED mode set in the current pipeline.
+   * <p>0: Use the LED mode set in the current pipeline
    * <p>1: Force off
    * <p>2: Force blink
    * <p>3: Force on
