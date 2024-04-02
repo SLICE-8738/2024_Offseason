@@ -129,7 +129,7 @@ public class StoreNotePart2 extends Command {
       return true;
     }
     // ends the command
-    if (indexer.isStored() && timerRunning && storeTimer.get() > 0.2) {
+    if (indexer.isStored() && timerRunning && storeTimer.get() > 0.1) {
       return true; // ends the command if stored is true (stored is a method in indexer)
     } else {
       return false;

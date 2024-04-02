@@ -24,6 +24,9 @@ import frc.robot.commands.LEDs.RainbowLEDs;
 import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
+import frc.robot.testing.routines.DrivetrainTest;
+import frc.robot.testing.routines.FlywheelTest;
+import frc.robot.testing.routines.IntakeTest;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -111,6 +114,11 @@ public class RobotContainer {
   public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
 
   public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
+
+  /* Tests */
+  public final FlywheelTest m_flywheelTest = new FlywheelTest(m_shooter);
+  public final DrivetrainTest m_DrivetrainTest = new DrivetrainTest(m_drivetrain);
+  public final IntakeTest m_IntakeTest = new IntakeTest(m_intake);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -186,6 +194,10 @@ public class RobotContainer {
 
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
+
+    Button.controlPadLeft1.onTrue(m_flywheelTest);
+    Button.controlPadRight1.onTrue(m_DrivetrainTest);
+  
 
     // ==================
     // Operator Controls

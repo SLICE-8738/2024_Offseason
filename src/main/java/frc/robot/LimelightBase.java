@@ -77,9 +77,9 @@ public class LimelightBase extends SubsystemBase {
 
     handleRawPose(currentTargetCameraSpacePose, lastTargetCameraSpacePose);
 
-    currentAprilTagID = table.getEntry("tid").getInteger(0);
+    currentAprilTagID = table.getEntry("tid").getDouble(0);
 
-    if(currentAprilTagID != 0) {
+    if(currentAprilTagID != 0 && currentAprilTagID != -1) {
 
       lastAprilTagID = currentAprilTagID;
 

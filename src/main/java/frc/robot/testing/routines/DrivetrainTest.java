@@ -28,7 +28,7 @@ public class DrivetrainTest extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.setPercentOutput(0.0, 1.0);
+    driveTrain.setPercentOutput(0.0, 0.5);
     timer.restart();
   }
 
@@ -51,7 +51,7 @@ public class DrivetrainTest extends Command{
     }
 
     if(timer.get() >= 2){
-      driveTrain.setPercentOutput(1.0, 0.0);
+      driveTrain.setPercentOutput(0.5, 0.0);
       while(timer.get() < 4){
         currents = driveTrain.driveOutputCurents();
         driveExecutes += 1;
@@ -68,7 +68,6 @@ public class DrivetrainTest extends Command{
             driveAverageSpeed[i] += currents[i];
         }
       }
-      isFinished();
     }
 
 }
@@ -95,6 +94,7 @@ public class DrivetrainTest extends Command{
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    
+    return timer.get() >= 4;
   }
 }

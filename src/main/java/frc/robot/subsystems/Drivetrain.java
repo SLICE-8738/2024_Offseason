@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      ShooterLimelight.getLastBotPoseBlue(),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(1.3, 1.3, 1.3));
 
@@ -276,7 +276,7 @@ public class Drivetrain extends SubsystemBase {
 
     if(visionPose != null && ShooterLimelight.getTargetDetected()) {
       
-      if(getAprilTagDistance() <= 2.0 && !DriverStation.isAutonomousEnabled()) {
+      if(ShooterLimelight.getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
 
         m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
 
