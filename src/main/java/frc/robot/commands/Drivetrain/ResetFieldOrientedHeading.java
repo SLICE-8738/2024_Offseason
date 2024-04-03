@@ -5,16 +5,17 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.subsystems.Drivetrain;
 
 public class ResetFieldOrientedHeading extends Command {
-  private Drivetrain m_drivetrain;
+  private final Drivetrain m_drivetrain;
 
   /** Creates a new ResetFieldOrientedHeading. */
   public ResetFieldOrientedHeading(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrain);
+    addRequirements(drivetrain);
+    m_drivetrain = drivetrain;
   }
 
   // Called when the command is initially scheduled.
@@ -36,4 +37,5 @@ public class ResetFieldOrientedHeading extends Command {
   public boolean isFinished() {
     return true;
   }
+
 }

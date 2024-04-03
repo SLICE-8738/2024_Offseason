@@ -4,15 +4,27 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.LimelightBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterLimelight extends LimelightBase {
+import frc.robot.LimelightTable;
+
+public class ShooterLimelight extends SubsystemBase {
+
+  private static LimelightTable table = new LimelightTable("limelight-shooter");
 
   /** Creates a new ShooterLimelight. */
-  public ShooterLimelight() {
+  public ShooterLimelight() {}
 
-    super("limelight-shooter");
-    lastTargetCameraSpacePose = new double[] {0, 0, 1.178, 0, 0, 0};
+  @Override
+  public void periodic() {
+
+    table.update();
+
+  }
+
+  public static LimelightTable getTable() {
+
+    return table;
 
   }
 

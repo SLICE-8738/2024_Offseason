@@ -83,7 +83,7 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    Translation2d distanceTranslation = DriverStation.isAutonomousEnabled()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
+    Translation2d distanceTranslation = DriverStation.isAutonomousEnabled()? ShooterLimelight.getTable().getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
     double distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
 
     // distanceWidget.getEntry().setDouble(distanceToSpeaker);

@@ -8,9 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -61,7 +58,7 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
     if (horizontalTarget < 0) {
       horizontalTarget += 360;
     }
-    double horizontalCurrent = DriverStation.isAutonomousEnabled()? ShooterLimelight.getLastBotPoseBlue().getRotation().getDegrees() : drivetrain.getPose().getRotation().getDegrees();
+    double horizontalCurrent = DriverStation.isAutonomousEnabled()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : drivetrain.getPose().getRotation().getDegrees();
 
 
     // Find the error in the drivetrain angle

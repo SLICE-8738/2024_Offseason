@@ -83,9 +83,9 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
-      ShooterLimelight.getLastBotPoseBlue(),
+      ShooterLimelight.getTable().getLastBotPoseBlue(),
       VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(1.3, 1.3, 1.3));
+      VecBuilder.fill(0.1, 0.1, 0.1));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -218,13 +218,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void swerveDrive(Transform2d transform, boolean isOpenLoop, boolean isFieldRelative) {
 
-    SwerveModuleState[] states = toModuleStates(transform, isFieldRelative);
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setDesiredState(states[mod.moduleNumber], isOpenLoop);
-
-    }
+    setModuleStates(toModuleStates(transform, isFieldRelative), isOpenLoop);
 
     simHeading = simHeading.plus(transform.getRotation().times(0.02));
 
@@ -272,13 +266,13 @@ public class Drivetrain extends SubsystemBase {
 
     m_swerveDrivetrainOdometry.update(getHeading(), getPositions());
 
-    Pose2d visionPose = ShooterLimelight.getCurrentBotPoseBlue();
+    Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
 
-    if(visionPose != null && ShooterLimelight.getTargetDetected()) {
+    if(visionPose != null && ShooterLimelight.getTable().getTargetDetected()) {
       
-      if(ShooterLimelight.getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
+      if(ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
 
-        m_swerveDrivetrainOdometry.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+        m_swerveDrivetrainOdometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
 
       }
       
@@ -321,7 +315,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getAprilTagDistance() {
 
-    return Constants.kFieldPositions.APRILTAG_POSITIONS[(int) ShooterLimelight.getAprilTagID() - 1].getDistance(getPose().getTranslation());
+    return Constants.kFieldPositions.APRILTAG_POSITIONS[(int) ShooterLimelight.getTable().getAprilTagID() - 1].getDistance(getPose().getTranslation());
 
   }
 
@@ -457,16 +451,14 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  /**
-   * 
-   * @return
-   */
   public void resetFieldOrientedHeading() {
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
+    resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d()));
   }
 
   public void reverseFieldOrientedHeading() {
     fieldOrientedOffset = getHeading();
+    resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), Rotation2d.fromDegrees(180)));
   }
 
   /**
@@ -584,7 +576,7 @@ public class Drivetrain extends SubsystemBase {
   public void setChassisSpeeds(ChassisSpeeds speeds) {
 
     speeds.omegaRadiansPerSecond *= -1;
-    setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)));
+    setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
 
   }
 
@@ -595,14 +587,18 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @param states The desired states for all drivetrain swerve modules to be set
    *               to.
+   * @param isOpenLoop Whether the accordingly generated states for the given
+   *                   velocities should be set using open loop control for
+   *                   the drive motors
+   *                   of the swerve modules.
    */
-  public void setModuleStates(SwerveModuleState[] states) {
+  public void setModuleStates(SwerveModuleState[] states, boolean isOpenLoop) {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setDesiredState(states[mod.moduleNumber], false);
+      mod.setDesiredState(states[mod.moduleNumber], isOpenLoop);
 
     }
 

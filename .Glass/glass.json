@@ -14,6 +14,15 @@
           },
           "open": true
         },
+        "Debug Tab": {
+          "Field": {
+            "double[]##v_/Shuffleboard/Debug Tab/Field/Robot": {
+              "open": true
+            },
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       }
     },

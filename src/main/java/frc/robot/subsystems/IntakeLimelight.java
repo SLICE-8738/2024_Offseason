@@ -4,13 +4,27 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.LimelightBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeLimelight extends LimelightBase {
+import frc.robot.LimelightTable;
+
+public class IntakeLimelight extends SubsystemBase {
+
+  private static LimelightTable table = new LimelightTable("limelight-intake");
+
   /** Creates a new IntakeLimelight. */
-  public IntakeLimelight() {
+  public IntakeLimelight() {}
 
-    super("limelight-intake");
+  @Override
+  public void periodic() {
+
+    table.update();
+
+  }
+
+  public static LimelightTable getTable() {
+
+    return table;
 
   }
 

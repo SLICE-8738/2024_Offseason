@@ -79,8 +79,8 @@ public class RobotContainer {
   // public final ConditionalCommand m_limelightAlign = new
   // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
   // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  // public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
-  //     false, false);
+  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
+  false, true);
 
   /* Shooter */
   // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
@@ -191,7 +191,7 @@ public class RobotContainer {
     Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
-    Button.square1.onTrue(m_alignAmp);
+    Button.square1.whileTrue(m_alignWithSpeaker);
 
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
