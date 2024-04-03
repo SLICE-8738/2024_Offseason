@@ -68,7 +68,7 @@ public class StoreNotePart2 extends Command {
     intake.runRampIntakeOnly(1/3.0);
 
     if (totalTimer.get() < 0.15) {
-      indexer.spinIndex(-1);
+      indexer.spinIndex(-0.5);
       return;
     }
     // spins the motors

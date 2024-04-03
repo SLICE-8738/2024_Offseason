@@ -108,14 +108,17 @@ public class PrepareShooterCommand extends Command {
       angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
     }
 
-    double optionalAngleAdjust = Button.leftBumper2.getAsBoolean() ? 0 : -3.5;
+    // double optionalAngleAdjust = Button.leftBumper2.getAsBoolean() ? 0 : -3.5;
 
-    double angleAdjust = distanceToSpeaker > 1.6 ? optionalAngleAdjust : 0;
+    // double angleAdjust = distanceToSpeaker > 1.6 ? optionalAngleAdjust : 0;
 
+    // angle += angleAdjust;
+
+    double angleAdjust = angleWidget.getEntry().getDouble(0);
     angle += angleAdjust;
 
     double speed = distanceToSpeaker < 3.4 ? 3500 : 4500;
-    //speed = 5500;
+    speed = 4500;
 
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);
