@@ -5,9 +5,13 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeLimelight;
 
 public class AlignWithNoteCommand extends Command {
 
@@ -24,6 +28,8 @@ public class AlignWithNoteCommand extends Command {
     m_drivetrain = drivetrain;
 
     rotationController = new PIDController(Constants.kDrivetrain.kPNoteAlignRotation, Constants.kDrivetrain.kINoteAlignRotation, Constants.kDrivetrain.kDNoteAlignRotation);
+    rotationController.setSetpoint(0);
+    rotationController.setTolerance(2);
     
   }
 
@@ -33,15 +39,27 @@ public class AlignWithNoteCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    double feedback = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
+    boolean atSetpoint = rotationController.atSetpoint();
+
+    m_drivetrain.swerveDrive(new Transform2d(atSetpoint? 2 : 0, 0, Rotation2d.fromDegrees(feedback)), false, false);
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+    m_drivetrain.swerveDrive(new Transform2d(), false, false);
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
+
 }
