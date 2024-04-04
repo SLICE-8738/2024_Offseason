@@ -43,7 +43,6 @@ public class AlignWithNoteCommand extends Command {
   public void execute() {
 
     double feedback = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
-    boolean atSetpoint = rotationController.atSetpoint();
     double error = rotationController.getPositionError();
     double power = (40 - Math.abs(error)) / 20.0;
 
