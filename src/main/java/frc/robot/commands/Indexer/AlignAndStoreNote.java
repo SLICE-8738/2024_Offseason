@@ -19,6 +19,6 @@ public class AlignAndStoreNote extends ParallelDeadlineGroup {
   public AlignAndStoreNote(Drivetrain drivetrain, Indexer indexer, Intake intake) {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
-    super(new StoreNote(indexer, intake), new AlignWithNoteCommand(drivetrain));
+    super(new StoreNote(indexer, intake), new AlignWithNoteCommand(drivetrain, indexer));
   }
 }

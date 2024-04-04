@@ -100,7 +100,7 @@ public class RobotContainer {
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
   public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
-  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain);
+  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
 
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new

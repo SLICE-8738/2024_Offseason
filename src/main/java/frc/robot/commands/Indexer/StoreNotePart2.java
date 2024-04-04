@@ -133,11 +133,13 @@ public class StoreNotePart2 extends Command {
     if (Button.circle1.getAsBoolean() || Button.circle2.getAsBoolean() || Button.rightTrigger1.getAsBoolean() || Button.cross1.getAsBoolean() || Button.rightTrigger2.getAsBoolean()) {
       return true;
     }
+
+    return totalTimer.get() > .15;
     // ends the command
-    if (indexer.isStored() && timerRunning && storeTimer.get() > 0.1) {
-      return true; // ends the command if stored is true (stored is a method in indexer)
-    } else {
-      return false;
-    }
+    // if (indexer.isStored() && timerRunning && storeTimer.get() > 0.1) {
+    //   return true; // ends the command if stored is true (stored is a method in indexer)
+    // } else {
+    //   return false;
+    // }
   }
 }
