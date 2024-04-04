@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeLimelight;
 
@@ -47,6 +48,7 @@ public class AlignWithNoteCommand extends Command {
     double power = (40 - Math.abs(error)) / 20.0;
 
     m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-feedback)), false, false);
+    LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
   }
 
@@ -55,6 +57,7 @@ public class AlignWithNoteCommand extends Command {
   public void end(boolean interrupted) {
 
     m_drivetrain.swerveDrive(new Transform2d(), false, false);
+    LimelightHelpers.setLEDMode_ForceOff("limelight-intake");
 
   }
 
