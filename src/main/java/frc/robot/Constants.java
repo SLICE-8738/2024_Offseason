@@ -132,7 +132,7 @@ public final class Constants {
     public static final double kDSpeakerAlignRotation = 0.8;
 
     /* Note Alignment Values */
-    public static final double kPNoteAlignRotation = 0.1;
+    public static final double kPNoteAlignRotation = 5;
     public static final double kINoteAlignRotation = 0;
     public static final double kDNoteAlignRotation = 0;
 

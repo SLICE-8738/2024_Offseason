@@ -51,7 +51,7 @@ public class RobotContainer {
   public final Intake m_intake = new Intake();
   public final Indexer m_indexer = new Indexer();
   public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
-  //public final IntakeLimelight m_intakeLimelight = new IntakeLimelight();
+  public final IntakeLimelight m_intakeLimelight = new IntakeLimelight();
   public final LEDs m_leds = new LEDs();
 
   public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);
@@ -100,7 +100,7 @@ public class RobotContainer {
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
   public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
-  public final AlignAndStoreNote m_alignAndStoreNote = new AlignAndStoreNote(m_drivetrain, m_indexer, m_intake);
+  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain);
 
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new
@@ -197,8 +197,7 @@ public class RobotContainer {
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
 
-    Button.controlPadLeft1.onTrue(m_flywheelTest);
-    Button.controlPadRight1.onTrue(m_IntakeTest);
+    Button.leftBumper1.whileTrue(m_alignNote.onlyIf(() -> IntakeLimelight.getTable().getTargetDetected()));
   
 
     // ==================

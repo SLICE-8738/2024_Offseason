@@ -43,8 +43,10 @@ public class AlignWithNoteCommand extends Command {
 
     double feedback = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
     boolean atSetpoint = rotationController.atSetpoint();
+    double error = rotationController.getPositionError();
+    double power = (40 - Math.abs(error)) / 20.0;
 
-    m_drivetrain.swerveDrive(new Transform2d(atSetpoint? 2 : 0, 0, Rotation2d.fromDegrees(feedback)), false, false);
+    m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-feedback)), false, false);
 
   }
 
