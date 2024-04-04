@@ -94,6 +94,7 @@ public class RobotContainer {
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
   //public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
   public final SubwooferShotCommand m_subwooferShotCommand = new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+  public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
 
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
@@ -114,8 +115,6 @@ public class RobotContainer {
 
   /* LEDs */
   public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
-
-  public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
 
   /* Tests */
   public final FlywheelTest m_flywheelTest = new FlywheelTest(m_shooter);
@@ -187,18 +186,18 @@ public class RobotContainer {
     // Driver Controls
     // ================
 
+    /* Drivetrain */
     Button.rightTrigger1.whileTrue(m_shoot);
-    Button.leftBumper1.or(Button.cross2).onTrue(m_storeNote);
     Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.square1.whileTrue(m_alignWithSpeaker);
+    Button.leftBumper1.whileTrue(m_alignNote.onlyIf(() -> IntakeLimelight.getTable().getTargetDetected()));
 
+    /* Intake */
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
-
-    Button.leftBumper1.whileTrue(m_alignNote.onlyIf(() -> IntakeLimelight.getTable().getTargetDetected()));
-  
+    Button.leftBumper1.or(Button.cross2).onTrue(m_storeNote);
 
     // ==================
     // Operator Controls

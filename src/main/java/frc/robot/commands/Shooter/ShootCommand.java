@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -38,10 +39,14 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
-    super(new SequentialCommandGroup(new WaitCommand(0.1), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
+    super(new SequentialCommandGroup(
+      new WaitCommand(0.1), 
+      new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), 
+      new NudgeIndexer(indexer),
+      new InstantCommand(drivetrain::resetToAprilTagRotation)));
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
-    addCommands(prepareShooter, alignWithSpeakerCommand);
+    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
+    addCommands(prepareShooter, alignWithSpeaker);
 
   }
 
@@ -53,8 +58,8 @@ public class ShootCommand extends ParallelDeadlineGroup {
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
-    addCommands(prepareShooter, alignWithSpeakerCommand);
+    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, true, true);
+    addCommands(prepareShooter, alignWithSpeaker);
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
