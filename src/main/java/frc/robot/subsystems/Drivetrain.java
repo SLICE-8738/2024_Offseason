@@ -451,14 +451,36 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  /** 
+   * Resets the position of the odometry object using a specified rotation
+   * while keeping the translation the same.
+   * 
+   * @param rotation The desired rotation to reset the odometry of the robot to.
+   */
+  public void resetRotation(Rotation2d rotation) {
+
+    resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), rotation));
+
+  }
+
+  /**
+   * Resets the rotation of the odometry object to the rotation received from
+   * the shooter limelight.
+   */
+  public void resetToAprilTagRotation() {
+
+    resetRotation(ShooterLimelight.getTable().getLastBotPoseBlue().getRotation());
+
+  }
+
   public void resetFieldOrientedHeading() {
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
-    resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d()));
+    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
   }
 
   public void reverseFieldOrientedHeading() {
     fieldOrientedOffset = getHeading();
-    resetOdometry(new Pose2d(getPose().getX(), getPose().getY(), Rotation2d.fromDegrees(180)));
+    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
   }
 
   /**
