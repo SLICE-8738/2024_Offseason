@@ -28,13 +28,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Speaker Under To Note 6"
+                        "pathName": "Source Side Speaker To Note 8"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 6"
+                        "pathName": "Source Side Score Note 8 Close"
                       }
                     }
                   ]
@@ -66,13 +72,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Far Score To Note 5"
+                        "pathName": "Source Side Close Score To Note 7"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 5 Far"
+                        "pathName": "Source Side Score Note 7 Close"
                       }
                     }
                   ]

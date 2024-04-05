@@ -32,6 +32,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 1"
@@ -67,6 +73,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "Close Score To Note 2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
                       }
                     },
                     {
@@ -108,6 +120,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Score Note 3"
@@ -134,7 +152,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Close Score To Note 5"
+            "pathName": "Middle Close Score To Note 5"
           }
         }
       ]

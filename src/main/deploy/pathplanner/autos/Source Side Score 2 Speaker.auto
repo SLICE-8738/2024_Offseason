@@ -32,9 +32,15 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 8"
+                        "pathName": "Source Side Score Note 8 Close"
                       }
                     }
                   ]

@@ -8,33 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8658408948023568,
-        "y": 4.897922419958315
+        "x": 1.7943584167120892,
+        "y": 5.229409462377644
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5499489296850935,
-        "y": 4.141036934556138
+        "x": 1.9599076920573775,
+        "y": 4.830143563015478
       },
       "prevControl": {
-        "x": 2.040506776049013,
-        "y": 4.577701637672778
+        "x": 1.8625257653836784,
+        "y": 5.102812957701835
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": 165.72,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -44,9 +38,9 @@
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 165.71917647346726,
-    "rotateFast": false
+    "velocity": 1.85,
+    "rotation": 146.02345596374317,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Wing Note Intake",
