@@ -16,6 +16,6 @@ public class StoreNote extends SequentialCommandGroup {
   public StoreNote(Indexer indexer, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new StoreNotePart1(indexer, intake) , new StoreNotePart2(indexer, intake));
+    addCommands(new StoreNotePart1(indexer, intake)/* , new StoreNotePart2(indexer, intake)*/);
   }
 }

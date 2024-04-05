@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Drivetrain;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakeLimelight;
 
 public class AlignWithNoteCommand extends Command {
@@ -20,13 +22,17 @@ public class AlignWithNoteCommand extends Command {
 
   private final PIDController rotationController;
 
+  private final Indexer m_indexer;
+
   /** Creates a new AlignWithNoteCommand. */
-  public AlignWithNoteCommand(Drivetrain drivetrain) {
+  public AlignWithNoteCommand(Drivetrain drivetrain, Indexer indexer) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
+
+    m_indexer = indexer;
 
     rotationController = new PIDController(Constants.kDrivetrain.kPNoteAlignRotation, Constants.kDrivetrain.kINoteAlignRotation, Constants.kDrivetrain.kDNoteAlignRotation);
     rotationController.setSetpoint(0);
@@ -46,6 +52,14 @@ public class AlignWithNoteCommand extends Command {
     double error = rotationController.getPositionError();
     double power = (40 - Math.abs(error)) / 20.0;
 
+    double height = IntakeLimelight.getTable().getYOffset() - 18.8;
+    double multiplier = (height + 20) / 15.0;
+    multiplier = MathUtil.clamp(multiplier, 0.3, 2);
+
+    multiplier = IntakeLimelight.getTable().getTargetDetected() ? multiplier : 0.3;
+
+    power *= multiplier;
+
     m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-feedback)), false, false);
     LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
@@ -63,7 +77,7 @@ public class AlignWithNoteCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
   }
 
 }
