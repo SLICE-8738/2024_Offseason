@@ -135,7 +135,7 @@ public class AutoSelector {
         NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));
-        NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain).onlyIf(() -> ShooterLimelight.getTable().getTargetDetected()));
+        NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).onlyIf(() -> ShooterLimelight.getTable().getTargetDetected()));
 
     }
 
