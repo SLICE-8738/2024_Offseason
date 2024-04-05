@@ -99,7 +99,7 @@ public class AlignWithSpeakerCommand extends Command {
     }
 
     // Run PID Controller
-    double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
+    double currentAngle = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : m_drivetrain.getPose().getRotation().getDegrees();
     double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
 
     m_drivetrain.swerveDrive(

@@ -9,8 +9,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
+import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.commands.Indexer.StoreNote;
+import frc.robot.commands.Shooter.EjectNoteCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.SpinFlywheelsCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -136,6 +139,7 @@ public class AutoSelector {
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));
         NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).onlyIf(() -> ShooterLimelight.getTable().getTargetDetected()));
+        NamedCommands.registerCommand("Eject Note", new EjectNoteCommand(m_shooter, m_indexer));
 
     }
 
