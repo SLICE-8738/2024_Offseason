@@ -11,6 +11,7 @@ import frc.slicelibs.util.config.JoystickFilterConfig;
 public class PolarJoystickFilter {
 
     private double lastInput;
+    private double lastThetaValue;
     private final double deadzone, smoothing, exponent, exponentPercent;
     private final boolean curve;
 
@@ -34,6 +35,8 @@ public class PolarJoystickFilter {
             Math.atan2(rawY, rawX),
             Math.sqrt(rawX * rawX + rawY * rawY)};
 
+        lastThetaValue = polarCoords[0];
+
         if (polarCoords[1] > 1) {
             polarCoords[1] = 1;
         }
@@ -43,7 +46,7 @@ public class PolarJoystickFilter {
 
     public double[] withDead(double[] polarCoords) {
         if(polarCoords[1] < deadzone) {
-            return new double[] {0, 0};
+            return new double[] {lastThetaValue, 0};
         }
         else {
             return polarCoords;

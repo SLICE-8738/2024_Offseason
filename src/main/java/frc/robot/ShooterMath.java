@@ -65,12 +65,9 @@ public final class ShooterMath {
     // Regression 5: https://www.desmos.com/calculator/qjryqf5qbx
     if (distance < 1.303) {
       return -2.3;
-    }else if (distance < 3.4) {
-      return polynomial(2.00929, -19.4485, 62.7241, -66.9758, 15.6318, distance); // Regression 5
-      //return polynomial(3.50328, -32.6803, 106.222, -93.3029, distance); //Regression 4
-    } else if (distance < 4.1) {
-      return polynomial(0, 0, 6.0091, -36.7117, 73.8773, distance);
-    } else {
+    }else if (distance < 3.72) {
+      return polynomial(1.43678, -13.6695, 42.6484, -37.9742, 5.7878, distance);
+    }else {
       return 21;
     }
   }

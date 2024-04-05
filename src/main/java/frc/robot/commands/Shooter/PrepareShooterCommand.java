@@ -115,7 +115,7 @@ public class PrepareShooterCommand extends Command {
     // angle += angleAdjust;
 
     double angleAdjust = angleWidget.getEntry().getDouble(0);
-    angle += angleAdjust;
+    //angle += angleAdjust;
 
     double speed = distanceToSpeaker < 3.4 ? 3500 : 4500;
     speed = 4500;
