@@ -71,10 +71,13 @@ public final class Constants {
     public static final double MAX_VOLTAGE = 12.0;
 
     /* Swerve Current Limiting */
-    public static final int DRIVE_CURRENT_LIMIT = 35;
+    public static final int DRIVE_CURRENT_LIMIT = 40;
     public static final int DRIVE_CURRENT_THRESHOLD = 60;
     public static final double DRIVE_CURRENT_THRESHOLD_TIME = 0.1;
     public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+
+    public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 55;
 
     public static final double OPEN_LOOP_RAMP = 0.25;
     public static final double CLOSED_LOOP_RAMP = 0.0;
@@ -127,7 +130,7 @@ public final class Constants {
     public static final double ROTATION_KP = 2.0;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 3.6;
+    public static final double kPSpeakerAlignRotation = 2.2;
     public static final double kISpeakerAlignRotation = 0;
     public static final double kDSpeakerAlignRotation = 0.8;
 
@@ -295,7 +298,7 @@ public final class Constants {
 
     public static final double ENTRANCE_CURRENT_THRESHOLD = 33;
 
-    public static double INTAKE_SPEED = 0.625;
+    public static double INTAKE_SPEED = 0.6375;
 
   }
 

@@ -128,7 +128,7 @@ public final class REVConfigs {
         12, 
         0.0, 
         0.0, 
-        40, 
+        20, 
         Constants.kIntake.RAMP_FRAME_1_PERIOD_MS, 
         Constants.kIntake.RAMP_FRAME_2_PERIOD_MS);
 

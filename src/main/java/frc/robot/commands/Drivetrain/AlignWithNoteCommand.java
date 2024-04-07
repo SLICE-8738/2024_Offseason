@@ -54,7 +54,7 @@ public class AlignWithNoteCommand extends Command {
 
     double height = IntakeLimelight.getTable().getYOffset() - 18.8;
     double multiplier = (height + 20) / 15.0;
-    multiplier = MathUtil.clamp(multiplier, 0.3, 2);
+    multiplier = MathUtil.clamp(multiplier, 0.45, 2);
 
     multiplier = IntakeLimelight.getTable().getTargetDetected() ? multiplier : 0.3;
 

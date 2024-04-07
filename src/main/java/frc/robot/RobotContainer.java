@@ -197,6 +197,7 @@ public class RobotContainer {
     /* Intake */
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));
     Button.controlPadDown1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED -= 0.1));
+    Button.controlPadRight1.onTrue(m_ffData);
     Button.leftBumper1.or(Button.cross2).onTrue(m_storeNote);
 
     // ==================

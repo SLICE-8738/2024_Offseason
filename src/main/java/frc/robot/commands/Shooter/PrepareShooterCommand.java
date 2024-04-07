@@ -104,7 +104,7 @@ public class PrepareShooterCommand extends Command {
     //speed *= multiplierWidget.getEntry().getDouble(1);
     double angle = -2.3;
 
-    if(!forceSubwoofer){
+    if(!forceSubwoofer && ShooterLimelight.getTable().getTargetDetected()){
       angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
     }
 

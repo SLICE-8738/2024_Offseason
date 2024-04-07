@@ -55,7 +55,7 @@ public class StoreNotePart1 extends Command {
     // spins the motors
     double distance = indexer.getLaserCanDistance();
     if (indexer.laserCanOnline()) {
-      indexer.spinIndex(0.2);
+      indexer.spinIndex(0.25);
     } else {
       if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
         outputCurrentThreshold = true;
@@ -71,7 +71,7 @@ public class StoreNotePart1 extends Command {
 
 
     intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
-    intake.runRampIntakeOnly(1/3.0);
+    intake.runRampIntakeOnly(0.4);
   }
 
   // Called once the command ends or is interrupted.
@@ -96,6 +96,6 @@ public class StoreNotePart1 extends Command {
       return true;
     }
     // ends the command
-    return indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
+    return indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE && !Button.cross2.getAsBoolean();
   }
 }

@@ -42,7 +42,7 @@ public class PassNoteCommand extends Command {
   @Override
   public void execute() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    shooter.spinFlywheels(4500, false);
+    shooter.spinFlywheels(4250, false);
     if (buttonReleased && !timerStarted && shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)) {
       timerStarted = true;
       timer.start();

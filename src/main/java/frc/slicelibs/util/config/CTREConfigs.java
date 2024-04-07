@@ -25,6 +25,9 @@ public final class CTREConfigs {
         driveCurrentLimits.SupplyCurrentThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD;
         driveCurrentLimits.SupplyTimeThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD_TIME;
 
+        driveCurrentLimits.StatorCurrentLimit = Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
+        driveCurrentLimits.StatorCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMIT;
+
         /* PID Config */
         var driveSlot0 = swerveDriveFXConfig.Slot0;
         driveSlot0.kP = Constants.kDrivetrain.DRIVE_KP;

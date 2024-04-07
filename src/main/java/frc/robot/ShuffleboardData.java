@@ -27,14 +27,14 @@ public class ShuffleboardData {
         modulesTab = Shuffleboard.getTab("Modules Tab");
         autoTab = Shuffleboard.getTab("Autonomous");
 
-        new DrivetrainData(drivetrain);
+        new DrivetrainData(drivetrain, shooter);
         new ShooterData(shooter);
         new AutoData(autoSelector);
     }
 
     public class DrivetrainData {
 
-        public DrivetrainData(Drivetrain drivetrain) {
+        public DrivetrainData(Drivetrain drivetrain, Shooter shooter) {
 
             //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
             modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getStates()[0].speedMetersPerSecond).
@@ -115,8 +115,16 @@ public class ShuffleboardData {
 
             //Displays the feed from the Limelight on Shuffleboard
             driverTab.addCamera("Limelight", "limelight-shooter-1", "http://10.87.38.67:5800").
-            withPosition(5, 0).
+            withPosition(0, 2).
             withSize(3, 3);
+
+            driverTab.addCamera("Intake", "limelight-intake-1", "http://10.87.38.88:5800").
+            withPosition(4, 0).
+            withSize(7, 5);
+
+            driverTab.addBoolean("Flywheel At Speed", () -> shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)).
+            withPosition(0, 0).
+            withSize(4, 2);
 
             // //Adds a tuner for the drive motor PID gains to Shuffleboard
             // ShuffleboardTuner.create(

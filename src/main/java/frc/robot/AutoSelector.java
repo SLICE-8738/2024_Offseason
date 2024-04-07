@@ -16,6 +16,7 @@ import frc.robot.commands.Indexer.StoreNote;
 import frc.robot.commands.Shooter.EjectNoteCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.SpinFlywheelsCommand;
+import frc.robot.commands.Shooter.SubwooferShotCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -137,8 +138,9 @@ public class AutoSelector {
 
         NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
+        NamedCommands.registerCommand("Shoot Note Subwoofer", new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));
-        NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).onlyIf(() -> ShooterLimelight.getTable().getTargetDetected()));
+        NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).onlyIf(() -> ShooterLimelight.getTable().getTargetDetected()).withTimeout(5));
         NamedCommands.registerCommand("Eject Note", new EjectNoteCommand(m_shooter, m_indexer));
 
     }

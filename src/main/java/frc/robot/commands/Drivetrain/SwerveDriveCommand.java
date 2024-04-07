@@ -78,8 +78,8 @@ public class SwerveDriveCommand extends Command {
     m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
 
     if (!m_isFieldRelative) {
-      translationX *= 0.5;
-      translationY *= 0.5;
+      translationX *= -0.5;
+      translationY *= -0.5;
       rotationFF *= 0.5;
       rotationFeedback *= 0.5;
     }
