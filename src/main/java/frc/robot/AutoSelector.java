@@ -9,9 +9,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
-import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.Shooter.EjectNoteCommand;
 import frc.robot.commands.Shooter.ShootCommand;
@@ -168,7 +167,17 @@ public class AutoSelector {
 
     private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
 
-        return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
+        try {
+
+            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
+
+        }
+        catch (Exception e) {
+
+            DriverStation.reportError(e.getMessage(), true);
+            return Optional.empty();
+
+        }
 
     }
 
