@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Intake.*;
+import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.LEDs.RainbowLEDs;
 import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
@@ -99,7 +100,7 @@ public class RobotContainer {
   /* Intake */
   public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
-  public final StoreNote m_storeNote = new StoreNote(m_indexer, m_intake);
+  public final StoreNoteSequence m_storeNote = new StoreNoteSequence(m_indexer, m_intake);
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
   public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
 

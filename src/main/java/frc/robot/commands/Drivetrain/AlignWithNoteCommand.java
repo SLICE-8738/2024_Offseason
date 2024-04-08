@@ -77,7 +77,7 @@ public class AlignWithNoteCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
+    return m_indexer.isStored();
   }
 
 }

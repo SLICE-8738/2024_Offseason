@@ -2,10 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Indexer;
+package frc.robot.commands.Intake.StoreNote;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +16,7 @@ import frc.robot.subsystems.Intake;
 /**
  * Store the note in the intake and runs both the intake and ramp intake
  */
-public class StoreNotePart2 extends Command {
+public class AlignNote extends Command {
   // creates private variables
   private final Indexer indexer;
   private final Intake intake;
@@ -28,11 +27,9 @@ public class StoreNotePart2 extends Command {
 
   private final PIDController pid;
 
-  private boolean outputCurrentThreshold;
-
   private boolean forceStop;
 
-  public StoreNotePart2(Indexer indexer, Intake intake) {
+  public AlignNote(Indexer indexer, Intake intake) {
     // from the indexer and intake subsystems, gets the motors without making a new
     // one
     addRequirements(indexer);
@@ -56,7 +53,6 @@ public class StoreNotePart2 extends Command {
 
     totalTimer.restart();
 
-    outputCurrentThreshold = false;
     forceStop = false;
   }
 
@@ -64,16 +60,9 @@ public class StoreNotePart2 extends Command {
   @Override
   public void execute() {
 
-    intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
-    intake.runRampIntakeOnly(1/3.0);
-
-    if (totalTimer.get() < 0.15) {
-      indexer.spinIndex(-0.5);
-      return;
-    }
     // spins the motors
-    double distance = indexer.getLaserCanDistance();
-    if (indexer.laserCanOnline()) {
+    double distance = indexer.getHighLaserCanDistance();
+    if (indexer.highLaserCanOnline()) {
       if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
         indexer.spinIndex(0.2);
       } else if (Math.abs(distance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
@@ -82,19 +71,7 @@ public class StoreNotePart2 extends Command {
         double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
         indexer.spinIndex(-output);
       }
-    } else {
-      if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
-        outputCurrentThreshold = true;
-      }
-
-      if (!outputCurrentThreshold) {
-        indexer.spinIndex(0.3);
-      } else {
-        indexer.spinIndex(0);
-        forceStop = true;
-      }
     }
-
 
     boolean stored = indexer.isStored();
     if (stored && !timerRunning) {
@@ -122,7 +99,7 @@ public class StoreNotePart2 extends Command {
   @Override
   public boolean isFinished() {
 
-    if (!indexer.laserCanOnline()) {
+    if (!indexer.highLaserCanOnline()) {
       return true;
     }
 
@@ -134,12 +111,6 @@ public class StoreNotePart2 extends Command {
       return true;
     }
 
-    return totalTimer.get() > .15;
-    // ends the command
-    // if (indexer.isStored() && timerRunning && storeTimer.get() > 0.1) {
-    //   return true; // ends the command if stored is true (stored is a method in indexer)
-    // } else {
-    //   return false;
-    // }
+    return (timerRunning && storeTimer.get() > .2);
   }
 }

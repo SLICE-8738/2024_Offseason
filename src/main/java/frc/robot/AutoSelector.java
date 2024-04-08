@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
 import frc.robot.commands.Indexer.NudgeIndexer;
-import frc.robot.commands.Indexer.StoreNote;
+import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.Shooter.EjectNoteCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.SpinFlywheelsCommand;
@@ -136,7 +136,7 @@ public class AutoSelector {
             () -> DriverStation.getAlliance().get() == Alliance.Red,
             m_drivetrain);
 
-        NamedCommands.registerCommand("Store Note", new StoreNote(m_indexer, m_intake));
+        NamedCommands.registerCommand("Store Note", new StoreNoteSequence(m_indexer, m_intake));
         NamedCommands.registerCommand("Shoot Note", new ShootCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Shoot Note Subwoofer", new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain));
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));

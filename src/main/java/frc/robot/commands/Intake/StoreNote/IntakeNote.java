@@ -2,11 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Indexer;
+package frc.robot.commands.Intake.StoreNote;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Button;
@@ -17,26 +14,22 @@ import frc.robot.subsystems.Intake;
 /**
  * Store the note in the intake and runs both the intake and ramp intake
  */
-public class StoreNotePart1 extends Command {
+public class IntakeNote extends Command {
   // creates private variables
   private final Indexer indexer;
   private final Intake intake;
-
-  private final PIDController pid;
 
   private boolean outputCurrentThreshold;
 
   private boolean forceStop;
 
-  public StoreNotePart1(Indexer indexer, Intake intake) {
+  public IntakeNote(Indexer indexer, Intake intake) {
     // from the indexer and intake subsystems, gets the motors without making a new
     // one
     addRequirements(indexer);
     addRequirements(intake);
     this.indexer = indexer;
     this.intake = intake;
-
-    pid = new PIDController(Constants.kIndexer.STORE_NOTE_KP, 0, Constants.kIndexer.STORE_NOTE_KD);
 
   }
 
@@ -53,8 +46,7 @@ public class StoreNotePart1 extends Command {
   @Override
   public void execute() {
     // spins the motors
-    double distance = indexer.getLaserCanDistance();
-    if (indexer.laserCanOnline()) {
+    if (indexer.lowLaserCanOnline()) {
       indexer.spinIndex(0.25);
     } else {
       if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
@@ -96,6 +88,6 @@ public class StoreNotePart1 extends Command {
       return true;
     }
     // ends the command
-    return indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE && !Button.cross2.getAsBoolean();
+    return indexer.isStored() && !Button.cross2.getAsBoolean();
   }
 }

@@ -30,7 +30,7 @@ public class SignalStoreNote extends Command {
 
     @Override
     public void execute() {
-      strobing = indexer.getLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
+      strobing = indexer.isStored();
       color = strobing ? 130 : 170;
         for(int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
             final int hue = ((((int)m_rainbowFirstPixelHue + (i * range / Constants.kLEDs.LED_LENGTH )) % range) + color) % 180;
