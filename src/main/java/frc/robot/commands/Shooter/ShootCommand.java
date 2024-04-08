@@ -64,6 +64,10 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
 
+    if (DriverStation.isAutonomousEnabled() && DriverStation.getMatchTime() < 2) {
+      return true;
+    }
+
     // Check if the flywheels are spinning fast enough
     boolean atSpeed = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
     // Check if the shooter is aimed vertically accurately enough
