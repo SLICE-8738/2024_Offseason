@@ -22,22 +22,25 @@ public class Indexer extends SubsystemBase {
 
   // Creates private variables
   private CANSparkMax highIndexMotor;
-  private LaserCan laser;
-  private boolean online;
+  private LaserCan lowLaser, highLaser;
+  private boolean lowLaserOnline, highLaserOnline;
 
   public Indexer() {
     highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
-    laser = new LaserCan(19); // creates new laserCan
+    lowLaser = new LaserCan(19); // creates new laserCan
+    highLaser = new LaserCan(19); // TODO: find ID
 
-    online = true;
+    lowLaserOnline = true;
+    highLaserOnline = true;
 
     try {
       // configures settings for the laserCan
-      laser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
-      laser.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS); // checks every 33 milliseconds for the measurement of the
-                                                              // laser
-      laser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense
-                                                                              // objects
+      lowLaser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
+      lowLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS); // checks every 33 milliseconds for the measurement of the laser
+      lowLaser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense objects
+      highLaser.setRangingMode(RangingMode.SHORT); // sets ranging mode to short distance, which is more accurate
+      highLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS); // checks every 33 milliseconds for the measurement of the laser
+      highLaser.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 12, 12)); // the area where the laserCan can sense objects
 
     } catch (ConfigurationFailedException e) {
       // displays if the code doesn't work properly
@@ -55,17 +58,7 @@ public class Indexer extends SubsystemBase {
 
   /** Method that checks if a note is at the high index motor */
   public boolean isStored() {
-    // checks if the laserCan distance is more than 150 millimeters or less than 150
-    // millimeters
-    if (getLaserCanDistance() <= 30 && getLaserCanDistance() >= 1) { //Constants.kIndexer.STORE_NOTE_TARGET + Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE ;; Constants.kIndexer.STORE_NOTE_TARGET - Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE
-      // if the laserCAN distance is less than 150 millimeters, returns true and there
-      // is a note stored in the high index motor
-      return true;
-    } else {
-      // if the laserCAN distance is more than 150 millimeters, returns false and
-      // there is no note at the high index motor
-      return false;
-    }
+    return getLowLaserCanDistance() < Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE;
   }
 
   /**
@@ -73,10 +66,21 @@ public class Indexer extends SubsystemBase {
    * @return
    */
   // Method that returns the distance from the laserCAN in millimeters
-  public double getLaserCanDistance() {
+  public double getLowLaserCanDistance() {
     // returns the distance from the laserCAN in millimeters
-    Measurement measurement = laser.getMeasurement();
-    online = measurement != null;
+    Measurement measurement = lowLaser.getMeasurement();
+    lowLaserOnline = measurement != null;
+    return getDistance(measurement);
+  }
+
+  public double getHighLaserCanDistance() {
+    // returns the distance from the laserCAN in millimeters
+    Measurement measurement = highLaser.getMeasurement();
+    highLaserOnline = measurement != null;
+    return getDistance(measurement);
+  }
+
+  private double getDistance(Measurement measurement) {
     if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
       return measurement.distance_mm;
     } else {
@@ -84,8 +88,12 @@ public class Indexer extends SubsystemBase {
     }
   }
 
-  public boolean laserCanOnline() {
-    return online;
+  public boolean lowLaserCanOnline() {
+    return lowLaserOnline;
+  }
+
+  public boolean highLaserCanOnline() {
+    return highLaserOnline;
   }
 
   public double getOutputCurrent() {
@@ -94,8 +102,10 @@ public class Indexer extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("LaserCAN Distance", getLaserCanDistance());
+    
+    SmartDashboard.putNumber("High LaserCAN Distance", getLowLaserCanDistance());
+    SmartDashboard.putNumber("High LaserCAN Distance", getHighLaserCanDistance());
 
-    SmartDashboard.putBoolean("Have Note", getLaserCanDistance() < 250);
+    SmartDashboard.putBoolean("Have Note", isStored());
   }
 }
