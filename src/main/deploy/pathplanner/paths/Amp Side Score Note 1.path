@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.27,
-        "y": 6.88
+        "x": 0.71,
+        "y": 6.76
       },
       "prevControl": {
-        "x": 1.6183975630362606,
-        "y": 6.877469074087085
+        "x": 1.0583975630362605,
+        "y": 6.757469074087085
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Note Score",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -58,19 +58,26 @@ public class AutoSelector {
 
     public enum DesiredMode {
 
-        TEST_PATH_MODE("Test Path"),
-        SCORE_5_SPEAKER("Score 5 Speaker"),
-        SCORE_4_SPEAKER("Score 4 Speaker"),
-        SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker"),
-        SCORE_3_SPEAKER("Score 3 Speaker"),
-        SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker"),
-        SCORE_2_SPEAKER("Score 2 Speaker");
+        SCORE_5_SPEAKER_1("Score 5 Speaker (Notes 1, 2, 3, 5)", true),
+        SCORE_5_SPEAKER_2("Score 5 Speaker (Notes 3, 2, 1, 5)", true),
+        SCORE_5_SPEAKER_3("Score 5 Speaker (Notes 2, 3, 1, 5)", true),
+        SCORE_4_SPEAKER("Score 4 Speaker", true),
+        SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker", true),
+        SCORE_3_SPEAKER_1("Score 3 Speaker (Notes 1 & 2)", true),
+        SCORE_3_SPEAKER_2("Score 3 Speaker (Notes 7 & 8)", true),
+        SCORE_3_SPEAKER_3("Score 3 Speaker (Notes 8 & 7)", true),
+        SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker", true),
+        SCORE_2_SPEAKER("Score 2 Speaker", true),
+        SCORE_1_SPEAKER("Score 1 Speaker", false),
+        TEST_PATH_MODE("Test Path", false);
 
         public final String value;
+        public final boolean useStartingPosition;
 
-        DesiredMode(String value) {
+        DesiredMode(String value, boolean useStartingPosition) {
 
             this.value = value;
+            this.useStartingPosition = useStartingPosition;
 
         }
 
@@ -112,13 +119,18 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_5_SPEAKER.value, DesiredMode.SCORE_5_SPEAKER);
+        modeChooser.setDefaultOption(DesiredMode.SCORE_5_SPEAKER_1.value, DesiredMode.SCORE_5_SPEAKER_1);
 
+        modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_2.value, DesiredMode.SCORE_5_SPEAKER_2);
+        modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_3.value, DesiredMode.SCORE_5_SPEAKER_3);
         modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER.value, DesiredMode.SCORE_3_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_1);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_2);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_3);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);
+        modeChooser.addOption(DesiredMode.SCORE_1_SPEAKER.value, DesiredMode.SCORE_1_SPEAKER);
         modeChooser.addOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
 
         AutoBuilder.configureHolonomic(
@@ -169,7 +181,7 @@ public class AutoSelector {
 
         try {
 
-            return Optional.of(new PathPlannerAuto(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value));
+            return Optional.of(new PathPlannerAuto(mode.useStartingPosition? mode.value : position.value + " " + mode.value));
 
         }
         catch (Exception e) {

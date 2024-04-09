@@ -126,7 +126,7 @@ public class PrepareShooterCommand extends Command {
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
     SmartDashboard.putNumber("Flywheel Target Velocity", speed);
 
-    SmartDashboard.putNumber("Target SHooter Angle", angle);
+    SmartDashboard.putNumber("Target Shooter Angle", angle);
 
 
     // desiredSpeedWidget.getEntry().setDouble(speed);

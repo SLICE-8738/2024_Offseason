@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.533824400982135,
-        "y": 6.456421738466253
+        "x": 5.83221194811184,
+        "y": 6.4335266259185
       },
       "prevControl": {
-        "x": 4.199692005552458,
-        "y": 6.2519196924514855
+        "x": 5.031659992398,
+        "y": 6.76102515325598
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,8 +39,8 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 165.6997225508144,
-    "rotateFast": false
+    "rotation": 161.3330857257797,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Mid Field Note Intake",

@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note"
+            "name": "Shoot Note Subwoofer"
           }
         },
         {
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Speaker To Note 7"
+                        "pathName": "Source Side Speaker To Note 8"
                       }
                     },
                     {
@@ -58,12 +58,56 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note"
+            "name": "Shoot Note Subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Source Side Speaker To Note 7"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Source Side Score Note 7 Close"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note Subwoofer"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Score 3 Speaker",
   "choreoAuto": false
 }

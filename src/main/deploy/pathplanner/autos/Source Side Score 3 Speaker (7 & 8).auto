@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Speaker To Note 8"
+                        "pathName": "Source Side Speaker To Note 7"
                       }
                     },
                     {
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Score Note 8 Close"
+                        "pathName": "Source Side Score Note 7 Close"
                       }
                     }
                   ]
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Close Score To Note 7"
+                        "pathName": "Source Side Speaker To Note 8"
                       }
                     },
                     {
@@ -84,7 +84,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Score Note 7 Close"
+                        "pathName": "Source Side Score Note 8 Close"
                       }
                     }
                   ]

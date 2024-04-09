@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.75,
-        "y": 4.34
+        "x": 1.4,
+        "y": 5.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.273394617711221,
-        "y": 2.023213124440433
+        "x": 1.5965643278804285,
+        "y": 5.305476142867179
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.511991165826304,
-        "y": 1.1935501885188167
+        "x": 1.96,
+        "y": 4.93
       },
       "prevControl": {
-        "x": 3.9399982346063984,
-        "y": 1.622937146583513
+        "x": 1.7639524640751407,
+        "y": 5.123532516568579
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 146.02,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -38,14 +44,14 @@
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": 169.53082574228864,
-    "rotateFast": true
+    "velocity": 1.85,
+    "rotation": 146.02,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Mid Field Note Intake",
+  "folder": "Wing Note Intake",
   "previewStartingState": {
-    "rotation": 120.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
