@@ -20,8 +20,8 @@ public class PassNoteCommand extends Command {
   Timer timer;
   boolean timerStarted;
 
-  public static final boolean PASS_NOTE_TEST_MODE = false;
-  private static final double TEST_TIME = 3;
+  public static final boolean PASS_NOTE_TEST_MODE = true;
+  private static final double TEST_TIME = 1.8;
   private Timer testTimer;
 
   public PassNoteCommand(Shooter shooter, Indexer indexer) {

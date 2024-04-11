@@ -50,7 +50,7 @@ public class NudgeIndexer extends Command {
   @Override
   public boolean isFinished() {
     //ends the command
-    if (time.get() >= 1) {
+    if (time.get() >= 0.5) {
       return true; //ends command if time greater than or equal to one second
     } else {
       return false;
