@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
@@ -22,13 +23,16 @@ public class Indexer extends SubsystemBase {
 
   // Creates private variables
   private CANSparkMax highIndexMotor;
+  private RelativeEncoder encoder;
   private LaserCan lowLaser, highLaser;
   private boolean lowLaserOnline, highLaserOnline;
 
   public Indexer() {
     highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
+
+    encoder = highIndexMotor.getEncoder();
     lowLaser = new LaserCan(20); // creates new laserCan
-    highLaser = new LaserCan(19); // creates another laserCan
+    highLaser = new LaserCan(19); // TODO: find ID
 
     lowLaserOnline = true;
     highLaserOnline = true;
@@ -98,6 +102,10 @@ public class Indexer extends SubsystemBase {
 
   public double getOutputCurrent() {
     return highIndexMotor.getOutputCurrent();
+  }
+
+  public double getVelocity() {
+    return encoder.getVelocity();
   }
 
   @Override
