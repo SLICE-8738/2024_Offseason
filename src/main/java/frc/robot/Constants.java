@@ -316,7 +316,7 @@ public final class Constants {
 
     public static final double CURRENT_THRESHOLD = 12;
 
-    public static final double STORE_NOTE_TARGET = 100;
+    public static final double STORE_NOTE_TARGET = 20;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
 
     public static final double STORE_NOTE_KP = 0.001;
