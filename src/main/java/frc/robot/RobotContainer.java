@@ -193,7 +193,7 @@ public class RobotContainer {
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.square1.whileTrue(m_alignWithSpeaker);
-    Button.leftBumper1.whileTrue(m_alignNote.onlyIf(() -> IntakeLimelight.getTable().getTargetDetected()));
+    Button.leftBumper1.whileTrue(m_alignNote);
 
     /* Intake */
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));

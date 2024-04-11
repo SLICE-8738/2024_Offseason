@@ -61,15 +61,27 @@ public class AlignNote extends Command {
   public void execute() {
 
     // spins the motors
-    double distance = indexer.getHighLaserCanDistance();
-    if (indexer.highLaserCanOnline()) {
-      if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
-        indexer.spinIndex(0.2);
-      } else if (Math.abs(distance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
+    double highDistance = indexer.getHighLaserCanDistance();
+    double lowDistance = indexer.getLowLaserCanDistance();
+    if (indexer.lowLaserCanOnline()) {
+      if (lowDistance > 90) {
+        indexer.spinIndex(0.15);
+        intake.runRampIntakeOnly(0.15);
+      } else if (highDistance < 50) {
+        indexer.spinIndex(-0.15);
+        intake.runRampIntakeOnly(-0.15);
+      }else if (Math.abs(lowDistance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
         indexer.spinIndex(0);
+        intake.runRampIntakeOnly(0);
       } else {
-        double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
+        double output = pid.calculate(lowDistance, Constants.kIndexer.STORE_NOTE_TARGET);
         indexer.spinIndex(-output);
+        if (output < 0) {
+          intake.runRampIntakeOnly(-output * 1.3333);
+        } else {
+          intake.runRampIntakeOnly(0);
+        }
+        
       }
     }
 
@@ -111,6 +123,6 @@ public class AlignNote extends Command {
       return true;
     }
 
-    return (timerRunning && storeTimer.get() > .2);
+    return false;
   }
 }

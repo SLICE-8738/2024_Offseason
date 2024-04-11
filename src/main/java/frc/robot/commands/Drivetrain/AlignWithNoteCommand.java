@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
@@ -19,10 +20,12 @@ import frc.robot.subsystems.IntakeLimelight;
 public class AlignWithNoteCommand extends Command {
 
   private final Drivetrain m_drivetrain;
+  private final Indexer m_indexer;
 
   private final PIDController rotationController;
 
-  private final Indexer m_indexer;
+  private final Timer timer;
+  private boolean timerOn;
 
   /** Creates a new AlignWithNoteCommand. */
   public AlignWithNoteCommand(Drivetrain drivetrain, Indexer indexer) {
@@ -31,24 +34,44 @@ public class AlignWithNoteCommand extends Command {
     addRequirements(drivetrain);
 
     m_drivetrain = drivetrain;
-
     m_indexer = indexer;
 
     rotationController = new PIDController(Constants.kDrivetrain.kPNoteAlignRotation, Constants.kDrivetrain.kINoteAlignRotation, Constants.kDrivetrain.kDNoteAlignRotation);
     rotationController.setSetpoint(0);
     rotationController.setTolerance(2);
+
+    timer = new Timer();
     
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    timer.reset();
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    double feedback = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
+    double rotation;
+
+    if (IntakeLimelight.getTable().getTargetDetected()) {
+      rotation = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
+      if (timerOn) {
+        timer.reset();
+        timerOn = false;
+      }
+    }
+    else {
+      if (!timerOn) {
+        timer.start();
+        timerOn = true;
+      }
+      rotation = 15 * (timer.get() + 3.5) * Math.sin(5 * (timer.get() + 3.5));
+    }
     double error = rotationController.getPositionError();
     double power = (40 - Math.abs(error)) / 20.0;
 
@@ -60,7 +83,7 @@ public class AlignWithNoteCommand extends Command {
 
     power *= multiplier;
 
-    m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-feedback)), false, false);
+    m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-rotation)), false, false);
     LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
   }

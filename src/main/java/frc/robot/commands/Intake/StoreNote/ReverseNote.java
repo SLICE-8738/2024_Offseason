@@ -69,6 +69,6 @@ public class ReverseNote extends Command {
       return true;
     }
 
-    return totalTimer.get() > .15;
+    return totalTimer.get() > .125;
   }
 }

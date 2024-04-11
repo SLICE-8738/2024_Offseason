@@ -8,33 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.592253556986355,
-        "y": 3.797895140274267
+        "x": 4.471273623398311,
+        "y": 4.708701048607771
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.88,
-        "y": 5.69
+        "x": 5.897711653579337,
+        "y": 4.250203110335298
       },
       "prevControl": {
-        "x": 6.3713089703759485,
-        "y": 3.846586103611116
+        "x": 5.264547834060208,
+        "y": 3.755316446803106
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.05,
-      "rotationDegrees": -129.31,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -44,9 +38,9 @@
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -129.3136674263497,
-    "rotateFast": false
+    "velocity": 2.5,
+    "rotation": -140.19442890773493,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Mid Field Note Intake",
