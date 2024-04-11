@@ -5,6 +5,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Button;
 import frc.robot.Constants;
@@ -19,7 +20,7 @@ public class PassNoteCommand extends Command {
   Timer timer;
   boolean timerStarted;
 
-  private static final boolean TEST_MODE = false;
+  public static final boolean PASS_NOTE_TEST_MODE = false;
   private static final double TEST_TIME = 3;
   private Timer testTimer;
 
@@ -33,7 +34,7 @@ public class PassNoteCommand extends Command {
 
     timer = new Timer();
 
-    if (TEST_MODE) {
+    if (PASS_NOTE_TEST_MODE) {
       testTimer = new Timer();
     }
   }
@@ -45,7 +46,7 @@ public class PassNoteCommand extends Command {
     timer.reset();
     timer.stop();
 
-    if (TEST_MODE) {
+    if (PASS_NOTE_TEST_MODE) {
       testTimer.restart();
     }
   }
@@ -54,15 +55,18 @@ public class PassNoteCommand extends Command {
   @Override
   public void execute() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    shooter.spinFlywheels(TEST_MODE ? 1000 : 4250, false);
+    shooter.spinFlywheels(PASS_NOTE_TEST_MODE ? 1000 : 4250, false);
+    boolean ready = false;
 
-    if (TEST_MODE) {
-      if (!timerStarted && testTimer.get() > TEST_TIME) {
-        timerStarted = true;
-      }
+    if (PASS_NOTE_TEST_MODE) {
+      ready = testTimer.get() > TEST_TIME;
+    }else {
+      ready = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
     }
 
-    if (buttonReleased && !timerStarted && shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)) {
+    SmartDashboard.putBoolean("Pass Note Read", ready);
+
+    if (buttonReleased && !timerStarted && ready) {
       timerStarted = true;
       timer.start();
     }
