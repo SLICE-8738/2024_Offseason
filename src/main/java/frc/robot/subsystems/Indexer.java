@@ -27,8 +27,8 @@ public class Indexer extends SubsystemBase {
 
   public Indexer() {
     highIndexMotor = SparkMaxFactory.createSparkMax(15, REVConfigs.indexerSparkMaxConfig); // creates new motor
-    lowLaser = new LaserCan(19); // creates new laserCan
-    highLaser = new LaserCan(19); // TODO: find ID
+    lowLaser = new LaserCan(20); // creates new laserCan
+    highLaser = new LaserCan(19); // creates another laserCan
 
     lowLaserOnline = true;
     highLaserOnline = true;
@@ -103,8 +103,8 @@ public class Indexer extends SubsystemBase {
   @Override
   public void periodic() {
     
-    SmartDashboard.putNumber("High LaserCAN Distance", getLowLaserCanDistance());
     SmartDashboard.putNumber("High LaserCAN Distance", getHighLaserCanDistance());
+    SmartDashboard.putNumber("Low LaserCAN Distance", getLowLaserCanDistance());
 
     SmartDashboard.putBoolean("Have Note", isStored());
   }

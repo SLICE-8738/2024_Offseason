@@ -44,7 +44,8 @@ public class AutoSelector {
 
         AMP_SIDE("Amp Side"),
         MIDDLE("Middle"),
-        SOURCE_SIDE("Source Side");
+        SOURCE_SIDE("Source Side"),
+        FAR_SOURCE_SIDE("Far Source Side");
 
         public final String value;
 
@@ -58,14 +59,15 @@ public class AutoSelector {
 
     public enum DesiredMode {
 
-        SCORE_5_SPEAKER_1("Score 5 Speaker (Notes 1, 2, 3, 5)", true),
-        SCORE_5_SPEAKER_2("Score 5 Speaker (Notes 3, 2, 1, 5)", true),
-        SCORE_5_SPEAKER_3("Score 5 Speaker (Notes 2, 3, 1, 5)", true),
+        SCORE_7_SPEAKER("Score 7 Speaker", true),
+        SCORE_5_SPEAKER_1("Score 5 Speaker (1, 2, 3, 5)", true),
+        SCORE_5_SPEAKER_2("Score 5 Speaker (3, 2, 1, 5)", true),
+        SCORE_5_SPEAKER_3("Score 5 Speaker (2, 3, 1, 5)", true),
         SCORE_4_SPEAKER("Score 4 Speaker", true),
         SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker", true),
-        SCORE_3_SPEAKER_1("Score 3 Speaker (Notes 1 & 2)", true),
-        SCORE_3_SPEAKER_2("Score 3 Speaker (Notes 7 & 8)", true),
-        SCORE_3_SPEAKER_3("Score 3 Speaker (Notes 8 & 7)", true),
+        SCORE_3_SPEAKER_1("Score 3 Speaker (1 & 2)", true),
+        SCORE_3_SPEAKER_2("Score 3 Speaker (7 & 8)", true),
+        SCORE_3_SPEAKER_3("Score 3 Speaker (8 & 7)", true),
         SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker", true),
         SCORE_2_SPEAKER("Score 2 Speaker", true),
         SCORE_1_SPEAKER("Score 1 Speaker", false),
@@ -114,13 +116,15 @@ public class AutoSelector {
 
         startingPositionChooser.setDefaultOption("Middle", StartingPosition.MIDDLE);
 
-        startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
         startingPositionChooser.addOption("Amp Side", StartingPosition.AMP_SIDE);
+        startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
+        startingPositionChooser.addOption("Far Source Side", StartingPosition.FAR_SOURCE_SIDE);
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_5_SPEAKER_1.value, DesiredMode.SCORE_5_SPEAKER_1);
+        modeChooser.setDefaultOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
 
+        modeChooser.addOption(DesiredMode.SCORE_7_SPEAKER.value, DesiredMode.SCORE_7_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_2.value, DesiredMode.SCORE_5_SPEAKER_2);
         modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_3.value, DesiredMode.SCORE_5_SPEAKER_3);
         modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
@@ -181,7 +185,7 @@ public class AutoSelector {
 
         try {
 
-            return Optional.of(new PathPlannerAuto(mode.useStartingPosition? mode.value : position.value + " " + mode.value));
+            return Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
 
         }
         catch (Exception e) {

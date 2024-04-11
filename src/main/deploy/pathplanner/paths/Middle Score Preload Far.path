@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.71,
-        "y": 5.53
+        "x": 1.4146207015818286,
+        "y": 1.608381656479625
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.245349124150206,
-        "y": 5.969512105097758
+        "x": 4.143775096063454,
+        "y": 2.5835994934471773
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.482880185618528,
-        "y": 6.5718037819054365
+        "x": 3.7726100984116866,
+        "y": 5.2
       },
       "prevControl": {
-        "x": 4.158330586164721,
-        "y": 6.2650766123318675
+        "x": 5.810378712958631,
+        "y": 3.849927132485434
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 175.87,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -38,15 +44,15 @@
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
-    "velocity": 3.0,
-    "rotation": -156.90317808183914,
-    "rotateFast": true
+    "velocity": 0,
+    "rotation": 175.86608280445347,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Mid Field Note Intake",
+  "folder": "Note Score",
   "previewStartingState": {
     "rotation": 180.0,
-    "velocity": 0
+    "velocity": 0.0
   },
   "useDefaultConstraints": true
 }

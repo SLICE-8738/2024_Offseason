@@ -64,12 +64,15 @@ public class AlignNote extends Command {
     double distance = indexer.getHighLaserCanDistance();
     if (indexer.highLaserCanOnline()) {
       if (distance > Constants.kIndexer.DEFAULT_LASERCAN_DISTANCE) {
-        indexer.spinIndex(0.2);
+        indexer.spinIndex(0.15);
+        intake.runRampIntakeOnly(0.15);
       } else if (Math.abs(distance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
         indexer.spinIndex(0);
+        intake.runRampIntakeOnly(0);
       } else {
         double output = pid.calculate(distance, Constants.kIndexer.STORE_NOTE_TARGET);
         indexer.spinIndex(-output);
+        intake.runRampIntakeOnly(0);
       }
     }
 
