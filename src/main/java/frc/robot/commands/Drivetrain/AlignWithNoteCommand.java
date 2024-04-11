@@ -70,7 +70,7 @@ public class AlignWithNoteCommand extends Command {
         timer.start();
         timerOn = true;
       }
-      rotation = 30 * timer.get() * Math.sin(6.5 * timer.get());
+      rotation = 15 * (timer.get() + 3.5) * Math.sin(5 * (timer.get() + 3.5));
     }
     double error = rotationController.getPositionError();
     double power = (40 - Math.abs(error)) / 20.0;
