@@ -19,6 +19,10 @@ public class PassNoteCommand extends Command {
   Timer timer;
   boolean timerStarted;
 
+  private static final boolean TEST_MODE = false;
+  private static final double TEST_TIME = 3;
+  private Timer testTimer;
+
   public PassNoteCommand(Shooter shooter, Indexer indexer) {
     this.shooter = shooter;
     this.indexer = indexer;
@@ -28,6 +32,10 @@ public class PassNoteCommand extends Command {
     timerStarted = false;
 
     timer = new Timer();
+
+    if (TEST_MODE) {
+      testTimer = new Timer();
+    }
   }
 
   // Called when the command is initially scheduled.
@@ -36,17 +44,31 @@ public class PassNoteCommand extends Command {
     timerStarted = false;
     timer.reset();
     timer.stop();
+
+    if (TEST_MODE) {
+      testTimer.restart();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    shooter.spinFlywheels(4250, false);
+    shooter.spinFlywheels(TEST_MODE ? 1000 : 4250, false);
+
+    if (TEST_MODE) {
+      if (!timerStarted && testTimer.get() > TEST_TIME) {
+        timerStarted = true;
+      }
+    }
+
     if (buttonReleased && !timerStarted && shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)) {
       timerStarted = true;
       timer.start();
     }
+
+
+
     if (timerStarted) {
       indexer.spinIndex(1);
     }
