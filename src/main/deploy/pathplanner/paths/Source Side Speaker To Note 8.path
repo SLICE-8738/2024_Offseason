@@ -28,7 +28,13 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.15,
+      "rotationDegrees": 169.53,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -40,7 +46,7 @@
   "goalEndState": {
     "velocity": 3.0,
     "rotation": 169.53082574228864,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Mid Field Note Intake",

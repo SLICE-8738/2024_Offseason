@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.34
+      "x": 1.4,
+      "y": 5.53
     },
-    "rotation": 120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -26,12 +26,6 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Source Side Speaker To Note 8"
-                      }
-                    },
-                    {
                       "type": "named",
                       "data": {
                         "name": "Note Align"
@@ -40,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Score Note 8 Close"
+                        "pathName": "Score Note 2"
                       }
                     }
                   ]
@@ -58,7 +52,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -72,7 +66,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Speaker To Note 7"
+                        "pathName": "Close Score To Note 3"
                       }
                     },
                     {
@@ -84,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Score Note 7 Close"
+                        "pathName": "Score Note 3"
                       }
                     }
                   ]
@@ -102,12 +96,44 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Middle Close Score To Note 6"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": "Score 3 Speaker",
+  "folder": null,
   "choreoAuto": false
 }
