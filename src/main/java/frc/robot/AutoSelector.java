@@ -68,6 +68,7 @@ public class AutoSelector {
         SCORE_3_SPEAKER_1("Score 3 Speaker (1 & 2)", true),
         SCORE_3_SPEAKER_2("Score 3 Speaker (7 & 8)", true),
         SCORE_3_SPEAKER_3("Score 3 Speaker (8 & 7)", true),
+        SCORE_3_SPEAKER_4("Score 3 Speaker (6 & 7)", true),
         SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker", true),
         SCORE_2_SPEAKER("Score 2 Speaker", true),
         SCORE_1_SPEAKER("Score 1 Speaker", false),
@@ -114,15 +115,15 @@ public class AutoSelector {
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
 
-        startingPositionChooser.setDefaultOption("Middle", StartingPosition.MIDDLE);
+        startingPositionChooser.setDefaultOption("Amp Side", StartingPosition.AMP_SIDE);
 
-        startingPositionChooser.addOption("Amp Side", StartingPosition.AMP_SIDE);
+        startingPositionChooser.addOption("Middle", StartingPosition.MIDDLE);
         startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
         startingPositionChooser.addOption("Far Source Side", StartingPosition.FAR_SOURCE_SIDE);
 
         modeChooser = new SendableChooser<DesiredMode>();
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
+        modeChooser.setDefaultOption(DesiredMode.SCORE_1_SPEAKER.value, DesiredMode.SCORE_1_SPEAKER);
 
         modeChooser.addOption(DesiredMode.SCORE_7_SPEAKER.value, DesiredMode.SCORE_7_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_2.value, DesiredMode.SCORE_5_SPEAKER_2);
@@ -131,11 +132,11 @@ public class AutoSelector {
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_AND_A_HALF_SPEAKER.value, DesiredMode.SCORE_3_AND_A_HALF_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_1);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_2);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_3);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_2.value, DesiredMode.SCORE_3_SPEAKER_2);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_3.value, DesiredMode.SCORE_3_SPEAKER_3);
+        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_4.value, DesiredMode.SCORE_3_SPEAKER_4);
         modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_1_SPEAKER.value, DesiredMode.SCORE_1_SPEAKER);
         modeChooser.addOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
 
         AutoBuilder.configureHolonomic(
@@ -189,7 +190,7 @@ public class AutoSelector {
             return Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
 
         }
-        catch (Exception e) {
+        catch (Error e) {
 
             DriverStation.reportError(e.getMessage(), true);
             return Optional.empty();
@@ -202,7 +203,16 @@ public class AutoSelector {
 
         Pose2d currentPose = m_drivetrain.getPose();
 
-        initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode == DesiredMode.TEST_PATH_MODE? mode.value : position.value + " " + mode.value);
+        try {
+
+            initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.useStartingPosition? position.value + " " + mode.value : mode.value);
+
+        }
+        catch (Error e) {
+
+            DriverStation.reportError(e.getMessage(), true);
+
+        }
 
         if (currentPose != null && initialAutoPose != null) {
 

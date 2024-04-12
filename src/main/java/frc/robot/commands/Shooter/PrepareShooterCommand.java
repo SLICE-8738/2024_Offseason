@@ -6,12 +6,13 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+//import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Button;
+
+//import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.ShooterMath;
 import frc.robot.subsystems.Drivetrain;
@@ -24,14 +25,14 @@ import frc.robot.subsystems.ShooterLimelight;
 public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
   private final Drivetrain m_drivetrain;
-  private boolean flywheelsStopped;
+  //private boolean flywheelsStopped;
 
   private boolean forceSubwoofer;
 
-  private static final ShuffleboardTab shooterTestTab = Shuffleboard.getTab("Shooter Testing");
+  //private static final ShuffleboardTab shooterTestTab = Shuffleboard.getTab("Shooter Testing");
   // private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
-  private static final SimpleWidget originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
-  private static final SimpleWidget angleWidget = shooterTestTab.add("Angle Adjustment", 0);
+  //private static final SimpleWidget originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
+  //private static final SimpleWidget angleWidget = shooterTestTab.add("Angle Adjustment", 0);
   
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
@@ -48,7 +49,7 @@ public class PrepareShooterCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 
-    flywheelsStopped = true;
+    //flywheelsStopped = true;
 
     forceSubwoofer = false;
   }
@@ -67,7 +68,7 @@ public class PrepareShooterCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
 
-    flywheelsStopped = true;
+    //flywheelsStopped = true;
 
     this.forceSubwoofer = forceSubwoofer;
   }
@@ -114,7 +115,7 @@ public class PrepareShooterCommand extends Command {
 
     // angle += angleAdjust;
 
-    double angleAdjust = angleWidget.getEntry().getDouble(0);
+    //double angleAdjust = angleWidget.getEntry().getDouble(0);
     //angle += angleAdjust;
 
     double speed = distanceToSpeaker < 1.303 ? 3500 : 4500;
@@ -124,9 +125,7 @@ public class PrepareShooterCommand extends Command {
 
     SmartDashboard.putNumber("Robot Distance", distanceToSpeaker);
     SmartDashboard.putNumber("Flywheel Target Velocity", speed);
-
     SmartDashboard.putNumber("Target Shooter Angle", angle);
-
 
     // desiredSpeedWidget.getEntry().setDouble(speed);
     // desiredAngleWidget.getEntry().setDouble(shotDetails.getShooterAngle());
