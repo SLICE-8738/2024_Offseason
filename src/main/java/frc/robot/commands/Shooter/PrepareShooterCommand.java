@@ -117,8 +117,7 @@ public class PrepareShooterCommand extends Command {
     double angleAdjust = angleWidget.getEntry().getDouble(0);
     //angle += angleAdjust;
 
-    double speed = distanceToSpeaker < 3.4 ? 3500 : 4500;
-    speed = 4500;
+    double speed = distanceToSpeaker < 1.303 ? 3500 : 4500;
 
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);

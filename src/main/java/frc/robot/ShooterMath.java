@@ -61,12 +61,14 @@ public final class ShooterMath {
      * @param distance the distance of the robot from the speaker
      * @return the appropriate shooter angle based on the regression
      */
-  public static double getDistanceBasedShooterAngle(double distance) {
+  public static double getDistanceBasedShooterAngle(double distance) {;
     // Regression 5: https://www.desmos.com/calculator/qjryqf5qbx
     if (distance < 1.303) {
       return -2.3;
-    }else if (distance < 3.72) {
+    }else if (distance < 3.5) {
       return polynomial(1.43678, -13.6695, 42.6484, -37.9742, 5.7878, distance);
+    }else if (distance < 4.12) {
+      return polynomial(0.489915, -4.53583, 10.8667, 9.08733, -19.1336, distance);
     }else {
       return 21;
     }

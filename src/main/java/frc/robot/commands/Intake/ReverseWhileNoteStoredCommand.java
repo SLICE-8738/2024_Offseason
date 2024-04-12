@@ -35,11 +35,11 @@ public class ReverseWhileNoteStoredCommand extends Command {
       if (Math.abs(operatorController.getRawAxis(5)) < 0.1) {
         m_intake.runIntakeEntranceOnly(0);
       }else {
-        m_intake.runIntake(-operatorController.getRawAxis(5) * 0.1);
+        m_intake.runIntake(-operatorController.getRawAxis(5) * 0.3);
       }
       
     }else {
-      m_intake.runIntake(-operatorController.getRawAxis(5) * 0.2);
+      m_intake.runIntake(-operatorController.getRawAxis(5) * 0.5);
     }
   }
 

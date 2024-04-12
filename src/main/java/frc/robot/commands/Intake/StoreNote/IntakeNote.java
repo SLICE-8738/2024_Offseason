@@ -63,7 +63,7 @@ public class IntakeNote extends Command {
 
 
     intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
-    intake.runRampIntakeOnly(0.4);
+    intake.runRampIntakeOnly(0.6);
   }
 
   // Called once the command ends or is interrupted.

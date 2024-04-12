@@ -142,12 +142,6 @@
           "data": {
             "name": "Shoot Note"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle Close Score To Note 5"
-          }
         }
       ]
     }

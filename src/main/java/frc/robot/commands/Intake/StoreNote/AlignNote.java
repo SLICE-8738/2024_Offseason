@@ -66,10 +66,10 @@ public class AlignNote extends Command {
     if (indexer.lowLaserCanOnline()) {
       if (lowDistance > 90) {
         indexer.spinIndex(0.15);
-        intake.runRampIntakeOnly(0.15);
+        intake.runRampIntakeOnly(0.15 * 1.3333 * 1.5);
       } else if (highDistance < 50) {
         indexer.spinIndex(-0.15);
-        intake.runRampIntakeOnly(-0.15);
+        intake.runRampIntakeOnly(-0.15 * 1.3333 * 1.5);
       }else if (Math.abs(lowDistance - Constants.kIndexer.STORE_NOTE_TARGET) < Constants.kIndexer.STORE_NOTE_ERROR_TOLERANCE) {
         indexer.spinIndex(0);
         intake.runRampIntakeOnly(0);
@@ -77,7 +77,7 @@ public class AlignNote extends Command {
         double output = pid.calculate(lowDistance, Constants.kIndexer.STORE_NOTE_TARGET);
         indexer.spinIndex(-output);
         if (output < 0) {
-          intake.runRampIntakeOnly(-output * 1.3333);
+          intake.runRampIntakeOnly(-output * 1.3333 * 1.5);
         } else {
           intake.runRampIntakeOnly(0);
         }
