@@ -40,7 +40,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
   /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
     super(new SequentialCommandGroup(
-      new WaitCommand(0.1), 
+      new WaitCommand(0.15), 
       new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), 
       new NudgeIndexer(indexer),
       new InstantCommand(drivetrain::resetToAprilTagRotation)));
@@ -53,8 +53,8 @@ public class ShootCommand extends ParallelDeadlineGroup {
   /** Creates a new ShootCommand for autonomous. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     super(
-      new SequentialCommandGroup(new WaitCommand(0.1),
-      new ParallelRaceGroup(new WaitCommand(2.5), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+      new SequentialCommandGroup(new WaitCommand(0.15),
+      new ParallelRaceGroup(new WaitCommand(9), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);

@@ -45,8 +45,12 @@ public class ReverseNote extends Command {
   @Override
   public void execute() {
 
+    if (totalTimer.get() > 0.1) {
+      indexer.spinIndex(-1);
+    }else {
+      indexer.spinIndex(0);
+    }
 
-    indexer.spinIndex(-0.5);
 
   }
 
@@ -69,6 +73,6 @@ public class ReverseNote extends Command {
       return true;
     }
 
-    return totalTimer.get() > .125;
+    return totalTimer.get() > .2;
   }
 }

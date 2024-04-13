@@ -120,6 +120,10 @@ public class PrepareShooterCommand extends Command {
 
     double speed = distanceToSpeaker < 1.303 ? 3500 : 4500;
 
+    if (forceSubwoofer) {
+      speed = 3500;
+    }
+
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);
 

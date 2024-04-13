@@ -64,7 +64,7 @@ public class AlignNote extends Command {
     double highDistance = indexer.getHighLaserCanDistance();
     double lowDistance = indexer.getLowLaserCanDistance();
     if (indexer.lowLaserCanOnline()) {
-      if (lowDistance > 90) {
+      if (lowDistance > 60) {
         indexer.spinIndex(0.15);
         intake.runRampIntakeOnly(0.15 * 1.3333 * 1.5);
       } else if (highDistance < 50) {

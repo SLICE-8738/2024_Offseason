@@ -10,7 +10,7 @@ public class SignalStoreNote extends Command {
     private final LEDs leds;
     private final Indexer indexer;
     private double m_rainbowFirstPixelHue = 0;
-    private int range = 7;
+    private int range = 9;
     private int color;
     private boolean strobing;
     private int strobingCounter;
@@ -31,17 +31,17 @@ public class SignalStoreNote extends Command {
     @Override
     public void execute() {
       strobing = indexer.isStored();
-      color = strobing ? 130 : 170;
+      color = strobing ? 60 : 2;
         for(int i = 0; i < Constants.kLEDs.LED_LENGTH; i++) {
-            final int hue = ((((int)m_rainbowFirstPixelHue + (i * range / Constants.kLEDs.LED_LENGTH )) % range) + color) % 180;
+            final int hue = ((((int)m_rainbowFirstPixelHue + (4 * i * range / Constants.kLEDs.LED_LENGTH )) % range) + color) % 180;
             if (strobing) {
-              leds.setLEDhsv(i, hue, 255, (strobingCounter + i) % 32);
+              leds.setLEDhsv(i, hue, 255, ((strobingCounter + i) % 32) >= 16 ? 128 : 0);
             }else {
               leds.setLEDhsv(i, hue, 255, 128);
             }
         }
 
-        m_rainbowFirstPixelHue += 0.1;
+        m_rainbowFirstPixelHue += 0.25;
         m_rainbowFirstPixelHue %= range;
         strobingCounter += 2;
         strobingCounter %= 32;

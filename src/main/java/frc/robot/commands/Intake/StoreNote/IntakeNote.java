@@ -47,7 +47,7 @@ public class IntakeNote extends Command {
   public void execute() {
     // spins the motors
     if (indexer.lowLaserCanOnline()) {
-      indexer.spinIndex(0.25);
+      indexer.spinIndex(0.2);
     } else {
       if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
         outputCurrentThreshold = true;

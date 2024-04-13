@@ -316,10 +316,10 @@ public final class Constants {
 
     public static final double CURRENT_THRESHOLD = 12;
 
-    public static final double STORE_NOTE_TARGET = 20;
+    public static final double STORE_NOTE_TARGET = 45;
     public static final double STORE_NOTE_ERROR_TOLERANCE = 15;
 
-    public static final double STORE_NOTE_KP = 0.001;
+    public static final double STORE_NOTE_KP = 0.003;
     public static final double STORE_NOTE_KD = 0.0001;
     public static final double DEFAULT_LASERCAN_DISTANCE = 150;
 
@@ -362,7 +362,7 @@ public final class Constants {
 
   public final class kLEDs {
     public static final int LED_PWM_PORT = 1;
-    public static final int LED_LENGTH = 55;
+    public static final int LED_LENGTH = 300;
   }
   
 }
