@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.143775096063454,
-        "y": 2.5835994934471773
+        "x": 3.94649899620084,
+        "y": 2.600097442187767
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.7726100984116866,
-        "y": 5.2
+        "x": 4.12,
+        "y": 5.11
       },
       "prevControl": {
-        "x": 5.810378712958631,
-        "y": 3.849927132485434
+        "x": 6.05968680502011,
+        "y": 3.8563242962784865
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,8 +45,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 175.86608280445347,
-    "rotateFast": false
+    "rotation": 173.66,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Note Score",

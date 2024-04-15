@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.77,
-        "y": 5.2
+        "x": 4.12,
+        "y": 5.11
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.471273623398311,
-        "y": 4.708701048607771
+        "x": 4.8212736233983104,
+        "y": 4.618701048607771
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Mid Field Note Intake",
   "previewStartingState": {
-    "rotation": 175.87,
+    "rotation": 173.66,
     "velocity": 0
   },
   "useDefaultConstraints": true
