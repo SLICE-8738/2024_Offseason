@@ -78,7 +78,8 @@ public class ShootCommand extends ParallelDeadlineGroup {
     if (horizontalTarget < 0) {
       horizontalTarget += 360;
     }
-    double horizontalCurrent = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : drivetrain.getPose().getRotation().getDegrees();
+    //double horizontalCurrent = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : drivetrain.getPose().getRotation().getDegrees();
+    double horizontalCurrent = drivetrain.getPose().getRotation().getDegrees();
 
 
     // Find the error in the drivetrain angle

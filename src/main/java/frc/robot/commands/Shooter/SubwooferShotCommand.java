@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import frc.robot.Constants;
-import frc.robot.commands.Drivetrain.AlignWithSpeakerCommand;
+//import frc.robot.commands.Drivetrain.AlignWithSpeakerCommand;
 import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
@@ -31,8 +31,8 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
   public SubwooferShotCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
     super(new SequentialCommandGroup(new WaitCommand(0.1), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain, true);
-    AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
-    addCommands(prepareShooter, alignWithSpeakerCommand);
+    //AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
+    addCommands(prepareShooter/*, alignWithSpeakerCommand*/);
 
   }
 
@@ -44,8 +44,8 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain, true);
-    AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
-    addCommands(prepareShooter, alignWithSpeakerCommand);
+    //AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
+    addCommands(prepareShooter/*, alignWithSpeakerCommand*/);
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
@@ -71,6 +71,6 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
     // Check if the robot is moving slow enough to shoot
     boolean stopped = speed < Constants.kShooter.MAXIMUM_SHOOTING_DRIVETRAIN_SPEED;
 
-    return atSpeed && horizontallyAimed && stopped;
+    return atSpeed /*&& horizontallyAimed*/ && stopped;
   }
 }

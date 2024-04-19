@@ -130,7 +130,7 @@ public final class Constants {
     public static final double ROTATION_KP = 2.0;
 
     /* Speaker Alignment Values */
-    public static final double kPSpeakerAlignRotation = 2.2;
+    public static final double kPSpeakerAlignRotation = 3.2; //2.9
     public static final double kISpeakerAlignRotation = 0;
     public static final double kDSpeakerAlignRotation = 0.8;
 

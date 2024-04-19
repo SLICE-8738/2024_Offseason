@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note"
+            "name": "Shoot Note Subwoofer"
           }
         },
         {
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source Side Speaker To Note 7"
+                        "pathName": "Source Side Speaker To Note 8"
                       }
                     },
                     {
