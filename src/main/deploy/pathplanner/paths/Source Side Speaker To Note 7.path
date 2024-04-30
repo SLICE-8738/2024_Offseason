@@ -20,33 +20,27 @@
         "y": 1.7684920476223926
       },
       "prevControl": {
-        "x": 4.602273034333303,
-        "y": 0.6913857799346798
+        "x": 4.478551368450255,
+        "y": 1.1353282281032642
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.2,
-      "rotationDegrees": -163.64,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.5,
-    "maxAcceleration": 4.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -163.6389225446537,
-    "rotateFast": false
+    "rotation": -152.4179707922028,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Mid Field Note Intake",
@@ -54,5 +48,5 @@
     "rotation": 120.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

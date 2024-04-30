@@ -18,6 +18,7 @@ public class PassNoteCommand extends Command {
   private final Shooter shooter;
   private final Indexer indexer;
   Timer timer;
+  boolean aim;
   boolean timerStarted;
 
   public static final boolean PASS_NOTE_TEST_MODE = false;
@@ -30,6 +31,7 @@ public class PassNoteCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     addRequirements(indexer);
+    aim = false;
     timerStarted = false;
 
     timer = new Timer();
@@ -42,6 +44,7 @@ public class PassNoteCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    aim = false;
     timerStarted = false;
     timer.reset();
     timer.stop();
@@ -55,7 +58,7 @@ public class PassNoteCommand extends Command {
   @Override
   public void execute() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    shooter.spinFlywheels(PASS_NOTE_TEST_MODE ? 1000 : 4250, false);
+    shooter.spinFlywheels(PASS_NOTE_TEST_MODE ? 1000 : 4000, false);
     boolean ready = false;
 
     if (PASS_NOTE_TEST_MODE) {
@@ -66,15 +69,24 @@ public class PassNoteCommand extends Command {
 
     SmartDashboard.putBoolean("Pass Note Read", ready);
 
-    if (buttonReleased && !timerStarted && ready) {
-      timerStarted = true;
-      timer.start();
+    if (buttonReleased && !aim && ready) {
+      aim = true;
     }
 
 
 
-    if (timerStarted) {
-      indexer.spinIndex(1);
+    if (aim) {
+      shooter.aimShooter(10);
+      if (shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR) || !indexer.isStored()) {
+        if (!timerStarted) {
+          timer.start();
+          timerStarted = true;
+        }
+      }
+
+      if (timerStarted) {
+        indexer.spinIndex(1);
+      }
     }
   }
 
@@ -82,6 +94,7 @@ public class PassNoteCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     indexer.spinIndex(0);
+    shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE + 0.5);
     shooter.spinFlywheels(0, false);
   }
 
@@ -89,7 +102,7 @@ public class PassNoteCommand extends Command {
   @Override
   public boolean isFinished() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    if (!timerStarted && buttonReleased && !shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)) {
+    if (!aim && buttonReleased && !shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)) {
       return true;
     }
     if (timerStarted && timer.get() > 1) {

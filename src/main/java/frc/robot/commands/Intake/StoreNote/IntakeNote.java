@@ -47,7 +47,7 @@ public class IntakeNote extends Command {
   public void execute() {
     // spins the motors
     if (indexer.lowLaserCanOnline()) {
-      indexer.spinIndex(0.2);
+      indexer.spinIndex(0.20);
     } else {
       if (!outputCurrentThreshold && indexer.getOutputCurrent() > Constants.kIndexer.CURRENT_THRESHOLD) {
         outputCurrentThreshold = true;
@@ -63,7 +63,7 @@ public class IntakeNote extends Command {
 
 
     intake.runIntakeEntranceOnly(Constants.kIntake.INTAKE_SPEED);
-    intake.runRampIntakeOnly(0.6);
+    intake.runRampIntakeOnly(0.65);
   }
 
   // Called once the command ends or is interrupted.
