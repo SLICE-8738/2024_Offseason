@@ -5,8 +5,11 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.Button;
 import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
@@ -14,6 +17,8 @@ import frc.robot.subsystems.Shooter;
 
 public class PassNoteCommand extends Command {
   /** Creates a new PassNoteCommand. */
+
+  private static SimpleWidget angleWidget = Shuffleboard.getTab("Debug Tab").add("Pass Angle", 35);
 
   private final Shooter shooter;
   private final Indexer indexer;
@@ -31,6 +36,7 @@ public class PassNoteCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
     addRequirements(indexer);
+
     aim = false;
     timerStarted = false;
 
@@ -76,7 +82,7 @@ public class PassNoteCommand extends Command {
 
 
     if (aim) {
-      shooter.aimShooter(10);
+      shooter.aimShooter(angleWidget.getEntry().getDouble(35));
       if (shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR) || !indexer.isStored()) {
         if (!timerStarted) {
           timer.start();

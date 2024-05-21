@@ -41,8 +41,8 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule[] swerveMods;
 
-  private final SwerveDrivePoseEstimator m_swerveDrivetrainOdometry;
-  private final AHRS navXGyro;
+  private final SwerveDrivePoseEstimator m_odometry;
+  private final AHRS m_gyro;
   public final Field2d m_field2d;
 
   private Rotation2d fieldOrientedOffset;
@@ -68,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
       new SwerveModule(3, Constants.kDrivetrain.Mod3.CONSTANTS)
     };
 
-    navXGyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
+    m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
 
     Timer.delay(1.0);
     resetModulesToAbsolute();
@@ -79,7 +79,7 @@ public class Drivetrain extends SubsystemBase {
     // Creates and pushes Field2d to SmartDashboard.
     SmartDashboard.putData(m_field2d);
 
-    m_swerveDrivetrainOdometry = new SwerveDrivePoseEstimator(
+    m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getPositions(), 
@@ -264,7 +264,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d updateOdometry() {
 
-    m_swerveDrivetrainOdometry.update(getHeading(), getPositions());
+    m_odometry.update(getHeading(), getPositions());
 
     Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
 
@@ -272,13 +272,13 @@ public class Drivetrain extends SubsystemBase {
       
       if(ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
 
-        m_swerveDrivetrainOdometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
+        m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
 
       }
       
     }
 
-    return m_swerveDrivetrainOdometry.getEstimatedPosition();
+    return m_odometry.getEstimatedPosition();
 
   }
 
@@ -290,7 +290,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d getPose() {
 
-    return m_swerveDrivetrainOdometry.getEstimatedPosition();
+    return m_odometry.getEstimatedPosition();
 
   }
 
@@ -321,7 +321,7 @@ public class Drivetrain extends SubsystemBase {
 
   public boolean atAllianceWing() {
     Alliance alliance = DriverStation.getAlliance().get();
-    double x = m_swerveDrivetrainOdometry.getEstimatedPosition().getX();
+    double x = m_odometry.getEstimatedPosition().getX();
 
     if (alliance == Alliance.Blue) {
       return x < 5.87248;
@@ -447,7 +447,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d position) {
 
-    m_swerveDrivetrainOdometry.resetPosition(getHeading(), getPositions(), position);
+    m_odometry.resetPosition(getHeading(), getPositions(), position);
 
   }
 
@@ -493,15 +493,15 @@ public class Drivetrain extends SubsystemBase {
 
     return RobotBase.isReal()? 
     Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
-      MathUtil.inputModulus(-navXGyro.getYaw(), 0 , 360) 
-      : MathUtil.inputModulus(navXGyro.getYaw(), 0, 360)) 
+      MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
+      : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360)) 
     : simHeading;
 
   }
 
   public Rotation2d getRotationalVelocity() {
 
-    return Rotation2d.fromDegrees(navXGyro.getRate());
+    return Rotation2d.fromDegrees(m_gyro.getRate());
 
   }
 
@@ -517,7 +517,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getPitch() {
 
-    return navXGyro.getPitch();
+    return m_gyro.getPitch();
 
   }
 
@@ -530,7 +530,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getRoll() {
 
-    return navXGyro.getRoll();
+    return m_gyro.getRoll();
 
   }
 
@@ -539,7 +539,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetHeading() {
 
-    navXGyro.reset();
+    m_gyro.reset();
 
   }
 
