@@ -34,6 +34,19 @@ import frc.slicelibs.util.config.SwerveModuleConstants;
  */
 public final class Constants {
 
+  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+
+  public static enum Mode {
+    /** Running on a real robot. */
+    REAL,
+
+    /** Running a physics simulator. */
+    SIM,
+
+    /** Replaying from a log file. */
+    REPLAY
+  }
+
   public final class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
@@ -62,10 +75,10 @@ public final class Constants {
     public static final double ANGLE_GEAR_RATIO = ((150.0 / 7.0) / 1.0); // (150/7):1
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
-        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+        new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
+        new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Front right module
+        new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0), // Back right module
+        new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0)); // Back left module
 
     /* Swerve Voltage Compensation */
     public static final double MAX_VOLTAGE = 12.0;
@@ -161,18 +174,8 @@ public final class Constants {
           CANCODER_ID, ANGLE_OFFSET);
     }
 
-    /* Back Left Module - Module 1 */
+    /* Front Right Module - Module 1 */
     public final class Mod1 {
-      public static final int DRIVE_MOTOR_ID = 1;
-      public static final int ANGLE_MOTOR_ID = 5;
-      public static final int CANCODER_ID = 22;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(316.32);
-      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          CANCODER_ID, ANGLE_OFFSET);
-    }
-
-    /* Front Right Module - Module 2 */
-    public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int CANCODER_ID = 20;
@@ -181,12 +184,22 @@ public final class Constants {
           CANCODER_ID, ANGLE_OFFSET);
     }
 
-    /* Back Right Module - Module 3 */
-    public final class Mod3 {
+    /* Back Right Module - Module 2 */
+    public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int CANCODER_ID = 23;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.08);
+      public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
+          CANCODER_ID, ANGLE_OFFSET);
+    }
+
+    /* Back Left Module - Module 3 */
+    public final class Mod3 {
+      public static final int DRIVE_MOTOR_ID = 1;
+      public static final int ANGLE_MOTOR_ID = 5;
+      public static final int CANCODER_ID = 22;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(316.32);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }

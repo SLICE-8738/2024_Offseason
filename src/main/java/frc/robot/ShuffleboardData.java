@@ -40,16 +40,16 @@ public class ShuffleboardData {
             modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getStates()[0].speedMetersPerSecond).
             withPosition(0, 0).
             withSize(2, 1);
-            //Displays the current velocity in meters per second of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getStates()[1].speedMetersPerSecond).
+            //Displays the current velocity in meters per second of the right front swerve module on Shuffleboard
+            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getStates()[1].speedMetersPerSecond).
             withPosition(0, 3).
             withSize(2, 1);
-            //Displays the current velocity in meters per second of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getStates()[2].speedMetersPerSecond).
+            //Displays the current velocity in meters per second of the right back swerve module on Shuffleboard
+            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getStates()[2].speedMetersPerSecond).
             withPosition(7, 0).
             withSize(2, 1);
-            //Displays the current velocity in meters per second of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getStates()[3].speedMetersPerSecond).
+            //Displays the current velocity in meters per second of the left back swerve module on Shuffleboard
+            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getStates()[3].speedMetersPerSecond).
             withPosition(7, 3).
             withSize(2, 1);
         
@@ -82,16 +82,16 @@ public class ShuffleboardData {
             modulesTab.addDouble("Left Front Integrated Angle", () -> drivetrain.getStates()[0].angle.getDegrees()).
             withPosition(2, 0).
             withSize(2, 1);
-            //Displays the current integrated encoder angle in degrees of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getStates()[1].angle.getDegrees()).
+            //Displays the current integrated encoder angle in degrees of the right front swerve module on Shuffleboard
+            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getStates()[1].angle.getDegrees()).
             withPosition(2, 3).
             withSize(2, 1);
-            //Displays the current integrated encoder angle in degrees of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getStates()[2].angle.getDegrees()).
+            //Displays the current integrated encoder angle in degrees of the right back swerve module on Shuffleboard
+            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getStates()[2].angle.getDegrees()).
             withPosition(5, 0).
             withSize(2, 1);
-            //Displays the current integrated encoder angle in degrees of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getStates()[3].angle.getDegrees()).
+            //Displays the current integrated encoder angle in degrees of the left back swerve module on Shuffleboard
+            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getStates()[3].angle.getDegrees()).
             withPosition(5, 3).
             withSize(2, 1);
         

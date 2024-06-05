@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
@@ -25,11 +24,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.Voltage;
 
 import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.SignalLogger;
 
@@ -50,8 +49,6 @@ public class Drivetrain extends SubsystemBase {
   public double speedPercent;
 
   private Rotation2d simHeading = new Rotation2d();
-
-  public final SendableChooser<SwerveModule> testModuleChooser = new SendableChooser<SwerveModule>();
 
   public double maxLinearVelocity = 4.5;
   public double maxAngularVelocity = 7;
@@ -93,12 +90,6 @@ public class Drivetrain extends SubsystemBase {
 
     PathPlannerLogging.setLogActivePathCallback(this::setField2d);
 
-    testModuleChooser.setDefaultOption("Left Front", swerveMods[0]);
-
-    testModuleChooser.addOption("Left Back", swerveMods[1]);
-    testModuleChooser.addOption("Right Front", swerveMods[2]);
-    testModuleChooser.addOption("Right Back", swerveMods[3]);
-
     sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
       (volts) -> {
         for(SwerveModule mod : swerveMods) {
@@ -125,11 +116,9 @@ public class Drivetrain extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
 
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setSimulationPosition();
-
-    }
+    Logger.recordOutput("Position", getPose());
+    Logger.recordOutput("Actual Module States", getStates());
+    Logger.recordOutput("Target Module States", getTargetStates());
 
   }
 
@@ -218,29 +207,35 @@ public class Drivetrain extends SubsystemBase {
    */
   public void swerveDrive(Transform2d transform, boolean isOpenLoop, boolean isFieldRelative) {
 
-    setModuleStates(toModuleStates(transform, isFieldRelative), isOpenLoop);
+    Rotation2d rotationWithOffset = getHeading().minus(fieldOrientedOffset);
+    if (rotationWithOffset.getDegrees() > 360) {
+      rotationWithOffset.minus(Rotation2d.fromDegrees(360));
+    }
+    if (rotationWithOffset.getDegrees() < 0) {
+      rotationWithOffset.plus(Rotation2d.fromDegrees(360));
+    }
 
-    simHeading = simHeading.plus(transform.getRotation().times(0.02));
+    SwerveModuleState[] states = Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(
+        isFieldRelative
+            ? ChassisSpeeds.discretize(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                  transform.getX() * speedPercent,
+                  transform.getY() * speedPercent,
+                  transform.getRotation().getRadians() * speedPercent,
+                  rotationWithOffset),
+                0.02)
+            : ChassisSpeeds.discretize(
+                new ChassisSpeeds(
+                  transform.getX() * speedPercent, 
+                  transform.getY() * speedPercent,
+                  transform.getRotation().getRadians() * speedPercent),
+                0.02));
 
-  }
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
-  /**
-   * Runs a single module with the corresponding motor IDs to the given module number, 
-   * using the state generated for the module selected on the Test Module sendable chooser.
-   * 
-   * @param transform A Transform2d object representing the desired
-   *                  field-relative velocities in meters/second that the
-   *                  robot would move at along the X and Y axes of the field, 
-   *                  as well as the desired velocity in radians/second that 
-   *                  the robot would rotate at.
-   * 
-   * @param idModuleNumber The module whose motor IDs should be run.
-   */
-  public void testSelectedModule(Transform2d transform, int idModuleNumber) {
+    setModuleStates(states, isOpenLoop);
 
-    SwerveModuleState[] states = toModuleStates(transform, true);
-
-    swerveMods[idModuleNumber].setDesiredState(states[testModuleChooser.getSelected().moduleNumber], false);
+    simHeading = simHeading.plus(transform.getRotation().times(-0.02));
 
   }
 
@@ -499,6 +494,9 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  /**
+   * @return The current rotational velocity of the robot as a Rotation2d
+   */
   public Rotation2d getRotationalVelocity() {
 
     return Rotation2d.fromDegrees(m_gyro.getRate());
@@ -540,38 +538,6 @@ public class Drivetrain extends SubsystemBase {
   public void resetHeading() {
 
     m_gyro.reset();
-
-  }
-
-  public SwerveModuleState[] toModuleStates(Transform2d transform, boolean isFieldRelative) {
-
-    Rotation2d rotationWithOffset = getHeading().minus(fieldOrientedOffset);
-    if (rotationWithOffset.getDegrees() > 360) {
-      rotationWithOffset.minus(Rotation2d.fromDegrees(360));
-    }
-    if (rotationWithOffset.getDegrees() < 0) {
-      rotationWithOffset.plus(Rotation2d.fromDegrees(360));
-    }
-
-    SwerveModuleState[] states = Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(
-        isFieldRelative
-            ? ChassisSpeeds.discretize(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                  transform.getX() * speedPercent,
-                  transform.getY() * speedPercent,
-                  transform.getRotation().getRadians() * speedPercent,
-                  rotationWithOffset),
-                0.02)
-            : ChassisSpeeds.discretize(
-                new ChassisSpeeds(
-                  transform.getX() * speedPercent, 
-                  transform.getY() * speedPercent,
-                  transform.getRotation().getRadians() * speedPercent),
-                0.02));
-
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
-
-    return states;
 
   }
 
@@ -647,23 +613,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double[] driveOutputCurents(){
-    double[] currents = new double[]{swerveMods[0].getDriveOutputCurrent(),swerveMods[1].getDriveOutputCurrent(),swerveMods[2].getDriveOutputCurrent(),swerveMods[3].getDriveOutputCurrent()};
-    return currents;
-  }
 
-  public void swivelMotors(){
-    
-  }
-    
-  public void setDriveVolts(Measure<Voltage> volts) {
+    double[] currents = new double[4];
 
-    for(SwerveModule mod : swerveMods) {
+    for (SwerveModule mod : swerveMods) {
 
-      mod.setVolts(volts.magnitude(), 0);
+      currents[mod.moduleNumber] = mod.getDriveOutputCurrent();
 
     }
 
+    return currents;
   }
+
+  public void swivelMotors() {}
 
   /**
    * Sets all drivetrain swerve modules to states with speeds of 0 and the current

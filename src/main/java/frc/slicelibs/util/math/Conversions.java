@@ -115,4 +115,13 @@ public class Conversions {
         double motorRotations = wheelRotations * gearRatio;
         return motorRotations;
     }
+
+    /**
+     * @param mechRPM Mechanism Velocity: (in Rotations per Minute)
+     * @param circumference Wheel Circumference: (in Meters)
+     * @return Mechanism Velocity: (in Meters per Second)
+     */
+    public static double RPMToMPS(double mechRPM, double circumference) {
+        return mechRPM * circumference / 60;
+    }
 }
