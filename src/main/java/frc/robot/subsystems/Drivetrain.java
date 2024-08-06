@@ -116,7 +116,7 @@ public class Drivetrain extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
 
-    Logger.recordOutput("Position", getPose());
+    Logger.recordOutput("Field Position", getPose());
     Logger.recordOutput("Actual Module States", getStates());
     Logger.recordOutput("Target Module States", getTargetStates());
 
@@ -411,7 +411,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      angles[mod.moduleNumber] = mod.getCANcoder().getDegrees();
+      angles[mod.moduleNumber] = mod.getCANcoderAngle().getDegrees();
 
     }
 

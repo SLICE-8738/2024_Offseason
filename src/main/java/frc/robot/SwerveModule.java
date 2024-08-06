@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -77,7 +78,7 @@ public class SwerveModule {
         lastAngle = getState().angle;
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
+    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
         desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
         
@@ -99,7 +100,7 @@ public class SwerveModule {
         angleMotor.setVoltage(angleVolts);
     }
 
-    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
+    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (RobotBase.isReal()) {
             if (isOpenLoop) {
                 driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
@@ -113,13 +114,13 @@ public class SwerveModule {
         }
         else {
             driveMotorSim.setInputVoltage(driveFeedForward.calculate(desiredState.speedMetersPerSecond) + 
-            driveControllerSim.calculate(Conversions.RPMToTalon(driveMotorSim.getAngularVelocityRPM(), Constants.kDrivetrain.DRIVE_GEAR_RATIO), desiredState.speedMetersPerSecond));
+            driveControllerSim.calculate(Conversions.RPMToTalon(driveMotorSim.getAngularVelocityRPM(), Constants.kDrivetrain.DRIVE_GEAR_RATIO), Conversions.MPSToTalon(desiredState.speedMetersPerSecond, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO)));
             driveMotorSim.update(0.02);
         }
     }
     
 
-    private void setAngle(SwerveModuleState desiredState){
+    private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
         Rotation2d angle =
             (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.kDrivetrain.MAX_LINEAR_VELOCITY * 0.01))
@@ -136,29 +137,29 @@ public class SwerveModule {
         lastAngle = angle;
     }
 
-    private Rotation2d getAngle(){
+    private Rotation2d getIntegratedAngle() {
         return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     }
 
-    public Rotation2d getCANcoder(){
+    public Rotation2d getCANcoderAngle() {
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
     }
 
-    private Rotation2d waitForCANcoder(){
+    private Rotation2d waitForCANcoder() {
         /* Wait for up to 250ms for a new CANcoder position */
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue());
     }
 
-    public void resetToAbsolute(){
+    public void resetToAbsolute() {
         double absolutePosition = waitForCANcoder().getDegrees() - angleOffset.getDegrees();
         integratedAngleEncoder.setPosition(absolutePosition);
     }
 
-    private void configAngleEncoder(){    
+    private void configAngleEncoder() {    
         angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
     }
 
-    private void configAngleMotor(){
+    private void configAngleMotor() {
         integratedAngleEncoder.setPositionConversionFactor(Constants.kDrivetrain.ANGLE_POSITION_CONVERSION_FACTOR_DEGREES);
         angleController.setP(Constants.kDrivetrain.ANGLE_KP);
         angleController.setI(Constants.kDrivetrain.ANGLE_KI);
@@ -167,7 +168,7 @@ public class SwerveModule {
         resetToAbsolute();
     }
 
-    private void configDriveMotor(){
+    private void configDriveMotor() {
         driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         driveMotor.getConfigurator().setPosition(0);
         driveMotor.getVelocity().setUpdateFrequency(Constants.kDrivetrain.DRIVE_VELOCITY_FRAME_RATE_HZ);
@@ -196,11 +197,11 @@ public class SwerveModule {
         angleController.setFF(kFF);
     }
 
-    public SwerveModuleState getState(){
+    public SwerveModuleState getState() {
         if (RobotBase.isReal()) {
             return new SwerveModuleState(
                 Conversions.talonToMPS(driveMotor.getVelocity().getValue(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
-                getAngle()
+                getIntegratedAngle()
             );
         }
         else {
@@ -214,11 +215,11 @@ public class SwerveModule {
         return targetState;
     }
 
-    public SwerveModulePosition getPosition(){
+    public SwerveModulePosition getPosition() {
         if (RobotBase.isReal()) {
             return new SwerveModulePosition(
                 Conversions.talonToMeters(driveMotor.getPosition().getValue(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
-                getAngle()
+                getIntegratedAngle()
             );
         }
         else {
@@ -228,7 +229,7 @@ public class SwerveModule {
     }
 
     //returns the output current of driveMotor 
-    public double getDriveOutputCurrent(){
+    public double getDriveOutputCurrent() {
        return driveMotor.getTorqueCurrent().getValueAsDouble();
     }
 }
