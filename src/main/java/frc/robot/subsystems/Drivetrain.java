@@ -40,6 +40,13 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule[] swerveMods;
 
+  private SwerveModulePosition[] lastModulePositions = // For delta tracking
+  new SwerveModulePosition[] {
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition()
+  };
   private final SwerveDrivePoseEstimator m_odometry;
   private final AHRS m_gyro;
   public final Field2d m_field2d;
@@ -79,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
-      getPositions(), 
+      getModulePositions(), 
       ShooterLimelight.getTable().getLastBotPoseBlue(),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
@@ -235,8 +242,6 @@ public class Drivetrain extends SubsystemBase {
 
     setModuleStates(states, isOpenLoop);
 
-    simHeading = simHeading.plus(transform.getRotation().times(-0.02));
-
   }
 
   /**
@@ -259,7 +264,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public Pose2d updateOdometry() {
 
-    m_odometry.update(getHeading(), getPositions());
+    m_odometry.update(getHeading(), getModulePositions());
 
     Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
 
@@ -344,7 +349,7 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current positions of all drivetrain swerve modules.
    */
-  public SwerveModulePosition[] getPositions() {
+  public SwerveModulePosition[] getModulePositions() {
 
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
 
@@ -442,7 +447,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d position) {
 
-    m_odometry.resetPosition(getHeading(), getPositions(), position);
+    m_odometry.resetPosition(getHeading(), getModulePositions(), position);
 
   }
 
@@ -486,11 +491,30 @@ public class Drivetrain extends SubsystemBase {
    */
   public Rotation2d getHeading() {
 
-    return RobotBase.isReal()? 
-    Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
-      MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
-      : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360)) 
-    : simHeading;
+    if (RobotBase.isReal()) {
+      return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
+        MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
+          : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360));
+    }
+    else {
+      SwerveModulePosition[] modulePositions = getModulePositions();
+      SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
+
+      for (SwerveModule mod : swerveMods) {
+        
+        moduleDeltas[mod.moduleNumber] = 
+          new SwerveModulePosition(
+            modulePositions[mod.moduleNumber].distanceMeters -
+              lastModulePositions[mod.moduleNumber].distanceMeters,
+            modulePositions[mod.moduleNumber].angle
+          );
+        lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
+
+      }
+
+      simHeading = simHeading.plus(new Rotation2d(Constants.kDrivetrain.kSwerveKinematics.toTwist2d(moduleDeltas).dtheta));
+      return simHeading;
+    }
 
   }
 
