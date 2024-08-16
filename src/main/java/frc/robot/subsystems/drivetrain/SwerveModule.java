@@ -1,4 +1,7 @@
-package frc.robot;
+package frc.robot.subsystems.drivetrain;
+
+import java.util.OptionalDouble;
+import java.util.Queue;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -9,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -23,6 +27,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
+import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -53,14 +59,26 @@ public class SwerveModule {
     private final VoltageOut driveVoltage = new VoltageOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
+    private final Queue<Double> timestampQueue;
+    private final Queue<Double> drivePositionQueue;
+    private final Queue<Double> anglePositionQueue;
+
+    private SwerveModulePosition[] odometryPositions;
+    private double[] odometryTimestamps;
+    private double[] odometryDrivePositions;
+    private Rotation2d[] odometryAnglePositions;
+
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
+
+        timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
         driveMotorSim = new DCMotorSim(DCMotor.getKrakenX60(1), Constants.kDrivetrain.DRIVE_GEAR_RATIO, 0.032); // This moment of inertia is a rough estimate for now
         driveControllerSim = new PIDController(Constants.kDrivetrain.DRIVE_KP, Constants.kDrivetrain.DRIVE_KI, Constants.kDrivetrain.DRIVE_KD);
+        drivePositionQueue = PhoenixOdometryThread.getInstance().registerSignal(driveMotor, driveMotor.getPosition());
         configDriveMotor();
         
         /* Angle Encoder Config */
@@ -73,9 +91,36 @@ public class SwerveModule {
         integratedAngleEncoder = angleMotor.getEncoder();
         angleController = angleMotor.getPIDController();
         angleControllerSim = new PIDController(Constants.kDrivetrain.ANGLE_KP, Constants.kDrivetrain.ANGLE_KI, Constants.kDrivetrain.ANGLE_KD);
+        anglePositionQueue = SparkMaxOdometryThread.getInstance().registerSignal(() -> {
+                  double value = integratedAngleEncoder.getPosition();
+                  if (angleMotor.getLastError() == REVLibError.kOk) {
+                    return OptionalDouble.of(value);
+                  } else {
+                    return OptionalDouble.empty();
+                  }});
         configAngleMotor();
         
         lastAngle = getState().angle;
+    }
+
+    public void periodic() {
+        odometryTimestamps = timestampQueue.stream().mapToDouble((Double value) -> value).toArray();
+        odometryDrivePositions = drivePositionQueue.stream()
+            .mapToDouble((Double value) -> Conversions.talonToMeters(value, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO))
+            .toArray();
+        odometryAnglePositions = anglePositionQueue.stream()
+            .map((Double value) -> Rotation2d.fromDegrees(value))
+            .toArray(Rotation2d[]::new);
+        odometryPositions = new SwerveModulePosition[odometryTimestamps.length];
+        timestampQueue.clear();
+        drivePositionQueue.clear();
+        anglePositionQueue.clear();
+        System.out.println("Timestamps: " + odometryTimestamps.length);
+        System.out.println("Drive positions: " + odometryDrivePositions.length);
+        System.out.println("Angle positions: " + odometryAnglePositions.length);
+        for (int i = 0; i < odometryTimestamps.length; i++) {
+            odometryPositions[i] = new SwerveModulePosition(odometryDrivePositions[i], odometryAnglePositions[i]);
+        }
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -226,6 +271,14 @@ public class SwerveModule {
             return new SwerveModulePosition(driveMotorSim.getAngularPositionRotations() * Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, 
                 Rotation2d.fromRotations(angleMotorSim.getAngularPositionRotations()));
         }
+    }
+
+    public SwerveModulePosition[] getOdometryPositions() {
+        return odometryPositions;
+    }
+
+    public double[] getOdometryTimestamps() {
+        return odometryTimestamps;
     }
 
     //returns the output current of driveMotor 

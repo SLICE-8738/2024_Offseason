@@ -6,7 +6,7 @@ package frc.robot.commands.Drivetrain;
 
 import frc.robot.Button;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
 import edu.wpi.first.math.controller.PIDController;

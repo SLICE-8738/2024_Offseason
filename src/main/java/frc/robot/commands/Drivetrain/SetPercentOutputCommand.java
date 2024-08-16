@@ -5,7 +5,7 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** 
  * Directly sets the drive and angle motors of all drivetrain swerve modules

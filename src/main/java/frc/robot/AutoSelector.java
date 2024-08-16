@@ -16,10 +16,10 @@ import frc.robot.commands.Shooter.EjectNoteCommand;
 import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.SpinFlywheelsCommand;
 import frc.robot.commands.Shooter.SubwooferShotCommand;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 
 import java.util.Optional;
 

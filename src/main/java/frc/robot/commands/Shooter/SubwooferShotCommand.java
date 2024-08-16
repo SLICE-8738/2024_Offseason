@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 //import frc.robot.commands.Drivetrain.AlignWithSpeakerCommand;
 import frc.robot.commands.Indexer.NudgeIndexer;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLimelight;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /**
  * Prepares the shooter for shooting, aligns the robot with the speaker (while maintaining driver control of translation) and then fires when everything is ready

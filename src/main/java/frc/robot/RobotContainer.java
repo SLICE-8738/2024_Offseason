@@ -25,6 +25,7 @@ import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.testing.routines.DrivetrainTest;
 import frc.robot.testing.routines.FlywheelTest;
 import frc.robot.testing.routines.IntakeTest;
@@ -81,7 +82,8 @@ public class RobotContainer {
   // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
   // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
   public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
-  false, true);
+    false, true);
+  public final AlignWithAmpCommand m_alignAmp = new AlignWithAmpCommand(m_drivetrain, driverController, false, true);
 
   /* Shooter */
   // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
@@ -89,7 +91,6 @@ public class RobotContainer {
   public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
-  public final AlignWithAmpCommand m_alignAmp = new AlignWithAmpCommand(m_drivetrain, driverController, false, true);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);

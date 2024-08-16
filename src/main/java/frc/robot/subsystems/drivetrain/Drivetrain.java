@@ -2,9 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
+import frc.robot.subsystems.ShooterLimelight;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +27,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 
-import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -40,9 +44,18 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule[] swerveMods;
 
+  private SwerveModulePosition[] lastModulePositions = new SwerveModulePosition[] {
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition(),
+    new SwerveModulePosition()
+  };
   private final SwerveDrivePoseEstimator m_odometry;
   private final AHRS m_gyro;
   public final Field2d m_field2d;
+  //private static final Lock phoenixOdometryLock = new ReentrantLock();
+  //private static final Lock sparkMaxOdometryLock = new ReentrantLock();
+  private static final CyclicBarrier threadBarrier = new CyclicBarrier(2);
 
   private Rotation2d fieldOrientedOffset;
 
@@ -65,6 +78,9 @@ public class Drivetrain extends SubsystemBase {
       new SwerveModule(3, Constants.kDrivetrain.Mod3.CONSTANTS)
     };
 
+    PhoenixOdometryThread.getInstance().start();
+    SparkMaxOdometryThread.getInstance().start();
+
     m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
 
     Timer.delay(1.0);
@@ -79,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
     m_odometry = new SwerveDrivePoseEstimator(
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
-      getPositions(), 
+      getModulePositions(), 
       ShooterLimelight.getTable().getLastBotPoseBlue(),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
@@ -88,7 +104,10 @@ public class Drivetrain extends SubsystemBase {
 
     speedPercent = 1;
 
-    PathPlannerLogging.setLogActivePathCallback(this::setField2d);
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      // Pushes the trajectory to Field2d.
+      m_field2d.getObject("Trajectory").setPoses(poses);
+    });
 
     sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
       (volts) -> {
@@ -105,6 +124,18 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    //PhoenixOdometryThread.getInstance().odometryLock.lock();
+    //SparkMaxOdometryThread.getInstance().odometryLock.lock();
+
+    for (SwerveModule mod : swerveMods) {
+
+      mod.periodic();
+
+    }
+
+    //PhoenixOdometryThread.getInstance().odometryLock.unlock();
+    //SparkMaxOdometryThread.getInstance().odometryLock.unlock();
 
     updateOdometry();
 
@@ -235,20 +266,6 @@ public class Drivetrain extends SubsystemBase {
 
     setModuleStates(states, isOpenLoop);
 
-    simHeading = simHeading.plus(transform.getRotation().times(-0.02));
-
-  }
-
-  /**
-   * Sends a given list of poses to the Field2d trajectory object.
-   * 
-   * @param poses The desired poses to send to the Field2d trajectory object.
-   */
-  public void setField2d(List<Pose2d> poses) {
-
-    // Pushes the trajectory to Field2d.
-    m_field2d.getObject("Trajectory").setPoses(poses);
-
   }
 
   /**
@@ -257,15 +274,22 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The new updated pose of the robot.
    */
-  public Pose2d updateOdometry() {
+  public void updateOdometry() {
 
-    m_odometry.update(getHeading(), getPositions());
+    double[] sampleTimestamps = swerveMods[0].getOdometryTimestamps();
+    
+    System.out.println("Drivetrain class timestamps: "  + sampleTimestamps.length);
+    for (int i = 0; i < sampleTimestamps.length; i++) {
+
+      m_odometry.updateWithTime(sampleTimestamps[i], getHeading(), getOdometryPositions(i));
+
+    }
 
     Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
 
-    if(visionPose != null && ShooterLimelight.getTable().getTargetDetected()) {
+    if (visionPose != null && ShooterLimelight.getTable().getTargetDetected()) {
       
-      if(ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
+      if (ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
 
         m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
 
@@ -273,7 +297,59 @@ public class Drivetrain extends SubsystemBase {
       
     }
 
-    return m_odometry.getEstimatedPosition();
+  }
+
+  /**
+   * Prevents resources being used by the Phoenix odometry
+   * thread from being used in any other threads.
+   */
+  /*public static void lockPhoenixOdometry() {
+
+    phoenixOdometryLock.lock();
+
+  }*/
+
+  /**
+   * Allows resources being used by the Phoenix odometry
+   * thread to be used in any other threads.
+   */
+  /*public static void unlockPhoenixOdometry() {
+
+    phoenixOdometryLock.unlock();
+
+  }*/
+
+    /**
+   * Locks the running of odometry code to the thread in which
+   * this is called.
+   */
+  /*public static void lockSparkMaxOdometry() {
+
+    sparkMaxOdometryLock.lock();
+
+  }*/
+
+  /**
+   * Allows odometry code to be run in any thread.
+   */
+  /*public static void unlockSparkMaxOdometry() {
+
+    sparkMaxOdometryLock.unlock();
+
+  }*/
+
+  /**
+   * Waits for the other of the two odometry threads to get to a
+   * common barrier point.
+   */
+  public static void awaitThread() {
+
+    try {
+      threadBarrier.await();
+    }
+    catch (InterruptedException | BrokenBarrierException e) {
+      Thread.currentThread().interrupt();
+    }
 
   }
 
@@ -344,13 +420,29 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current positions of all drivetrain swerve modules.
    */
-  public SwerveModulePosition[] getPositions() {
+  public SwerveModulePosition[] getModulePositions() {
 
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
 
     for(SwerveModule mod : swerveMods) {
 
       positions[mod.moduleNumber] = mod.getPosition();
+
+    }
+
+    return positions;
+
+  }
+
+  public SwerveModulePosition[] getOdometryPositions(int sampleIndex) {
+
+
+    SwerveModulePosition[] positions = new SwerveModulePosition[4];
+
+    for (SwerveModule mod : swerveMods) {
+
+      System.out.println("Drivetrain class mod" + mod.moduleNumber + "timestamps: "  + mod.getOdometryPositions().length);
+      positions[mod.moduleNumber] = mod.getOdometryPositions()[sampleIndex];
 
     }
 
@@ -390,7 +482,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      targetStates[mod.moduleNumber] = mod.getTargetState();
+      targetStates[mod.moduleNumber] = (mod).getTargetState();
 
     }
 
@@ -442,7 +534,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d position) {
 
-    m_odometry.resetPosition(getHeading(), getPositions(), position);
+    m_odometry.resetPosition(getHeading(), getModulePositions(), position);
 
   }
 
@@ -486,11 +578,30 @@ public class Drivetrain extends SubsystemBase {
    */
   public Rotation2d getHeading() {
 
-    return RobotBase.isReal()? 
-    Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
-      MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
-      : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360)) 
-    : simHeading;
+    if (RobotBase.isReal()) {
+      return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
+        MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
+          : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360));
+    }
+    else {
+      SwerveModulePosition[] modulePositions = getModulePositions();
+      SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
+
+      for (SwerveModule mod : swerveMods) {
+        
+        moduleDeltas[mod.moduleNumber] = 
+          new SwerveModulePosition(
+            modulePositions[mod.moduleNumber].distanceMeters -
+              lastModulePositions[mod.moduleNumber].distanceMeters,
+            modulePositions[mod.moduleNumber].angle
+          );
+        lastModulePositions[mod.moduleNumber] = modulePositions[mod.moduleNumber];
+
+      }
+
+      simHeading = simHeading.plus(new Rotation2d(Constants.kDrivetrain.kSwerveKinematics.toTwist2d(moduleDeltas).dtheta));
+      return simHeading;
+    }
 
   }
 
@@ -623,22 +734,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     return currents;
-  }
-
-  public void swivelMotors() {}
-
-  /**
-   * Sets all drivetrain swerve modules to states with speeds of 0 and the current
-   * angles of the modules.
-   */
-  public void stopDrive() {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setDesiredState(new SwerveModuleState(), false);
-
-    }
-
   }
 
   public Command getSysIdDriveQuasistatic(Direction direction) {
