@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
-    switch (Constants.ADVANTAGE_KIT_MODE) {
+    switch (Constants.CURRENT_MODE) {
       case REAL: 
         Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables

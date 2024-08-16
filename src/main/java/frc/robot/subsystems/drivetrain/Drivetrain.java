@@ -53,8 +53,7 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_odometry;
   private final AHRS m_gyro;
   public final Field2d m_field2d;
-  //private static final Lock phoenixOdometryLock = new ReentrantLock();
-  //private static final Lock sparkMaxOdometryLock = new ReentrantLock();
+  private static final Lock odometryLock = new ReentrantLock();
   private static final CyclicBarrier threadBarrier = new CyclicBarrier(2);
 
   private Rotation2d fieldOrientedOffset;
@@ -69,22 +68,23 @@ public class Drivetrain extends SubsystemBase {
   private final SysIdRoutine sysIdDriveRoutine;
 
   /** Creates a new Drivetrain. */
-  public Drivetrain() {
+  public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
 
     swerveMods = new SwerveModule[] {
-      new SwerveModule(0, Constants.kDrivetrain.Mod0.CONSTANTS),
-      new SwerveModule(1, Constants.kDrivetrain.Mod1.CONSTANTS),
-      new SwerveModule(2, Constants.kDrivetrain.Mod2.CONSTANTS),
-      new SwerveModule(3, Constants.kDrivetrain.Mod3.CONSTANTS)
+      new SwerveModule(mod0IO, 0),
+      new SwerveModule(mod1IO, 1),
+      new SwerveModule(mod2IO, 2),
+      new SwerveModule(mod3IO, 3)
     };
 
-    PhoenixOdometryThread.getInstance().start();
-    SparkMaxOdometryThread.getInstance().start();
+    OdometryThread.getInstance().start();
+    //PhoenixOdometryThread.getInstance().start();
+    //SparkMaxOdometryThread.getInstance().start();
 
     m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
 
     Timer.delay(1.0);
-    resetModulesToAbsolute();
+    //resetModulesToAbsolute();
     resetHeading();
 
     m_field2d = new Field2d();
@@ -112,7 +112,7 @@ public class Drivetrain extends SubsystemBase {
     sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
       (volts) -> {
         for(SwerveModule mod : swerveMods) {
-          mod.setVolts(volts.in(Units.Volts), 0);
+          mod.runCharacterization(volts.in(Units.Volts));
         }
       },
       null,
@@ -125,17 +125,26 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+
+    lockOdometry();
     //PhoenixOdometryThread.getInstance().odometryLock.lock();
     //SparkMaxOdometryThread.getInstance().odometryLock.lock();
+
+    for (SwerveModule mod : swerveMods) {
+
+      mod.updateInputs();
+
+    }
+
+    unlockOdometry();
+    //PhoenixOdometryThread.getInstance().odometryLock.unlock();
+    //SparkMaxOdometryThread.getInstance().odometryLock.unlock();
 
     for (SwerveModule mod : swerveMods) {
 
       mod.periodic();
 
     }
-
-    //PhoenixOdometryThread.getInstance().odometryLock.unlock();
-    //SparkMaxOdometryThread.getInstance().odometryLock.unlock();
 
     updateOdometry();
 
@@ -165,7 +174,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setDriveIdleMode(enableBrakeMode);
+      mod.setDriveBrakeMode(enableBrakeMode);
 
     }
 
@@ -183,7 +192,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setAngleIdleMode(enableBrakeMode);
+      mod.setAngleBrakeMode(enableBrakeMode);
 
     }
 
@@ -278,7 +287,6 @@ public class Drivetrain extends SubsystemBase {
 
     double[] sampleTimestamps = swerveMods[0].getOdometryTimestamps();
     
-    System.out.println("Drivetrain class timestamps: "  + sampleTimestamps.length);
     for (int i = 0; i < sampleTimestamps.length; i++) {
 
       m_odometry.updateWithTime(sampleTimestamps[i], getHeading(), getOdometryPositions(i));
@@ -300,43 +308,24 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Prevents resources being used by the Phoenix odometry
-   * thread from being used in any other threads.
+   * Allows resources being used by the thread in which
+   * this is called to only be used in that thread. 
    */
-  /*public static void lockPhoenixOdometry() {
+  public static void lockOdometry() {
 
-    phoenixOdometryLock.lock();
+    odometryLock.lock();
 
-  }*/
+  }
 
   /**
-   * Allows resources being used by the Phoenix odometry
-   * thread to be used in any other threads.
+   * Allows resources being used by the thread in which
+   * this is called to be used in any thread. 
    */
-  /*public static void unlockPhoenixOdometry() {
+  public static void unlockOdometry() {
 
-    phoenixOdometryLock.unlock();
+    odometryLock.unlock();
 
-  }*/
-
-    /**
-   * Locks the running of odometry code to the thread in which
-   * this is called.
-   */
-  /*public static void lockSparkMaxOdometry() {
-
-    sparkMaxOdometryLock.lock();
-
-  }*/
-
-  /**
-   * Allows odometry code to be run in any thread.
-   */
-  /*public static void unlockSparkMaxOdometry() {
-
-    sparkMaxOdometryLock.unlock();
-
-  }*/
+  }
 
   /**
    * Waits for the other of the two odometry threads to get to a
@@ -434,6 +423,14 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  /**
+   * Obtains and returns the current positions of all drivetrain swerve modules
+   * sampled in the odometry thread at the given sample index.
+   * 
+   * @param sampleIndex
+   * @return The current positions of all drivetrain swerve modules sampled
+   *         in the odometry thread.
+   */
   public SwerveModulePosition[] getOdometryPositions(int sampleIndex) {
 
 
@@ -441,7 +438,6 @@ public class Drivetrain extends SubsystemBase {
 
     for (SwerveModule mod : swerveMods) {
 
-      System.out.println("Drivetrain class mod" + mod.moduleNumber + "timestamps: "  + mod.getOdometryPositions().length);
       positions[mod.moduleNumber] = mod.getOdometryPositions()[sampleIndex];
 
     }
@@ -482,7 +478,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      targetStates[mod.moduleNumber] = (mod).getTargetState();
+      targetStates[mod.moduleNumber] = mod.getTargetState();
 
     }
 
@@ -517,7 +513,7 @@ public class Drivetrain extends SubsystemBase {
    * readings of the CANCoders with their offsets being taken
    * into account.
    */
-  public void resetModulesToAbsolute() {
+  /*public void resetModulesToAbsolute() {
 
     for(SwerveModule mod : swerveMods) {
 
@@ -525,7 +521,7 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-  }
+  }*/
 
   /**
    * Resets the position of the odometry object using a specified position.
@@ -697,7 +693,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setDesiredState(states[mod.moduleNumber], isOpenLoop);
+      mod.runSetpoint(states[mod.moduleNumber], isOpenLoop);
 
     }
 
@@ -705,8 +701,7 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Sets the drive and angle motors of all swerve modules to given drive and
-   * angle motor
-   * percent outputs.
+   * angle motor percent outputs.
    * 
    * @param drivePercentOutput The percent output between -1 and 1 to set all
    *                           drive motors to.
@@ -717,7 +712,7 @@ public class Drivetrain extends SubsystemBase {
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setPercentOutput(drivePercentOutput, anglePercentOutput);
+      mod.runDutyCycle(drivePercentOutput, anglePercentOutput);
 
     }
 

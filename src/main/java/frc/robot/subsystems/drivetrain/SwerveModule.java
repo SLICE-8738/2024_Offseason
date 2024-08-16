@@ -1,288 +1,216 @@
 package frc.robot.subsystems.drivetrain;
 
-import java.util.OptionalDouble;
-import java.util.Queue;
-
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.slicelibs.util.config.REVConfigs;
-import frc.slicelibs.util.config.SwerveModuleConstants;
-import frc.slicelibs.util.factories.SparkMaxFactory;
-import frc.slicelibs.util.math.Conversions;
 import frc.slicelibs.util.math.OnboardModuleState;
 
+import org.littletonrobotics.junction.Logger;
+
 public class SwerveModule {
-    public int moduleNumber;
-    private Rotation2d angleOffset;
-    private Rotation2d lastAngle;
-    private SwerveModuleState targetState = new SwerveModuleState();
 
-    private CANSparkMax angleMotor;
-    private TalonFX driveMotor;
-    private DCMotorSim driveMotorSim;
-    private DCMotorSim angleMotorSim;
-    private RelativeEncoder integratedAngleEncoder;
-    private CANcoder angleEncoder;
+  private final SwerveModuleIO io;
+  private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
+  public final int moduleNumber;
 
-    private final PIDController driveControllerSim;
-    private final PIDController angleControllerSim;
-    private final SparkPIDController angleController;
+  private final SimpleMotorFeedforward driveFeedforward;
+  private final PIDController driveFeedback;
+  private final PIDController angleFeedback;
+  private Rotation2d angleSetpoint = null; // Setpoint for closed loop control, null for open loop
+  private Double velocitySetpoint = null; // Setpoint for closed loop control, null for open loop
+  private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.kDrivetrain.DRIVE_KS, Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA);
+  private final boolean isReal;
 
-    /* Drive motor control requests */
-    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
-    private final VoltageOut driveVoltage = new VoltageOut(0);
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+  public SwerveModule(SwerveModuleIO io, int moduleNumber) {
+    this.io = io;
+    this.moduleNumber = moduleNumber;
 
-    private final Queue<Double> timestampQueue;
-    private final Queue<Double> drivePositionQueue;
-    private final Queue<Double> anglePositionQueue;
+    isReal = RobotBase.isReal();
 
-    private SwerveModulePosition[] odometryPositions;
-    private double[] odometryTimestamps;
-    private double[] odometryDrivePositions;
-    private Rotation2d[] odometryAnglePositions;
-
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
-        this.moduleNumber = moduleNumber;
-        this.angleOffset = moduleConstants.angleOffset;
-
-        timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
-
-        /* Drive Motor Config */
-        driveMotor = new TalonFX(moduleConstants.driveMotorID);
-        driveMotorSim = new DCMotorSim(DCMotor.getKrakenX60(1), Constants.kDrivetrain.DRIVE_GEAR_RATIO, 0.032); // This moment of inertia is a rough estimate for now
-        driveControllerSim = new PIDController(Constants.kDrivetrain.DRIVE_KP, Constants.kDrivetrain.DRIVE_KI, Constants.kDrivetrain.DRIVE_KD);
-        drivePositionQueue = PhoenixOdometryThread.getInstance().registerSignal(driveMotor, driveMotor.getPosition());
-        configDriveMotor();
-        
-        /* Angle Encoder Config */
-        angleEncoder = new CANcoder(moduleConstants.cancoderID);
-        configAngleEncoder();
-
-        /* Angle Motor Config */
-        angleMotor = SparkMaxFactory.createSparkMax(moduleConstants.angleMotorID, REVConfigs.angleSparkMaxConfig);
-        angleMotorSim = new DCMotorSim(DCMotor.getNEO(1), Constants.kDrivetrain.ANGLE_GEAR_RATIO, 0.004); // This moment of inertia is a rough estimate for now
-        integratedAngleEncoder = angleMotor.getEncoder();
-        angleController = angleMotor.getPIDController();
-        angleControllerSim = new PIDController(Constants.kDrivetrain.ANGLE_KP, Constants.kDrivetrain.ANGLE_KI, Constants.kDrivetrain.ANGLE_KD);
-        anglePositionQueue = SparkMaxOdometryThread.getInstance().registerSignal(() -> {
-                  double value = integratedAngleEncoder.getPosition();
-                  if (angleMotor.getLastError() == REVLibError.kOk) {
-                    return OptionalDouble.of(value);
-                  } else {
-                    return OptionalDouble.empty();
-                  }});
-        configAngleMotor();
-        
-        lastAngle = getState().angle;
+    // Switch constants based on mode (the physics simulator is treated as a
+    // separate robot with different tuning)
+    switch (Constants.CURRENT_MODE) {
+      case REAL:
+        driveFeedforward = new SimpleMotorFeedforward(
+          Constants.kDrivetrain.DRIVE_KS, Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA);
+        driveFeedback = new PIDController(0.0, 0.0, 0.0);
+        angleFeedback = new PIDController(0.0, 0.0, 0.0);
+        break;
+      case REPLAY:
+        driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
+        driveFeedback = new PIDController(0.05, 0.0, 0.0);
+        angleFeedback = new PIDController(7.0, 0.0, 0.0);
+        angleFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        break;
+      case SIM:
+        driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
+        driveFeedback = new PIDController(0.1, 0.0, 0.0);
+        angleFeedback = new PIDController(10.0, 0.0, 0.0);
+        angleFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        break;
+      default:
+        driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+        driveFeedback = new PIDController(0.0, 0.0, 0.0);
+        angleFeedback = new PIDController(0.0, 0.0, 0.0);
+        break;
     }
 
-    public void periodic() {
-        odometryTimestamps = timestampQueue.stream().mapToDouble((Double value) -> value).toArray();
-        odometryDrivePositions = drivePositionQueue.stream()
-            .mapToDouble((Double value) -> Conversions.talonToMeters(value, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO))
-            .toArray();
-        odometryAnglePositions = anglePositionQueue.stream()
-            .map((Double value) -> Rotation2d.fromDegrees(value))
-            .toArray(Rotation2d[]::new);
-        odometryPositions = new SwerveModulePosition[odometryTimestamps.length];
-        timestampQueue.clear();
-        drivePositionQueue.clear();
-        anglePositionQueue.clear();
-        System.out.println("Timestamps: " + odometryTimestamps.length);
-        System.out.println("Drive positions: " + odometryDrivePositions.length);
-        System.out.println("Angle positions: " + odometryAnglePositions.length);
-        for (int i = 0; i < odometryTimestamps.length; i++) {
-            odometryPositions[i] = new SwerveModulePosition(odometryDrivePositions[i], odometryAnglePositions[i]);
-        }
+  }
+
+  /**
+   * Update inputs without running the rest of the periodic logic. This is useful since these
+   * updates need to be properly thread-locked.
+   */
+  public void updateInputs() {
+    io.updateInputs(inputs);
+  }
+
+  public void periodic() {
+    Logger.processInputs("Drivetrain/Module" + Integer.toString(moduleNumber), inputs);
+
+    if (velocitySetpoint != null) {
+      if (isReal) {
+        io.setDriveVelocity(velocitySetpoint, driveFeedforward.calculate(velocitySetpoint));
+      }
+      else {
+        io.setDriveVoltage(driveFeedback.calculate(inputs.driveVelocityMetersPerSec, velocitySetpoint) +
+          driveFeedforward.calculate(velocitySetpoint));
+      }
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
-        desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
-        
-        targetState = desiredState;
-
-        setAngle(desiredState);
-        setSpeed(desiredState, isOpenLoop);
+    if (angleSetpoint != null) {
+      if (isReal) {
+        io.setAnglePosition(angleSetpoint.getDegrees());
+      }
+      else {
+        io.setAngleVoltage(angleFeedback.calculate(inputs.anglePosition.getDegrees(), angleSetpoint.getDegrees()));
+      }
     }
 
-    public void setPercentOutput(double drivePercentOutput, double anglePercentOutput) {
-        driveDutyCycle.Output = drivePercentOutput;
-        driveMotor.setControl(driveDutyCycle);
-        angleMotor.set(anglePercentOutput);
+    // Calculate positions for odometry
+    int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
+    odometryPositions = new SwerveModulePosition[sampleCount];
+    for (int i = 0; i < sampleCount; i++) {
+      odometryPositions[i] = new SwerveModulePosition(
+        inputs.odometryDrivePositionsMeters[i],
+        inputs.odometryAnglePositions[i]);
+    }
+  }
+
+  /** Runs the module with the specified setpoint state. Returns the optimized state. */
+  public SwerveModuleState runSetpoint(SwerveModuleState state, boolean isOpenLoop) {
+    // Optimize state based on current angle
+    // Controllers run in "periodic" when the setpoint is not null
+    var optimizedState = OnboardModuleState.optimize(state, getAngle());
+
+    // Update setpoints, controllers run in "periodic"
+    angleSetpoint = optimizedState.angle;
+    if (isOpenLoop) {
+      io.setDriveVoltage(optimizedState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
+      velocitySetpoint = null;
+    }
+    else {
+      velocitySetpoint = optimizedState.speedMetersPerSecond;
     }
 
-    public void setVolts(double driveVolts, double angleVolts) {
-        driveVoltage.Output = driveVolts;
-        driveMotor.setControl(driveVoltage);
-        angleMotor.setVoltage(angleVolts);
-    }
+    return optimizedState;
+  }
 
-    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
-        if (RobotBase.isReal()) {
-            if (isOpenLoop) {
-                driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY;
-                driveMotor.setControl(driveDutyCycle);
-            }
-            else {
-                driveVelocity.Velocity = Conversions.MPSToTalon(desiredState.speedMetersPerSecond, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO);
-                driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
-                driveMotor.setControl(driveVelocity);
-            }
-        }
-        else {
-            driveMotorSim.setInputVoltage(driveFeedForward.calculate(desiredState.speedMetersPerSecond) + 
-            driveControllerSim.calculate(Conversions.RPMToTalon(driveMotorSim.getAngularVelocityRPM(), Constants.kDrivetrain.DRIVE_GEAR_RATIO), Conversions.MPSToTalon(desiredState.speedMetersPerSecond, Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO)));
-            driveMotorSim.update(0.02);
-        }
-    }
-    
+  /** Runs the module with the specified voltage while controlling to zero degrees. */
+  public void runCharacterization(double volts) {
+    // Closed loop angle control
+    angleSetpoint = new Rotation2d();
 
-    private void setAngle(SwerveModuleState desiredState) {
-        // Prevent rotating module if speed is less then 1%. Prevents jittering.
-        Rotation2d angle =
-            (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.kDrivetrain.MAX_LINEAR_VELOCITY * 0.01))
-                ? lastAngle
-                : desiredState.angle;
+    // Open loop drive control
+    io.setDriveVoltage(volts);
+    velocitySetpoint = null;
+  }
 
-        if (RobotBase.isReal()) {
-            angleController.setReference(angle.getDegrees(), ControlType.kPosition);
-        }
-        else {
-            angleMotorSim.setInputVoltage(angleControllerSim.calculate(angleMotorSim.getAngularPositionRotations() * 360, desiredState.angle.getDegrees()));
-            angleMotorSim.update(0.02);
-        }
-        lastAngle = angle;
-    }
+  /** Runs the module with the specified duty cycle percent outputs. */
+  public void runDutyCycle(double drivePercentOutput, double anglePercentOutput) {
+    io.setDriveDutyCycle(drivePercentOutput);
+    io.setAngleDutyCycle(anglePercentOutput);
+    velocitySetpoint = null;
+  }
 
-    private Rotation2d getIntegratedAngle() {
-        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
-    }
+  /** Disables all outputs to motors. */
+  public void stop() {
+    io.setAngleVoltage(0.0);
+    io.setDriveVoltage(0.0);
 
-    public Rotation2d getCANcoderAngle() {
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
-    }
+    // Disable closed loop control for angle and drive
+    angleSetpoint = null;
+    velocitySetpoint = null;
+  }
 
-    private Rotation2d waitForCANcoder() {
-        /* Wait for up to 250ms for a new CANcoder position */
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue());
-    }
+  /** Sets whether brake mode is enabled for the drive motor. */
+  public void setDriveBrakeMode(boolean enabled) {
+    io.setDriveBrakeMode(enabled);
+  }
 
-    public void resetToAbsolute() {
-        double absolutePosition = waitForCANcoder().getDegrees() - angleOffset.getDegrees();
-        integratedAngleEncoder.setPosition(absolutePosition);
-    }
+  /** Sets whether brake mode is enabled for the angle motor. */
+  public void setAngleBrakeMode(boolean enabled) {
+    io.setAngleBrakeMode(enabled);
+  }
 
-    private void configAngleEncoder() {    
-        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
-    }
+  /** Returns the current angle of the module measured
+   *  by the relative encoder with the offset. */
+  public Rotation2d getAngle() {
+    return inputs.anglePosition;
+  }
 
-    private void configAngleMotor() {
-        integratedAngleEncoder.setPositionConversionFactor(Constants.kDrivetrain.ANGLE_POSITION_CONVERSION_FACTOR_DEGREES);
-        angleController.setP(Constants.kDrivetrain.ANGLE_KP);
-        angleController.setI(Constants.kDrivetrain.ANGLE_KI);
-        angleController.setD(Constants.kDrivetrain.ANGLE_KD);
-        angleController.setFF(Constants.kDrivetrain.ANGLE_KFF);
-        resetToAbsolute();
-    }
+  /** Returns the current angle of the module measured
+   *  by the CANcoder without the offset.
+   */
+  public Rotation2d getCANcoderAngle() {
+    return inputs.angleAbsolutePosition;
+  }
 
-    private void configDriveMotor() {
-        driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
-        driveMotor.getConfigurator().setPosition(0);
-        driveMotor.getVelocity().setUpdateFrequency(Constants.kDrivetrain.DRIVE_VELOCITY_FRAME_RATE_HZ);
-        driveMotor.getPosition().setUpdateFrequency(Constants.kDrivetrain.DRIVE_POSITION_FRAME_RATE_HZ);
-    }
+  /** Returns the current drive position of the module in meters. */
+  public double getPositionMeters() {
+    return inputs.drivePositionMeters;
+  }
 
-    public void setDriveIdleMode(boolean setBrakeMode) {
-        driveMotor.setNeutralMode(setBrakeMode? NeutralModeValue.Brake : NeutralModeValue.Coast);
-    }
+  /** Returns the current drive velocity of the module in meters per second. */
+  public double getVelocityMetersPerSec() {
+    return inputs.driveVelocityMetersPerSec;
+  }
 
-    public void setAngleIdleMode(boolean setBrakeMode) {
-        angleMotor.setIdleMode(setBrakeMode? IdleMode.kBrake : IdleMode.kCoast);
-    }
+  /** Returns the module position (angle position and drive position). */
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(getPositionMeters(), getAngle());
+  }
 
-    public void setDrivePID(double kP, double kI, double kD) {
-        driveMotor.getConfigurator().apply(new Slot0Configs().
-        withKP(kP).
-        withKI(kI).
-        withKD(kD));
-    }
+  /** Returns the module state (angle position and drive velocity). */
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
+  }
 
-    public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
-        angleController.setP(kP);
-        angleController.setI(kI);
-        angleController.setD(kD);
-        angleController.setFF(kFF);
-    }
+  /** Returns the target module state (angle position setpoint and 
+   *  drive velocity setpoint). */
+  public SwerveModuleState getTargetState() {
+    return new SwerveModuleState(velocitySetpoint, angleSetpoint);
+  }
 
-    public SwerveModuleState getState() {
-        if (RobotBase.isReal()) {
-            return new SwerveModuleState(
-                Conversions.talonToMPS(driveMotor.getVelocity().getValue(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
-                getIntegratedAngle()
-            );
-        }
-        else {
-            return new SwerveModuleState(
-                Conversions.RPMToMPS(driveMotorSim.getAngularVelocityRPM(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE), 
-                Rotation2d.fromRotations(angleMotorSim.getAngularPositionRotations()));
-        }
-    }
+  /** Returns the module positions received this cycle. */
+  public SwerveModulePosition[] getOdometryPositions() {
+    return odometryPositions;
+  }
 
-    public SwerveModuleState getTargetState() {
-        return targetState;
-    }
+  /** Returns the timestamps of the samples received this cycle. */
+  public double[] getOdometryTimestamps() {
+    return inputs.odometryTimestamps;
+  }
 
-    public SwerveModulePosition getPosition() {
-        if (RobotBase.isReal()) {
-            return new SwerveModulePosition(
-                Conversions.talonToMeters(driveMotor.getPosition().getValue(), Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, Constants.kDrivetrain.DRIVE_GEAR_RATIO), 
-                getIntegratedAngle()
-            );
-        }
-        else {
-            return new SwerveModulePosition(driveMotorSim.getAngularPositionRotations() * Constants.kDrivetrain.WHEEL_CIRCUMFERENCE, 
-                Rotation2d.fromRotations(angleMotorSim.getAngularPositionRotations()));
-        }
-    }
+  /** Returns the drive velocity in meters/sec. */
+  public double getCharacterizationVelocity() {
+    return inputs.driveVelocityMetersPerSec;
+  }
 
-    public SwerveModulePosition[] getOdometryPositions() {
-        return odometryPositions;
-    }
-
-    public double[] getOdometryTimestamps() {
-        return odometryTimestamps;
-    }
-
-    //returns the output current of driveMotor 
-    public double getDriveOutputCurrent() {
-       return driveMotor.getTorqueCurrent().getValueAsDouble();
-    }
 }

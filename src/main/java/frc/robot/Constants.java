@@ -34,7 +34,7 @@ import frc.slicelibs.util.config.SwerveModuleConstants;
  */
 public final class Constants {
 
-  public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+  public static final Mode CURRENT_MODE = Mode.SIM;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -98,8 +98,7 @@ public final class Constants {
     /* Status Frame Rates/Periods */
     // TODO: Tune status frames
     public static final int ODOMETRY_FREQUENCY_HZ = 250;
-    public static final int DRIVE_VELOCITY_FRAME_RATE_HZ = 22;
-    public static final int DRIVE_POSITION_FRAME_RATE_HZ = 22;
+    public static final int DRIVE_DEFAULT_FRAME_RATE_HZ = 22;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
     public static final int ANGLE_FRAME_2_PERIOD_MS = 300;
 
