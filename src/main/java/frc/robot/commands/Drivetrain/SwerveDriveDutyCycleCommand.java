@@ -11,7 +11,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
  * Directly sets the drive and angle motors of all drivetrain swerve modules
  * to given drive and angle motor percent outputs.
  */
-public class SetPercentOutputCommand extends Command {
+public class SwerveDriveDutyCycleCommand extends Command {
 
   private final Drivetrain m_drivetrain;
 
@@ -23,7 +23,7 @@ public class SetPercentOutputCommand extends Command {
    * @param drivePercentOutput The desired percent output between -1 and 1 to set all drivetrain drive motors to.
    * @param anglePercentOutput The desired percent output between -1 and 1 to set all drivetrain angle motors to.
    */
-  public SetPercentOutputCommand(Drivetrain drivetrain, double drivePercentOutput, double anglePercentOutput) {
+  public SwerveDriveDutyCycleCommand(Drivetrain drivetrain, double drivePercentOutput, double anglePercentOutput) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
 
@@ -42,7 +42,7 @@ public class SetPercentOutputCommand extends Command {
   @Override
   public void execute() {
 
-    m_drivetrain.setPercentOutput(drivePercentOutput, anglePercentOutput);
+    m_drivetrain.driveDutyCycle(drivePercentOutput, anglePercentOutput);
 
   }
 
@@ -50,7 +50,7 @@ public class SetPercentOutputCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_drivetrain.setPercentOutput(0, 0);
+    m_drivetrain.driveDutyCycle(0, 0);
 
   }
 

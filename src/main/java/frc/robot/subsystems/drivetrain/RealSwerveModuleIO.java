@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.slicelibs.util.config.REVConfigs;
@@ -60,8 +61,8 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
     integratedAngleEncoder.setPositionConversionFactor(Constants.kDrivetrain.ANGLE_POSITION_CONVERSION_FACTOR_DEGREES);
     integratedAngleEncoder.setVelocityConversionFactor(Constants.kDrivetrain.ANGLE_VELOCITY_CONVERSION_FACTOR_DEGREES);
-    integratedAngleEncoder.setPosition(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees());
-
+    resetToAbsolute();
+    
     timestampQueue = OdometryThread.getInstance().makeTimestampQueue();
 
     drivePosition = driveMotor.getPosition();
@@ -82,7 +83,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         driveVelocity,
         driveAppliedVolts,
         driveCurrent);
-    driveMotor.optimizeBusUtilization();
+    //riveMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -152,5 +153,10 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
   @Override
   public void setAngleBrakeMode(boolean enable) {
     angleMotor.setIdleMode(enable? IdleMode.kBrake : IdleMode.kCoast);
+  }
+
+  @Override
+  public void resetToAbsolute() {
+    integratedAngleEncoder.setPosition(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees());
   }
 }

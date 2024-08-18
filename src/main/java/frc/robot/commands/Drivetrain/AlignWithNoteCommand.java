@@ -83,7 +83,7 @@ public class AlignWithNoteCommand extends Command {
 
     power *= multiplier;
 
-    m_drivetrain.swerveDrive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-rotation)), false, false);
+    m_drivetrain.drive(new Transform2d(-power, 0, Rotation2d.fromDegrees(-rotation)), false, false);
     LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
   }
@@ -92,7 +92,7 @@ public class AlignWithNoteCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_drivetrain.swerveDrive(new Transform2d(), false, false);
+    m_drivetrain.drive(new Transform2d(), false, false);
     LimelightHelpers.setLEDMode_ForceOff("limelight-intake");
 
   }

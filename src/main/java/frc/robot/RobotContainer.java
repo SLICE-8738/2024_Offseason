@@ -26,6 +26,9 @@ import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
+import frc.robot.subsystems.drivetrain.SimSwerveModuleIO;
+import frc.robot.subsystems.drivetrain.SwerveModuleIO;
 import frc.robot.testing.routines.DrivetrainTest;
 import frc.robot.testing.routines.FlywheelTest;
 import frc.robot.testing.routines.IntakeTest;
@@ -48,85 +51,184 @@ public class RobotContainer {
   // Subsystems
   // ==========================
 
-  public final Drivetrain m_drivetrain = new Drivetrain();
-  public final Shooter m_shooter = new Shooter();
-  public final Intake m_intake = new Intake();
-  public final Indexer m_indexer = new Indexer();
-  public final ShooterLimelight m_shooterLimelight = new ShooterLimelight();
-  public final IntakeLimelight m_intakeLimelight = new IntakeLimelight();
-  public final LEDs m_leds = new LEDs();
+  public final Drivetrain m_drivetrain;
+  public final Shooter m_shooter;
+  public final Intake m_intake;
+  public final Indexer m_indexer;
+  public final ShooterLimelight m_shooterLimelight;
+  public final IntakeLimelight m_intakeLimelight;
+  public final LEDs m_leds;
 
-  public final AutoSelector m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);
-  public final ShuffleboardData m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter,
-      m_intake/* , m_indexer */, m_autoSelector);
+  public final AutoSelector m_autoSelector;
+  public final ShuffleboardData m_shuffleboardData;
 
   // ==========================
   // Commands
   // ==========================
 
   /* Drivetrain */
-  public final SwerveDriveCommand m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true);
-  public final SwerveDriveCommand m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController,
-      false);
-  public final SetPercentOutputCommand m_setDrivePercentOutput = new SetPercentOutputCommand(m_drivetrain, 0.5, 0.5);
-  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
-  // public final Command m_pathfindToSource = AutoBuilder
-  //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 5.67, Rotation2d.fromDegrees(90)),
-       Constants.kDrivetrain.PATH_CONSTRAINTS);
-  // public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
-  // public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
-  // public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
-  // public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
-  // public final ConditionalCommand m_limelightAlign = new
-  // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
-  // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
-    false, true);
-  public final AlignWithAmpCommand m_alignAmp = new AlignWithAmpCommand(m_drivetrain, driverController, false, true);
+  public final SwerveDriveCommand m_swerveDriveOpenLoop;
+  public final SwerveDriveCommand m_swerveDriveClosedLoop;
+  public final SwerveDriveDutyCycleCommand m_setDrivePercentOutput;
+  public final ResetFieldOrientedHeading m_resetFieldOrientedHeading;
+  // public final Command m_pathfindToSource;
+  public final Command m_pathfindToAmp;
+  // public final Command m_driveQuasistaicForward;
+  // public final Command m_driveQuasistaicReverse;
+  // public final Command m_driveDynamicForward;
+  // public final Command m_driveDynamicReverse;
+  // public final ConditionalCommand m_limelightAlign;
+  // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose;
+  public final AlignWithSpeakerCommand m_alignWithSpeaker;
+  public final AlignWithAmpCommand m_alignAmp;
 
   /* Shooter */
-  // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
-  public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, m_drivetrain, m_indexer, operatorController);
-  public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
-  public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
-  public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
-  public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
-  public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
-  public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
-  //public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
-  public final SubwooferShotCommand m_subwooferShotCommand = new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain, driverController);
-  public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
+  // public final PrepareShooterCommand m_prepareShooter;
+  public final ManualShooterCommand m_manualShooter;
+  public final ResetAlternateAngleCommand m_resetAlternateAngle;
+  public final StowShooterCommand m_stow;
+  public final ToAmpPositionCommand m_toAmpAngle;
+  public final ToClimbPositionCommand m_ToClimbPositionCommand;
+  public final ShootCommand m_shoot;
+  public final ClimbLockCommand m_lockClimber;
+  //public final SpinFlywheelCommand m_reverseFlywheels;
+  public final SubwooferShotCommand m_subwooferShotCommand;
+  public final PassNoteCommand m_pass;
 
   /* Intake */
-  public final RunIntakeCommand m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
-  public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
-  public final StoreNoteSequence m_storeNote = new StoreNoteSequence(m_indexer, m_intake);
-  public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
-  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
+  public final RunIntakeCommand m_runIntakeIn;
+  public final RunIntakeCommand m_runIntakeOut;
+  public final StoreNoteSequence m_storeNote;
+  public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored;
+  public final AlignWithNoteCommand m_alignNote;
 
   /* Indexer */
-  // public final RunIndexerCommand m_runIndexerUp = new
-  // RunIndexerCommand(m_indexer, 0.3); // Manual Stow
-  // public final StoreNote m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
-  // public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
-  public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
-  // public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
+  // public final RunIndexerCommand m_runIndexerUp; // Manual Stow
+  // public final StoreNote m_runIndexerUp; // Auto stow
+  // public final RunIndexerCommand m_runIndexerDown;
+  public final ManualIndexerCommand m_manualIndexer;
+  // public final NudgeIndexer m_nudgeIndexer;
 
-  public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
+  public final RecordFFDataCommand m_ffData;
 
   /* LEDs */
-  public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
+  public final SignalStoreNote m_signalStoreNote;
 
-  /* Tests */
-  public final FlywheelTest m_flywheelTest = new FlywheelTest(m_shooter);
-  public final DrivetrainTest m_DrivetrainTest = new DrivetrainTest(m_drivetrain);
-  public final IntakeTest m_IntakeTest = new IntakeTest(m_intake);
+  // ==========================
+  // Tests
+  // ==========================
+
+  public final FlywheelTest m_flywheelTest;
+  public final DrivetrainTest m_drivetrainTest;
+  public final IntakeTest m_intakeTest;
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    switch (Constants.CURRENT_MODE) {
+      case REAL:
+        // Real robot, instantiate hardware IO implementations
+        m_drivetrain =
+          new Drivetrain(
+              new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+              new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+              new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS),
+              new RealSwerveModuleIO(Constants.kDrivetrain.Mod0.CONSTANTS));
+        break;
+      case SIM:
+        m_drivetrain =
+          new Drivetrain(
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO(),
+            new SimSwerveModuleIO());
+        break;
+      default:
+        m_drivetrain =
+          new Drivetrain(
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {},
+            new SwerveModuleIO() {});
+        break;
+    }
+
+    m_shooter = new Shooter();
+    m_intake = new Intake();
+    m_indexer = new Indexer();
+    m_shooterLimelight = new ShooterLimelight();
+    m_intakeLimelight = new IntakeLimelight();
+    m_leds = new LEDs();
+
+    m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);
+    m_shuffleboardData = new ShuffleboardData(m_drivetrain, m_shooter,
+      m_intake/* , m_indexer */, m_autoSelector);
+
+    // ==========================
+    // Commands
+    // ==========================
+
+    /* Drivetrain */
+    m_swerveDriveOpenLoop = new SwerveDriveCommand(m_drivetrain, driverController, true);
+    m_swerveDriveClosedLoop = new SwerveDriveCommand(m_drivetrain, driverController, false);
+    m_setDrivePercentOutput = new SwerveDriveDutyCycleCommand(m_drivetrain, 0.5, 0.5);
+    m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
+    // public final Command m_pathfindToSource = AutoBuilder
+    //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+    m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 5.67, Rotation2d.fromDegrees(90)),
+      Constants.kDrivetrain.PATH_CONSTRAINTS);
+    // public final Command m_driveQuasistaicForward = m_drivetrain.getSysIdDriveQuasistatic(Direction.kForward);
+    // public final Command m_driveQuasistaicReverse = m_drivetrain.getSysIdDriveQuasistatic(Direction.kReverse);
+    // public final Command m_driveDynamicForward = m_drivetrain.getSysIdDriveDynamic(Direction.kForward);
+    // public final Command m_driveDynamicReverse = m_drivetrain.getSysIdDriveDynamic(Direction.kReverse);
+    // public final ConditionalCommand m_limelightAlign = new
+    // ConditionalCommand(m_aprilTagAlign, m_noteAlign, noteDetected);
+    // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
+    m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
+      false, true);
+    m_alignAmp = new AlignWithAmpCommand(m_drivetrain, driverController, false, true);
+
+    /* Shooter */
+    // m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
+    m_manualShooter = new ManualShooterCommand(m_shooter, m_drivetrain, m_indexer, operatorController);
+    m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
+    m_stow = new StowShooterCommand(m_shooter);
+    m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
+    m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
+    m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+    m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
+    //m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
+    m_subwooferShotCommand = new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain, driverController);
+    m_pass = new PassNoteCommand(m_shooter, m_indexer);
+
+    /* Intake */
+    m_runIntakeIn = new RunIntakeCommand(m_intake, 0.5);
+    m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
+    m_storeNote = new StoreNoteSequence(m_indexer, m_intake);
+    m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
+    m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
+
+    /* Indexer */
+    // m_runIndexerUp = new RunIndexerCommand(m_indexer, 0.3); // Manual Stow
+    // m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
+    // m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
+    m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
+    // m_nudgeIndexer = new NudgeIndexer(m_indexer);
+
+    m_ffData = new RecordFFDataCommand(m_shooter);
+
+    /* LEDs */
+    m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
+
+    // ==========================
+    // Tests
+    // ==========================
+
+    m_flywheelTest = new FlywheelTest(m_shooter);
+    m_drivetrainTest = new DrivetrainTest(m_drivetrain);
+    m_intakeTest = new IntakeTest(m_intake);
 
     // Configure the trigger bindings
     configureDriveBindings();

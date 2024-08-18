@@ -55,7 +55,7 @@ public class AlignToPoseCommand extends Command {
     double translationY = yController.calculate(robotPose.getY(), targetPose.getY());
     double turnAmount = thetaController.calculate(robotPose.getRotation().getDegrees(), targetPose.getRotation().getDegrees());
 
-    m_drivetrain.swerveDrive(
+    m_drivetrain.drive(
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         false,
         true);

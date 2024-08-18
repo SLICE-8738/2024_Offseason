@@ -58,8 +58,6 @@ public class Drivetrain extends SubsystemBase {
 
   private Rotation2d fieldOrientedOffset;
 
-  public double speedPercent;
-
   private Rotation2d simHeading = new Rotation2d();
 
   public double maxLinearVelocity = 4.5;
@@ -78,13 +76,11 @@ public class Drivetrain extends SubsystemBase {
     };
 
     OdometryThread.getInstance().start();
-    //PhoenixOdometryThread.getInstance().start();
-    //SparkMaxOdometryThread.getInstance().start();
 
     m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
 
     Timer.delay(1.0);
-    //resetModulesToAbsolute();
+    resetModulesToAbsolute();
     resetHeading();
 
     m_field2d = new Field2d();
@@ -101,8 +97,6 @@ public class Drivetrain extends SubsystemBase {
       VecBuilder.fill(0.1, 0.1, 0.1));
 
     fieldOrientedOffset = new Rotation2d();
-
-    speedPercent = 1;
 
     PathPlannerLogging.setLogActivePathCallback((poses) -> {
       // Pushes the trajectory to Field2d.
@@ -125,10 +119,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-
     lockOdometry();
-    //PhoenixOdometryThread.getInstance().odometryLock.lock();
-    //SparkMaxOdometryThread.getInstance().odometryLock.lock();
 
     for (SwerveModule mod : swerveMods) {
 
@@ -137,8 +128,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     unlockOdometry();
-    //PhoenixOdometryThread.getInstance().odometryLock.unlock();
-    //SparkMaxOdometryThread.getInstance().odometryLock.unlock();
 
     for (SwerveModule mod : swerveMods) {
 
@@ -200,21 +189,21 @@ public class Drivetrain extends SubsystemBase {
 
   public void setDrivePID(double kP, double kI, double kD) {
 
-    for(SwerveModule mod : swerveMods) {
+    /*for(SwerveModule mod : swerveMods) {
 
       mod.setDrivePID(kP, kI, kD);
 
-    }
+    }*/
 
   }
 
   public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
 
-    for(SwerveModule mod : swerveMods) {
+    /*for(SwerveModule mod : swerveMods) {
 
       mod.setAnglePIDF(kP, kI, kD, kFF);
 
-    }
+    }*/
 
   }
 
@@ -245,7 +234,7 @@ public class Drivetrain extends SubsystemBase {
    * @param isFieldRelative Whether the given velocities are relative to the field
    *                        or not.
    */
-  public void swerveDrive(Transform2d transform, boolean isOpenLoop, boolean isFieldRelative) {
+  public void drive(Transform2d transform, boolean isOpenLoop, boolean isFieldRelative) {
 
     Rotation2d rotationWithOffset = getHeading().minus(fieldOrientedOffset);
     if (rotationWithOffset.getDegrees() > 360) {
@@ -259,16 +248,16 @@ public class Drivetrain extends SubsystemBase {
         isFieldRelative
             ? ChassisSpeeds.discretize(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                  transform.getX() * speedPercent,
-                  transform.getY() * speedPercent,
-                  transform.getRotation().getRadians() * speedPercent,
+                  transform.getX(),
+                  transform.getY(),
+                  transform.getRotation().getRadians(),
                   rotationWithOffset),
                 0.02)
             : ChassisSpeeds.discretize(
                 new ChassisSpeeds(
-                  transform.getX() * speedPercent, 
-                  transform.getY() * speedPercent,
-                  transform.getRotation().getRadians() * speedPercent),
+                  transform.getX(), 
+                  transform.getY(),
+                  transform.getRotation().getRadians()),
                 0.02));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
@@ -513,7 +502,7 @@ public class Drivetrain extends SubsystemBase {
    * readings of the CANCoders with their offsets being taken
    * into account.
    */
-  /*public void resetModulesToAbsolute() {
+  public void resetModulesToAbsolute() {
 
     for(SwerveModule mod : swerveMods) {
 
@@ -521,7 +510,7 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-  }*/
+  }
 
   /**
    * Resets the position of the odometry object using a specified position.
@@ -700,15 +689,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Sets the drive and angle motors of all swerve modules to given drive and
-   * angle motor percent outputs.
+   * Runs the drive and angle motors of all swerve modules at the given duty
+   * cycle percent outputs.
    * 
    * @param drivePercentOutput The percent output between -1 and 1 to set all
    *                           drive motors to.
    * @param anglePercentOutput The percent output between -1 and 1 to set all
    *                           angle motors to.
    */
-  public void setPercentOutput(double drivePercentOutput, double anglePercentOutput) {
+  public void driveDutyCycle(double drivePercentOutput, double anglePercentOutput) {
 
     for(SwerveModule mod : swerveMods) {
 
@@ -718,7 +707,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public double[] driveOutputCurents(){
+  public double[] getDriveOutputCurents(){
 
     double[] currents = new double[4];
 

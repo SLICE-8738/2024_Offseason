@@ -58,7 +58,7 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void initialize() {
 
-    m_drivetrain.setPercentOutput(0, 0);
+    m_drivetrain.driveDutyCycle(0, 0);
 
   }
 
@@ -84,7 +84,7 @@ public class SwerveDriveCommand extends Command {
       rotationFeedback *= 0.5;
     }
 
-    m_drivetrain.swerveDrive(
+    m_drivetrain.drive(
         new Transform2d(new Translation2d(translationX, translationY), new Rotation2d(rotationFF + rotationFeedback)),
         m_isOpenLoop,
         m_isFieldRelative);
@@ -95,7 +95,7 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_drivetrain.swerveDrive(
+    m_drivetrain.drive(
       new Transform2d(), 
       m_isOpenLoop,
       m_isFieldRelative);

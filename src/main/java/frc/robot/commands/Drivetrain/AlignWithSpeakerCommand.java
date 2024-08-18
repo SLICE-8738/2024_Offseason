@@ -69,7 +69,7 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void initialize() {
 
-    m_drivetrain.setPercentOutput(0, 0);
+    m_drivetrain.driveDutyCycle(0, 0);
 
   }
 
@@ -103,7 +103,7 @@ public class AlignWithSpeakerCommand extends Command {
     double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
     double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
 
-    m_drivetrain.swerveDrive(
+    m_drivetrain.drive(
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
@@ -117,7 +117,7 @@ public class AlignWithSpeakerCommand extends Command {
   @Override
   public void end(boolean interrupted) {
 
-    m_drivetrain.swerveDrive(
+    m_drivetrain.drive(
       new Transform2d(), 
       m_isOpenLoop,
       m_isFieldRelative);

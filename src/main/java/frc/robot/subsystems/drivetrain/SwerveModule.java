@@ -46,13 +46,13 @@ public class SwerveModule {
         driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
         driveFeedback = new PIDController(0.05, 0.0, 0.0);
         angleFeedback = new PIDController(7.0, 0.0, 0.0);
-        angleFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        angleFeedback.enableContinuousInput(-180, 180);
         break;
       case SIM:
-        driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
+        driveFeedforward = new SimpleMotorFeedforward(0.0, 2.0);
         driveFeedback = new PIDController(0.1, 0.0, 0.0);
-        angleFeedback = new PIDController(10.0, 0.0, 0.0);
-        angleFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        angleFeedback = new PIDController(0.5, 0.0, 0.0);
+        angleFeedback.enableContinuousInput(-180, 180);
         break;
       default:
         driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
@@ -94,9 +94,8 @@ public class SwerveModule {
     }
 
     // Calculate positions for odometry
-    int sampleCount = inputs.odometryTimestamps.length; // All signals are sampled together
-    odometryPositions = new SwerveModulePosition[sampleCount];
-    for (int i = 0; i < sampleCount; i++) {
+    odometryPositions = new SwerveModulePosition[inputs.odometryTimestamps.length];
+    for (int i = 0; i < inputs.odometryTimestamps.length; i++) {
       odometryPositions[i] = new SwerveModulePosition(
         inputs.odometryDrivePositionsMeters[i],
         inputs.odometryAnglePositions[i]);
@@ -159,6 +158,10 @@ public class SwerveModule {
     io.setAngleBrakeMode(enabled);
   }
 
+  public void resetToAbsolute() {
+    io.resetToAbsolute();
+  }
+
   /** Returns the current angle of the module measured
    *  by the relative encoder with the offset. */
   public Rotation2d getAngle() {
@@ -195,7 +198,9 @@ public class SwerveModule {
   /** Returns the target module state (angle position setpoint and 
    *  drive velocity setpoint). */
   public SwerveModuleState getTargetState() {
-    return new SwerveModuleState(velocitySetpoint, angleSetpoint);
+    return new SwerveModuleState(
+      velocitySetpoint == null? 0 : velocitySetpoint, 
+      angleSetpoint == null? new Rotation2d() : angleSetpoint);
   }
 
   /** Returns the module positions received this cycle. */
@@ -208,9 +213,9 @@ public class SwerveModule {
     return inputs.odometryTimestamps;
   }
 
-  /** Returns the drive velocity in meters/sec. */
-  public double getCharacterizationVelocity() {
-    return inputs.driveVelocityMetersPerSec;
+  /** Returns the output current of the drive motor in amps. */
+  public double getDriveOutputCurrent() {
+    return inputs.driveCurrentAmps[0];
   }
 
 }

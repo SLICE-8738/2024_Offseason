@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveModuleIO {
@@ -49,4 +50,9 @@ public interface SwerveModuleIO {
 
   /** Enable or disable brake mode on the angle motor. */
   public default void setAngleBrakeMode(boolean enable) {}
+
+  /** Reset the integrated angle encoder position to
+   *  the position of the CANcoder with the offset.
+   */
+  public default void resetToAbsolute() {}
 }
