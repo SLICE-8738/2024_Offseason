@@ -50,7 +50,7 @@ public class SwerveDriveCommand extends Command {
         Constants.OperatorConstants.turnExponent,
         Constants.OperatorConstants.turnExponentPercent));
 
-    rotationController = new PIDController(0, 0, 0);
+    rotationController = new PIDController(1, 0.5, 0);
 
   }
 
