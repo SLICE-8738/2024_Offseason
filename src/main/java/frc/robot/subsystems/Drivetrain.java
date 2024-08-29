@@ -117,6 +117,8 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d.setRobotPose(getPose());
 
+    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
+
   }
 
   @Override
@@ -523,7 +525,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public Rotation2d getRotationalVelocity() {
 
-    return Rotation2d.fromDegrees(m_gyro.getRate());
+    return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? -m_gyro.getRate() : m_gyro.getRate());
 
   }
 

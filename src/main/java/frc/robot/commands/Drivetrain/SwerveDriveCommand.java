@@ -50,7 +50,7 @@ public class SwerveDriveCommand extends Command {
         Constants.OperatorConstants.turnExponent,
         Constants.OperatorConstants.turnExponentPercent));
 
-    rotationController = new PIDController(1, 0.5, 0);
+    rotationController = new PIDController(6, 0, 0);
 
   }
 
@@ -66,14 +66,15 @@ public class SwerveDriveCommand extends Command {
   @Override
   public void execute() {
 
-    SmartDashboard.putNumber("Raw Y Axis", m_driverController.getRawAxis(0));
     double[] translation = translationFilter.filter(m_driverController.getRawAxis(1), m_driverController.getRawAxis(0));
 
     double translationX = translation[0] * m_drivetrain.maxLinearVelocity;
     double translationY = translation[1] * m_drivetrain.maxLinearVelocity;
 
     double rotationFF = rotationFilter.filter(m_driverController.getRawAxis(2), 0)[0] * m_drivetrain.maxAngularVelocity;
-    double rotationFeedback = rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), rotationFF);
+    double rotationFeedback = rotationFF == 0 ? 
+      -rotationController.calculate(m_drivetrain.getRotationalVelocity().getRadians(), -rotationFF)
+      : 0;
 
     m_isFieldRelative = !Button.rightBumper1.getAsBoolean();
 
