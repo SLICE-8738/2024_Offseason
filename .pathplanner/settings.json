@@ -3,7 +3,6 @@
   "robotLength": 0.91,
   "holonomicMode": true,
   "pathFolders": [
-    "Amp To Note",
     "Mid Field Note Intake",
     "Note Score",
     "Wing Note Intake"
