@@ -39,6 +39,11 @@
           "visible": true
         }
       },
+      "/Shuffleboard/Autonomous/Starting Position": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/Debug Tab/Field": {
         "bottom": 1476,
         "builtin": "",
@@ -57,7 +62,10 @@
         "left": 150,
         "right": 2961,
         "top": 79,
-        "width": 16.541748046875
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
       }
     }
   },

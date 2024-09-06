@@ -42,6 +42,7 @@ public class AutoSelector {
     public enum StartingPosition {
 
         AMP_SIDE("Amp Side"),
+        AMP_SIDE_CORNER("Amp Side Corner"),
         MIDDLE("Middle"),
         SOURCE_SIDE("Source Side"),
         FAR_SOURCE_SIDE("Far Source Side");
@@ -63,16 +64,15 @@ public class AutoSelector {
         SCORE_5_SPEAKER_2("Score 5 Speaker (3, 2, 1, 5)", true),
         SCORE_5_SPEAKER_3("Score 5 Speaker (2, 3, 1, 5)", true),
         SCORE_4_SPEAKER("Score 4 Speaker", true),
-        SCORE_1_AMP_AND_3_SPEAKER("Score 1 Amp And 3 Speaker", true),
         SCORE_3_AND_A_HALF_SPEAKER("Score 3.5 Speaker", true),
         SCORE_3_SPEAKER_1("Score 3 Speaker (1 & 2)", true),
         SCORE_3_SPEAKER_2("Score 3 Speaker (7 & 8)", true),
         SCORE_3_SPEAKER_3("Score 3 Speaker (8 & 7)", true),
         SCORE_3_SPEAKER_4("Score 3 Speaker (6 & 7)", true),
-        SCORE_1_AMP_AND_2_SPEAKER("Score 1 Amp And 2 Speaker", true),
         SCORE_2_SPEAKER("Score 2 Speaker", true),
         SCORE_1_SPEAKER("Score 1 Speaker", false),
-        TEST_PATH_MODE("Test Path", false);
+        CHOREO_TEST_AUTO("Choreo Test Auto", false),
+        TEST_PATH("Test Path", false);
 
         public final String value;
         public final boolean useStartingPosition;
@@ -129,15 +129,14 @@ public class AutoSelector {
         modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_2.value, DesiredMode.SCORE_5_SPEAKER_2);
         modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_3.value, DesiredMode.SCORE_5_SPEAKER_3);
         modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_3_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_3_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_AND_A_HALF_SPEAKER.value, DesiredMode.SCORE_3_AND_A_HALF_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_1);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_2.value, DesiredMode.SCORE_3_SPEAKER_2);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_3.value, DesiredMode.SCORE_3_SPEAKER_3);
         modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_4.value, DesiredMode.SCORE_3_SPEAKER_4);
-        modeChooser.addOption(DesiredMode.SCORE_1_AMP_AND_2_SPEAKER.value, DesiredMode.SCORE_1_AMP_AND_2_SPEAKER);
         modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
-        modeChooser.addOption(DesiredMode.TEST_PATH_MODE.value, DesiredMode.TEST_PATH_MODE);
+        modeChooser.addOption(DesiredMode.CHOREO_TEST_AUTO.value, DesiredMode.CHOREO_TEST_AUTO);
+        modeChooser.addOption(DesiredMode.TEST_PATH.value, DesiredMode.TEST_PATH);
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,
@@ -190,7 +189,7 @@ public class AutoSelector {
             return Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
 
         }
-        catch (Error e) {
+        catch (Exception e) {
 
             DriverStation.reportError(e.getMessage(), true);
             return Optional.empty();
@@ -208,7 +207,7 @@ public class AutoSelector {
             initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.useStartingPosition? position.value + " " + mode.value : mode.value);
 
         }
-        catch (Error e) {
+        catch (Exception e) {
 
             DriverStation.reportError(e.getMessage(), true);
 

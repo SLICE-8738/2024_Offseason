@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 6.76
+      "x": 1.4151326417922967,
+      "y": 7.2973856925964355
     },
-    "rotation": -120.0
+    "rotation": 179.90874767107852
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Speaker To Note 1"
+                        "pathName": "Amp Side Corner To Note 1"
                       }
                     },
                     {
@@ -36,20 +36,8 @@
                       "data": {
                         "name": "Note Align"
                       }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Amp Side Score Note 1"
-                      }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Store Note"
                 }
               }
             ]
@@ -58,7 +46,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -72,7 +60,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Close Score To Note 4"
+                        "pathName": "Note 1 To Note 4"
                       }
                     },
                     {
@@ -89,11 +77,43 @@
                     }
                   ]
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Store Note"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp Side Speaker To Note 5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp Side Score Note 5 Close"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -102,12 +122,12 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         }
       ]
     }
   },
-  "folder": "Score 3 Speaker",
-  "choreoAuto": false
+  "folder": null,
+  "choreoAuto": true
 }
