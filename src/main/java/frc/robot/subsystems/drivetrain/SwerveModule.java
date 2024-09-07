@@ -22,6 +22,7 @@ public class SwerveModule {
   private final PIDController driveFeedback;
   private final PIDController angleFeedback;
   private Rotation2d angleSetpoint = null; // Setpoint for closed loop control, null for open loop
+  private Rotation2d lastAngle;
   private Double velocitySetpoint = null; // Setpoint for closed loop control, null for open loop
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
@@ -61,6 +62,7 @@ public class SwerveModule {
         break;
     }
 
+    lastAngle = getAngle();
   }
 
   /**
@@ -109,7 +111,13 @@ public class SwerveModule {
     var optimizedState = OnboardModuleState.optimize(state, getAngle());
 
     // Update setpoints, controllers run in "periodic"
-    angleSetpoint = optimizedState.angle;
+    // Prevent rotating module if speed is less then 1%. Prevents jittering.
+    angleSetpoint = (Math.abs(optimizedState.speedMetersPerSecond) <= (Constants.kDrivetrain.MAX_LINEAR_VELOCITY * 0.01))
+      ? lastAngle
+      : optimizedState.angle;
+
+    lastAngle = angleSetpoint;
+
     if (isOpenLoop) {
       io.setDriveVoltage(optimizedState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
       velocitySetpoint = null;

@@ -46,7 +46,7 @@ public class DrivetrainTest extends Command{
           swivelMaxCurrent[i] = currents[i];
         }
       }
-      speeds = driveTrain.getStates();
+      speeds = driveTrain.getModuleStates();
       for(int i = 0; i < 4; i++){
         swivelAverageSpeed[i] += currents[i];
       }
@@ -64,7 +64,7 @@ public class DrivetrainTest extends Command{
             driveMaxCurrent[i] = currents[i];
           }
         }
-        speeds = driveTrain.getStates();
+        speeds = driveTrain.getModuleStates();
         for(int i = 0; i < 4; i++){
             driveAverageSpeed[i] += currents[i];
         }

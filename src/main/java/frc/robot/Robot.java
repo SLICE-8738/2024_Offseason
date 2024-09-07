@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -64,8 +63,6 @@ public class Robot extends LoggedRobot {
     
     // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-
-    AutoLogOutputManager.addPackage("frc.robot.subsystems");
     
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -75,7 +72,6 @@ public class Robot extends LoggedRobot {
     SparkMaxFactory.flashAll();
 
     m_robotContainer.m_autoSelector.updateAutoSelector();
-
   }
 
   /**

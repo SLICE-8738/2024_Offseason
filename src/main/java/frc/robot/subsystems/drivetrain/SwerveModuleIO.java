@@ -32,8 +32,10 @@ public interface SwerveModuleIO {
   /** Run the drive motor at the specified voltage. */
   public default void setDriveVoltage(double volts) {}
 
-  /** Set the given drive motor velocity in meters/second as a PID setpoint along with
-   *  a feedforward voltage. */
+  /** 
+   * Set the given drive motor velocity in meters/second as a PID setpoint along with
+   * a feedforward voltage. 
+   */
   public default void setDriveVelocity(double velocity, double feedforward) {}
 
   /** Run the angle motor at the specified duty cycle percent output. */
@@ -51,8 +53,9 @@ public interface SwerveModuleIO {
   /** Enable or disable brake mode on the angle motor. */
   public default void setAngleBrakeMode(boolean enable) {}
 
-  /** Reset the integrated angle encoder position to
-   *  the position of the CANcoder with the offset.
+  /** 
+   * Reset the integrated angle encoder position to
+   * the position of the CANcoder with the offset.
    */
   public default void resetToAbsolute() {}
 }

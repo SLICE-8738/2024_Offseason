@@ -85,7 +85,7 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d = new Field2d();
 
-    // Creates and pushes Field2d to SmartDashboard.
+    // Create and push Field2d to SmartDashboard
     SmartDashboard.putData(m_field2d);
 
     m_odometry = new SwerveDrivePoseEstimator(
@@ -99,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
     fieldOrientedOffset = new Rotation2d();
 
     PathPlannerLogging.setLogActivePathCallback((poses) -> {
-      // Pushes the trajectory to Field2d.
+      // Display the trajector on the Field2d object
       m_field2d.getObject("Trajectory").setPoses(poses);
     });
 
@@ -120,13 +120,11 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
 
     lockOdometry();
-
     for (SwerveModule mod : swerveMods) {
 
       mod.updateInputs();
 
     }
-
     unlockOdometry();
 
     for (SwerveModule mod : swerveMods) {
@@ -139,16 +137,15 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d.setRobotPose(getPose());
 
+    Logger.recordOutput("Field Position", getPose());
+    Logger.recordOutput("Actual Module States", getModuleStates());
+    Logger.recordOutput("Target Module States", getTargetModuleStates());
+
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-
-    Logger.recordOutput("Field Position", getPose());
-    Logger.recordOutput("Actual Module States", getStates());
-    Logger.recordOutput("Target Module States", getTargetStates());
-
   }
 
   /**
@@ -272,9 +269,9 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The new updated pose of the robot.
    */
-  public void updateOdometry() {
+  private void updateOdometry() {
 
-    double[] sampleTimestamps = swerveMods[0].getOdometryTimestamps();
+    double[] sampleTimestamps = swerveMods[0].getOdometryTimestamps(); // All signals are sampled together
     
     for (int i = 0; i < sampleTimestamps.length; i++) {
 
@@ -440,7 +437,7 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current states of all drivetrain swerve modules.
    */
-  public SwerveModuleState[] getStates() {
+  public SwerveModuleState[] getModuleStates() {
 
     SwerveModuleState[] states = new SwerveModuleState[4];
 
@@ -461,7 +458,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The target states that the drivetrain swerve modules have been set
    *         to.
    */
-  public SwerveModuleState[] getTargetStates() {
+  public SwerveModuleState[] getTargetModuleStates() {
 
     SwerveModuleState[] targetStates = new SwerveModuleState[4];
 
@@ -646,7 +643,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public ChassisSpeeds getChassisSpeeds() {
 
-    return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getStates());
+    return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getModuleStates());
 
   }
 

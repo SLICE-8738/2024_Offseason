@@ -12,65 +12,72 @@ public final class CTREConfigs {
     public TalonFXConfiguration flywheelFXConfig = new TalonFXConfiguration();
 
     public CTREConfigs(){
-        /** Swerve Drive Motor Configuration */
+        // ================================
+        // Swerve Drive Motor Configuration
+        // ================================
 
-            /* Motor Output */
-            var driveMotorOutput = swerveDriveFXConfig.MotorOutput;
-            driveMotorOutput.Inverted = Constants.kDrivetrain.DRIVE_INVERT;
-            driveMotorOutput.NeutralMode = Constants.kDrivetrain.DRIVE_IDLE_MODE;
+        /* Motor Output */
+        var driveMotorOutput = swerveDriveFXConfig.MotorOutput;
+        driveMotorOutput.Inverted = Constants.kDrivetrain.DRIVE_INVERT;
+        driveMotorOutput.NeutralMode = Constants.kDrivetrain.DRIVE_IDLE_MODE;
 
-            /* Current Limiting */
-            var driveCurrentLimits = swerveDriveFXConfig.CurrentLimits;
-            driveCurrentLimits.SupplyCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT;
-            driveCurrentLimits.SupplyCurrentLimit = Constants.kDrivetrain.DRIVE_CURRENT_LIMIT;
-            driveCurrentLimits.SupplyCurrentThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD;
-            driveCurrentLimits.SupplyTimeThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD_TIME;
+        /* Current Limiting */
+        var driveCurrentLimits = swerveDriveFXConfig.CurrentLimits;
+        driveCurrentLimits.SupplyCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT;
+        driveCurrentLimits.SupplyCurrentLimit = Constants.kDrivetrain.DRIVE_CURRENT_LIMIT;
+        driveCurrentLimits.SupplyCurrentThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD;
+        driveCurrentLimits.SupplyTimeThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD_TIME;
 
-            driveCurrentLimits.StatorCurrentLimit = Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
-            driveCurrentLimits.StatorCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMIT;
+        driveCurrentLimits.StatorCurrentLimit = Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
+        driveCurrentLimits.StatorCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMIT;
 
-            /* PID Config */
-            var driveSlot0 = swerveDriveFXConfig.Slot0;
-            driveSlot0.kP = Constants.kDrivetrain.DRIVE_KP;
-            driveSlot0.kI = Constants.kDrivetrain.DRIVE_KI;
-            driveSlot0.kD = Constants.kDrivetrain.DRIVE_KD;
+        /* PID Config */
+        var driveSlot0 = swerveDriveFXConfig.Slot0;
+        driveSlot0.kP = Constants.kDrivetrain.DRIVE_KP;
+        driveSlot0.kI = Constants.kDrivetrain.DRIVE_KI;
+        driveSlot0.kD = Constants.kDrivetrain.DRIVE_KD;
 
-            /* Open and Closed Loop Ramping */
-            swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kDrivetrain.OPEN_LOOP_RAMP;
-            swerveDriveFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kDrivetrain.OPEN_LOOP_RAMP;
+        /* Open and Closed Loop Ramping */
+        swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kDrivetrain.OPEN_LOOP_RAMP;
+        swerveDriveFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kDrivetrain.OPEN_LOOP_RAMP;
 
-            swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
-            swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
+        swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
+        swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
 
-        /** Swerve CANCoder Configuration */
-            swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.kDrivetrain.CANCODER_INVERT;
-            swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+        // ================================
+        // Swerve CANcoder Configuration
+        // ================================   
 
-        /** Flywheel Motor Configuration */
+        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.kDrivetrain.CANCODER_INVERT;
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
-            /** Motor Output */
-            var flywheelMotorOutput = flywheelFXConfig.MotorOutput;
-            flywheelMotorOutput.Inverted = Constants.kShooter.FLYWHEEL_INVERT;
-            flywheelMotorOutput.NeutralMode = Constants.kShooter.FLYWHEEL_IDLE_MODE;
+        // ================================
+        // Flywheel Motor Configuration
+        // ================================
 
-            /* Current Limiting */
-            var flywheelCurrentLimits = flywheelFXConfig.CurrentLimits;
-            flywheelCurrentLimits.SupplyCurrentLimitEnable = Constants.kShooter.FLYWHEEL_ENABLE_CURRENT_LIMIT;
-            flywheelCurrentLimits.SupplyCurrentLimit = Constants.kShooter.FLYWHEEL_CURRENT_LIMIT;
-            flywheelCurrentLimits.SupplyCurrentThreshold = Constants.kShooter.FLYWHEEL_CURRENT_THRESHOLD;
-            flywheelCurrentLimits.SupplyTimeThreshold = Constants.kShooter.FLYWHEEL_CURRENT_THRESHOLD_TIME;
+        /** Motor Output */
+        var flywheelMotorOutput = flywheelFXConfig.MotorOutput;
+        flywheelMotorOutput.Inverted = Constants.kShooter.FLYWHEEL_INVERT;
+        flywheelMotorOutput.NeutralMode = Constants.kShooter.FLYWHEEL_IDLE_MODE;
 
-            /* PID Config */
-            var flywheelSlot0 = flywheelFXConfig.Slot0;
-            flywheelSlot0.kP = Constants.kShooter.FLYWHEEL_KP;
-            flywheelSlot0.kI = Constants.kShooter.FLYWHEEL_KI;
-            flywheelSlot0.kD = Constants.kShooter.FLYWHEEL_KD;
+        /* Current Limiting */
+        var flywheelCurrentLimits = flywheelFXConfig.CurrentLimits;
+        flywheelCurrentLimits.SupplyCurrentLimitEnable = Constants.kShooter.FLYWHEEL_ENABLE_CURRENT_LIMIT;
+        flywheelCurrentLimits.SupplyCurrentLimit = Constants.kShooter.FLYWHEEL_CURRENT_LIMIT;
+        flywheelCurrentLimits.SupplyCurrentThreshold = Constants.kShooter.FLYWHEEL_CURRENT_THRESHOLD;
+        flywheelCurrentLimits.SupplyTimeThreshold = Constants.kShooter.FLYWHEEL_CURRENT_THRESHOLD_TIME;
 
-            /* Open and Closed Loop Ramping */
-            flywheelFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kShooter.FLYWHEEL_OPEN_LOOP_RAMP;
-            flywheelFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kShooter.FLYWHEEL_OPEN_LOOP_RAMP;
+        /* PID Config */
+        var flywheelSlot0 = flywheelFXConfig.Slot0;
+        flywheelSlot0.kP = Constants.kShooter.FLYWHEEL_KP;
+        flywheelSlot0.kI = Constants.kShooter.FLYWHEEL_KI;
+        flywheelSlot0.kD = Constants.kShooter.FLYWHEEL_KD;
 
-            flywheelFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kShooter.FLYWHEEL_CLOSED_LOOP_RAMP;
-            flywheelFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kShooter.FLYWHEEL_CLOSED_LOOP_RAMP;
+        /* Open and Closed Loop Ramping */
+        flywheelFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.kShooter.FLYWHEEL_OPEN_LOOP_RAMP;
+        flywheelFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.kShooter.FLYWHEEL_OPEN_LOOP_RAMP;
+
+        flywheelFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kShooter.FLYWHEEL_CLOSED_LOOP_RAMP;
+        flywheelFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kShooter.FLYWHEEL_CLOSED_LOOP_RAMP;
     }
 }

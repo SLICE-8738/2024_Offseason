@@ -66,9 +66,15 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "AdvantageKit": {
         "Drivetrain": {
+          "Module0": {
+            "open": true
+          },
           "open": true
         }
       },
@@ -89,9 +95,10 @@
         },
         "Joystick Filters": {
           "open": true
-        }
-      },
-      "SmartDashboard": {
+        },
+        "Modules Tab": {
+          "open": true
+        },
         "open": true
       }
     }

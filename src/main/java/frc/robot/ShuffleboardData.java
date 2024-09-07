@@ -10,6 +10,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -26,29 +27,29 @@ public class ShuffleboardData {
         modulesTab = Shuffleboard.getTab("Modules Tab");
         autoTab = Shuffleboard.getTab("Autonomous");
 
-        new DrivetrainData(drivetrain, shooter);
+        new DrivetrainData(drivetrain);
         new ShooterData(shooter);
         new AutoData(autoSelector);
     }
 
     public class DrivetrainData {
 
-        public DrivetrainData(Drivetrain drivetrain, Shooter shooter) {
+        public DrivetrainData(Drivetrain drivetrain) {
 
             //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
-            modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getStates()[0].speedMetersPerSecond).
+            modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getModuleStates()[0].speedMetersPerSecond).
             withPosition(0, 0).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getStates()[1].speedMetersPerSecond).
+            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getModuleStates()[1].speedMetersPerSecond).
             withPosition(0, 3).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getStates()[2].speedMetersPerSecond).
+            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getModuleStates()[2].speedMetersPerSecond).
             withPosition(7, 0).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getStates()[3].speedMetersPerSecond).
+            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getModuleStates()[3].speedMetersPerSecond).
             withPosition(7, 3).
             withSize(2, 1);
         
@@ -78,19 +79,19 @@ public class ShuffleboardData {
             withSize(2, 1);
         
             //Displays the current integrated encoder angle in degrees of the left front swerve module on Shuffleboard
-            modulesTab.addDouble("Left Front Integrated Angle", () -> drivetrain.getStates()[0].angle.getDegrees()).
+            modulesTab.addDouble("Left Front Integrated Angle", () -> drivetrain.getModuleStates()[0].angle.getDegrees()).
             withPosition(2, 0).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getStates()[1].angle.getDegrees()).
+            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getModuleStates()[1].angle.getDegrees()).
             withPosition(2, 3).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getStates()[2].angle.getDegrees()).
+            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getModuleStates()[2].angle.getDegrees()).
             withPosition(5, 0).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getStates()[3].angle.getDegrees()).
+            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getModuleStates()[3].angle.getDegrees()).
             withPosition(5, 3).
             withSize(2, 1);
         
@@ -120,10 +121,6 @@ public class ShuffleboardData {
             driverTab.addCamera("Intake", "limelight-intake-1", "http://10.87.38.88:5800").
             withPosition(4, 0).
             withSize(7, 5);
-
-            driverTab.addBoolean("Flywheel At Speed", () -> shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)).
-            withPosition(0, 0).
-            withSize(4, 2);
 
             // //Adds a tuner for the drive motor PID gains to Shuffleboard
             // ShuffleboardTuner.create(
@@ -168,6 +165,10 @@ public class ShuffleboardData {
             debugTab.addDouble("Shooter Absolute Angle", shooter::getAlternateAngle).
             withPosition(0, 3).
             withSize(2, 1);
+
+            driverTab.addBoolean("Flywheel At Speed", () -> shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR)).
+            withPosition(0, 0).
+            withSize(4, 2);
             
         }
 
