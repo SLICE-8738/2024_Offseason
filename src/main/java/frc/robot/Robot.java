@@ -74,8 +74,6 @@ public class Robot extends LoggedRobot {
     Timer.delay(0.2);
     SparkMaxFactory.flashAll();
 
-    m_robotContainer.m_autoSelector.updateAutoSelector();
-
   }
 
   /**
@@ -96,18 +94,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-
-    m_robotContainer.m_autoSelector.reset();
-    m_robotContainer.m_autoSelector.updateAutoSelector();
-
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {
-
-    m_robotContainer.m_autoSelector.updateAutoSelector();
-
+    m_robotContainer.m_autoSelector.updateInitialAutoPoseOffset();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

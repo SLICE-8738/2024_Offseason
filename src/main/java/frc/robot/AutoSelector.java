@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
 import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.Shooter.EjectNoteCommand;
@@ -32,10 +31,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 /**
  * This class primarily manages the creation and updating of the autonomous mode
- * and starting position sendable choosers on Shuffleboard.
- * 
- * <p>
- * {@link SendableChooser See SendableChooser class here}
+ * and starting position {@link SendableChooser sendable choosers} on Shuffleboard.
  */
 public class AutoSelector {
 
@@ -57,7 +53,7 @@ public class AutoSelector {
 
     }
 
-    public enum DesiredMode {
+    public enum Mode {
 
         SCORE_7_SPEAKER("Score 7 Speaker", true),
         SCORE_5_SPEAKER_1("Score 5 Speaker (1, 2, 3, 5)", true),
@@ -77,7 +73,7 @@ public class AutoSelector {
         public final String value;
         public final boolean useStartingPosition;
 
-        DesiredMode(String value, boolean useStartingPosition) {
+        Mode(String value, boolean useStartingPosition) {
 
             this.value = value;
             this.useStartingPosition = useStartingPosition;
@@ -86,11 +82,11 @@ public class AutoSelector {
 
     }
 
-    public static StartingPosition storedStartingPosition;
-    public DesiredMode storedDesiredMode;
+    private StartingPosition storedStartingPosition = StartingPosition.AMP_SIDE;
+    private Mode storedMode = Mode.SCORE_1_SPEAKER;
 
     public SendableChooser<StartingPosition> startingPositionChooser;
-    public SendableChooser<DesiredMode> modeChooser;
+    public SendableChooser<Mode> modeChooser;
 
     private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
 
@@ -114,29 +110,32 @@ public class AutoSelector {
 
         startingPositionChooser = new SendableChooser<StartingPosition>();
 
-
         startingPositionChooser.setDefaultOption("Amp Side", StartingPosition.AMP_SIDE);
 
         startingPositionChooser.addOption("Middle", StartingPosition.MIDDLE);
         startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
         startingPositionChooser.addOption("Far Source Side", StartingPosition.FAR_SOURCE_SIDE);
 
-        modeChooser = new SendableChooser<DesiredMode>();
+        startingPositionChooser.onChange((position) -> updateAutoRoutine(position, modeChooser.getSelected()));
 
-        modeChooser.setDefaultOption(DesiredMode.SCORE_1_SPEAKER.value, DesiredMode.SCORE_1_SPEAKER);
+        modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.addOption(DesiredMode.SCORE_7_SPEAKER.value, DesiredMode.SCORE_7_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_2.value, DesiredMode.SCORE_5_SPEAKER_2);
-        modeChooser.addOption(DesiredMode.SCORE_5_SPEAKER_3.value, DesiredMode.SCORE_5_SPEAKER_3);
-        modeChooser.addOption(DesiredMode.SCORE_4_SPEAKER.value, DesiredMode.SCORE_4_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_3_AND_A_HALF_SPEAKER.value, DesiredMode.SCORE_3_AND_A_HALF_SPEAKER);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_1.value, DesiredMode.SCORE_3_SPEAKER_1);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_2.value, DesiredMode.SCORE_3_SPEAKER_2);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_3.value, DesiredMode.SCORE_3_SPEAKER_3);
-        modeChooser.addOption(DesiredMode.SCORE_3_SPEAKER_4.value, DesiredMode.SCORE_3_SPEAKER_4);
-        modeChooser.addOption(DesiredMode.SCORE_2_SPEAKER.value, DesiredMode.SCORE_2_SPEAKER);
-        modeChooser.addOption(DesiredMode.CHOREO_TEST_AUTO.value, DesiredMode.CHOREO_TEST_AUTO);
-        modeChooser.addOption(DesiredMode.TEST_PATH.value, DesiredMode.TEST_PATH);
+        modeChooser.setDefaultOption(Mode.SCORE_1_SPEAKER.value, Mode.SCORE_1_SPEAKER);
+
+        modeChooser.addOption(Mode.SCORE_7_SPEAKER.value, Mode.SCORE_7_SPEAKER);
+        modeChooser.addOption(Mode.SCORE_5_SPEAKER_2.value, Mode.SCORE_5_SPEAKER_2);
+        modeChooser.addOption(Mode.SCORE_5_SPEAKER_3.value, Mode.SCORE_5_SPEAKER_3);
+        modeChooser.addOption(Mode.SCORE_4_SPEAKER.value, Mode.SCORE_4_SPEAKER);
+        modeChooser.addOption(Mode.SCORE_3_AND_A_HALF_SPEAKER.value, Mode.SCORE_3_AND_A_HALF_SPEAKER);
+        modeChooser.addOption(Mode.SCORE_3_SPEAKER_1.value, Mode.SCORE_3_SPEAKER_1);
+        modeChooser.addOption(Mode.SCORE_3_SPEAKER_2.value, Mode.SCORE_3_SPEAKER_2);
+        modeChooser.addOption(Mode.SCORE_3_SPEAKER_3.value, Mode.SCORE_3_SPEAKER_3);
+        modeChooser.addOption(Mode.SCORE_3_SPEAKER_4.value, Mode.SCORE_3_SPEAKER_4);
+        modeChooser.addOption(Mode.SCORE_2_SPEAKER.value, Mode.SCORE_2_SPEAKER);
+        modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
+        modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
+
+        modeChooser.onChange((mode) -> updateAutoRoutine(startingPositionChooser.getSelected(), mode));
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,
@@ -161,55 +160,42 @@ public class AutoSelector {
 
     }
 
-    public void updateAutoSelector() {
+    private void updateAutoRoutine(StartingPosition position, Mode mode) {
 
-        StartingPosition startingPosition = startingPositionChooser.getSelected();
-        DesiredMode desiredMode = modeChooser.getSelected();
-
-        if (storedStartingPosition != startingPosition || storedDesiredMode != desiredMode) {
-
-            System.out.println("Auto selection changed, updating creator; Starting Position: " + startingPosition.name()
-                    + ", Desired Mode: " + desiredMode.name());
-
-            autoRoutine = getAutoRoutineForParams(startingPosition, desiredMode);
-
-            updateInitialAutoPoseOffset(startingPosition, desiredMode);
-
-        }
-
-        storedStartingPosition = startingPosition;
-        storedDesiredMode = desiredMode;
-
-    }
-
-    private Optional<PathPlannerAuto> getAutoRoutineForParams(StartingPosition position, DesiredMode mode) {
+        storedStartingPosition = position;
+        storedMode = mode;
 
         try {
 
-            return Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
+            System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
+                + ", Mode: " + mode.value);
+            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
 
         }
         catch (Exception e) {
 
-            DriverStation.reportError(e.getMessage(), true);
-            return Optional.empty();
+            DriverStation.reportError("Selected auto routine '" + (mode.useStartingPosition? position.value + " " + mode.value : mode.value)
+                + "' does not exist", false);            
+            autoRoutine = Optional.empty();
 
         }
 
     }
 
-    public void updateInitialAutoPoseOffset(StartingPosition position, DesiredMode mode) {
+    public void updateInitialAutoPoseOffset() {
 
         Pose2d currentPose = m_drivetrain.getPose();
 
         try {
 
-            initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(mode.useStartingPosition? position.value + " " + mode.value : mode.value);
+            initialAutoPose = PathPlannerAuto.getStaringPoseFromAutoFile(storedMode.useStartingPosition? 
+                storedStartingPosition.value + " " + storedMode.value : storedMode.value);
 
         }
         catch (Exception e) {
 
-            DriverStation.reportError(e.getMessage(), true);
+            DriverStation.reportError("Selected auto routine '" + (storedMode.useStartingPosition? 
+                storedStartingPosition.value + " " + storedMode.value : storedMode.value)+ "' does not exist", false);
 
         }
 
@@ -225,46 +211,21 @@ public class AutoSelector {
 
     }
 
-    public void reset() {
-
-        autoRoutine = Optional.empty();
-        storedDesiredMode = null;
-
-        initialAutoPose = null;
-
-    }
-
     public PathPlannerAuto getAutoRoutine() {
 
         return autoRoutine.get();
 
     }
 
-    public String getStoredDesiredMode() {
+    public String getStartingPosition() {
 
-        if (storedDesiredMode != null) {
-
-            return storedDesiredMode.value;
-
-        } else {
-
-            return "None Stored";
-
-        }
+        return startingPositionChooser.getSelected().value;
 
     }
 
-    public String getStoredStartingPosition() {
+    public String getMode() {
 
-        if (storedStartingPosition != null) {
-
-            return storedStartingPosition.value;
-
-        } else {
-
-            return "None Stored";
-
-        }
+        return modeChooser.getSelected().value;
 
     }
 
