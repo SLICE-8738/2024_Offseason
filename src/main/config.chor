@@ -2033,7 +2033,7 @@
             "eventMarkers": [],
             "isTrajectoryStale": false
         },
-        "Amp Side Score Note 4 Close": {
+        "Amp Side Score Note 4 Speaker": {
             "waypoints": [
                 {
                     "x": 7.863582134246826,
@@ -3345,7 +3345,7 @@
             "eventMarkers": [],
             "isTrajectoryStale": false
         },
-        "Amp Side Score Note 5 Close": {
+        "Amp Side Score Note 5 Speaker": {
             "waypoints": [
                 {
                     "x": 7.8382744789123535,
