@@ -76,6 +76,12 @@
           "Auto Mode": {
             "open": true
           },
+          "Starting Position": {
+            "open": true,
+            "string[]##v_/Shuffleboard/Autonomous/Starting Position/options": {
+              "open": true
+            }
+          },
           "open": true
         },
         "Debug Tab": {
