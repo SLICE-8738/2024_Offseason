@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import frc.robot.*;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -24,13 +26,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Units;
 
-import java.util.List;
-
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.SignalLogger;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -95,17 +93,28 @@ public class Drivetrain extends SubsystemBase {
 
     speedPercent = 1;
 
-    PathPlannerLogging.setLogActivePathCallback(this::setField2d);
+    PathPlannerLogging.setLogActivePathCallback(
+      (path) -> {
+        Logger.recordOutput("Odometry/Trajectory", path.toArray(new Pose2d[path.size()]));
+        m_field2d.getObject("Trajectory").setPoses(path);
+      }
+    );
+    PathPlannerLogging.setLogTargetPoseCallback(
+      (pose) -> {
+        Logger.recordOutput("Odometry/Trajectory Setpoint", pose);
+      }
+    );
 
-    sysIdDriveRoutine = new SysIdRoutine(new Config(), new Mechanism(
-      (volts) -> {
-        for(SwerveModule mod : swerveMods) {
-          mod.setVolts(volts.in(Units.Volts), 0);
-        }
-      },
-      null,
-      this 
-    ));
+    sysIdDriveRoutine = new SysIdRoutine(
+      new Config(), 
+      new Mechanism(
+        (volts) -> {
+          for (SwerveModule mod : swerveMods) {
+            mod.setVolts(volts.in(Volts), 0);
+          }
+        },
+        null,
+        this));
 
   }
 
@@ -117,18 +126,11 @@ public class Drivetrain extends SubsystemBase {
 
     m_field2d.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Rotational Velocity", getRotationalVelocity().getDegrees());
-
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-
-    Logger.recordOutput("Field Position", getPose());
-    Logger.recordOutput("Actual Module States", getStates());
-    Logger.recordOutput("Target Module States", getTargetStates());
-
   }
 
   /**
@@ -247,18 +249,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Sends a given list of poses to the Field2d trajectory object.
-   * 
-   * @param poses The desired poses to send to the Field2d trajectory object.
-   */
-  public void setField2d(List<Pose2d> poses) {
-
-    // Pushes the trajectory to Field2d.
-    m_field2d.getObject("Trajectory").setPoses(poses);
-
-  }
-
-  /**
    * Updates the drivetrain odometry object to the robot's current position on the
    * field.
    * 
@@ -284,6 +274,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  @AutoLogOutput(key = "Odometry/Field Position")
   /**
    * Returns the current pose of the robot without updating
    * the odometry.
@@ -305,8 +296,8 @@ public class Drivetrain extends SubsystemBase {
   public Translation2d getSpeakerPosition() {
 
     Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
-    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getPose().getTranslation())
-    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
+      Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getPose().getTranslation())
+        : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
 
     return difference;
 
@@ -365,6 +356,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  @AutoLogOutput(key = "Odometry/Actual Module States")
   /**
    * Obtains and returns the current states of all drivetrain swerve modules.
    * 
@@ -384,6 +376,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  @AutoLogOutput(key = "Target Module States")
   /**
    * Obtains and returns the target states that the drivetrain swerve modules have
    * been set to.
@@ -669,13 +662,13 @@ public class Drivetrain extends SubsystemBase {
 
   public Command getSysIdDriveQuasistatic(Direction direction) {
 
-    return sysIdDriveRoutine.quasistatic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+    return sysIdDriveRoutine.quasistatic(direction);
 
   }
 
   public Command getSysIdDriveDynamic(Direction direction) {
 
-    return sysIdDriveRoutine.dynamic(direction).beforeStarting(SignalLogger::start).andThen(SignalLogger::stop);
+    return sysIdDriveRoutine.dynamic(direction);
 
   }
 
