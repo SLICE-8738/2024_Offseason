@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
@@ -58,7 +59,8 @@ public class Drivetrain extends SubsystemBase {
   public double maxLinearVelocity = 4.5;
   public double maxAngularVelocity = 7;
 
-  private final SysIdRoutine sysIdDriveRoutine;
+  private final SysIdRoutine sysIDDriveRoutine;
+  public final SendableChooser<Command> sysIDChooser;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -105,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
       }
     );
 
-    sysIdDriveRoutine = new SysIdRoutine(
+    sysIDDriveRoutine = new SysIdRoutine(
       new Config(), 
       new Mechanism(
         (volts) -> {
@@ -115,6 +117,13 @@ public class Drivetrain extends SubsystemBase {
         },
         null,
         this));
+
+    sysIDChooser = new SendableChooser<Command>();
+
+    sysIDChooser.setDefaultOption("Quasistatic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward));
+    sysIDChooser.addOption("Quasistatic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse));
+    sysIDChooser.addOption("Dynamic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward));
+    sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse));
 
   }
 
@@ -644,8 +653,6 @@ public class Drivetrain extends SubsystemBase {
     return currents;
   }
 
-  public void swivelMotors() {}
-
   /**
    * Sets all drivetrain swerve modules to states with speeds of 0 and the current
    * angles of the modules.
@@ -660,15 +667,9 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public Command getSysIdDriveQuasistatic(Direction direction) {
+  public Command getSysIDDriveRoutine() {
 
-    return sysIdDriveRoutine.quasistatic(direction);
-
-  }
-
-  public Command getSysIdDriveDynamic(Direction direction) {
-
-    return sysIdDriveRoutine.dynamic(direction);
+    return sysIDChooser.getSelected();
 
   }
 

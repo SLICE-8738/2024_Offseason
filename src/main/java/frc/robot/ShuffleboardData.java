@@ -157,6 +157,8 @@ public class ShuffleboardData {
             //     new String[] {"Max Linear", "Max Angular"},
             //     "Drivetrain Max Velocities");
 
+            debugTab.add("SysID Routine", drivetrain.sysIDChooser);
+
         }
 
     }

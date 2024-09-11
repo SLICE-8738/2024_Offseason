@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 127.86697111921795,
+    "rotation": -52.129999999999995,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Wing Note Intake",
   "previewStartingState": {
-    "rotation": -147.1879672757015,
+    "rotation": 32.81,
     "velocity": 0
   },
   "useDefaultConstraints": false

@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 173.66,
+    "rotation": -6.339999999999975,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Note Score",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 0.0,
     "velocity": 0.0
   },
   "useDefaultConstraints": true

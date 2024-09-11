@@ -51,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": 179.99999999998622,
+    "rotation": 0.0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Mid Field Note Intake",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true
