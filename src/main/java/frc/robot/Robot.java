@@ -39,7 +39,7 @@ public class Robot extends LoggedRobot {
     Timer.delay(0.2);
     SparkMaxFactory.flashAll();
 
-    m_robotContainer.m_autoSelector.updateAutoSelector();
+    //TODO m_robotContainer.m_autoSelector.updateAutoSelector();
 
   }
 
@@ -63,15 +63,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
 
-    m_robotContainer.m_autoSelector.reset();
-    m_robotContainer.m_autoSelector.updateAutoSelector();
-
   }
 
   @Override
   public void disabledPeriodic() {
-
-    m_robotContainer.m_autoSelector.updateAutoSelector();
 
   }
 
