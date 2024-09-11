@@ -8,12 +8,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Class for interfacing with a Limelight connected to NetworkTables. */
@@ -95,7 +92,7 @@ public class LimelightTable {
   public boolean getTargetDetected() {
 
     return targetDetected == 1;
-
+    
   }
 
   /**
@@ -153,15 +150,6 @@ public class LimelightTable {
    * 
    * @return The current robot-relative pose of the speaker.
    */
-  public Translation2d getSpeakerPosition() {
-
-    Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
-    Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getLastBotPoseBlue().getTranslation())
-    : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getLastBotPoseBlue().getTranslation());
-
-    return difference;
-
-  }
 
   /**
    * @return The last received non-empty robot pose with the target as the origin if any.

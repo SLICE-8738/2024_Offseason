@@ -365,7 +365,55 @@ public final class Constants {
     public static final int LED_LENGTH = 300;
   }
   
+    public static final int kDriverControllerPort = 0;
+  
+  //current limit = 40 amphs
+  public static final class DriveConstants{
+
+    //public static final double kGearRatio = 1/36;
+    //public static final double kWheelRadiusInches = 0;
+
+    //public static final double kLinearDistanceConversionFactor = (Units.inchesToMeters(1/(kGearRatio * 2 * Math.PI*Units.inchesToMeters(kWheelRadiusInches)) * 10));
+
+    public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.128 * Math.PI;
+    public static final int kLeftMotorPort = 0;
+    public static final int kRightMotorPort = 1;
+
+
+    }
+
+  public static final class ArmConstants{
+
+    public static final double ArmKP = 0;
+    public static final double ArmKI = 0;
+    public static final double ArmKD = 0;
+    public static final double ArmFF = 0;
+
+  }
+
+  public static final class AutoConstants {
+    public static final double kAutoDriveDistanceInches = 60;
+    public static final double kAutoBackupDistanceInches = 20;
+    public static final double kAutoDriveSpeed = 0.5;
+  }
+
+  public static final class PIDConstants {
+    public static final double kP = 4.0; // TODO: tune the PID values
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+  }
+
+
+
+  private static final double SELF_RIGHTING_ARM_ERROR_TOLERANCE = 0;
+  public static final double kPSpeakerAlignRotation = 3.2;
+  public static final double kISpeakerAlignRotation = 0;
+  public static final double kDSpeakerAlignRotation = 0.8;
+  public static double kPNoteAlignRotation = 3;
+  public static double kINoteAlignRotation = 0;
+  public static double kDNoteAlignRotation = 0;
 }
+
 
 
 
