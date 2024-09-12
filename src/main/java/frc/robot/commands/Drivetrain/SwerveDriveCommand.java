@@ -9,6 +9,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -39,7 +42,7 @@ public class SwerveDriveCommand extends Command {
     m_isOpenLoop = isOpenLoop;
 
     translationFilter = new PolarJoystickFilter(new JoystickFilterConfig(
-        0.07,
+        0.09,
         0.9,
         Constants.OperatorConstants.driveExponent,
         Constants.OperatorConstants.driveExponentPercent));

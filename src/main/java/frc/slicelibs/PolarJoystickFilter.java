@@ -69,7 +69,6 @@ public class PolarJoystickFilter {
         filtered[1] = smoothing * lastInput + (1 - smoothing) * filtered[1];
         lastInput = filtered[1];
         double[] signal = withDead(filtered);
-        //System.out.println("X: " + (Math.cos(signal[0]) * signal[1]) + ", Y:" + (Math.sin(signal[0]) * signal[1]));
         return new double[] {Math.cos(signal[0]) * signal[1], Math.sin(signal[0]) * signal[1]};
     }
 
