@@ -40,12 +40,12 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveModule[] swerveMods;
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
-  new SwerveModulePosition[] {
-    new SwerveModulePosition(),
-    new SwerveModulePosition(),
-    new SwerveModulePosition(),
-    new SwerveModulePosition()
-  };
+    new SwerveModulePosition[] {
+      new SwerveModulePosition(),
+      new SwerveModulePosition(),
+      new SwerveModulePosition(),
+      new SwerveModulePosition()
+    };
   private final SwerveDrivePoseEstimator m_odometry;
   private final AHRS m_gyro;
   public final Field2d m_field2d;

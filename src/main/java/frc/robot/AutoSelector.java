@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,6 +26,7 @@ import java.util.Optional;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -68,6 +70,7 @@ public class AutoSelector {
         SCORE_2_SPEAKER("Score 2 Speaker", true),
         SCORE_1_SPEAKER("Score 1 Speaker", false),
         CHOREO_TEST_AUTO("Choreo Test Auto", false),
+        CHOREO_TEST_PATH("Choreo Test Path", false),
         TEST_PATH("Test Path", false);
 
         public final String value;
@@ -133,6 +136,7 @@ public class AutoSelector {
         modeChooser.addOption(Mode.SCORE_3_SPEAKER_4.value, Mode.SCORE_3_SPEAKER_4);
         modeChooser.addOption(Mode.SCORE_2_SPEAKER.value, Mode.SCORE_2_SPEAKER);
         modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
+        modeChooser.addOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
         modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
 
         modeChooser.onChange((mode) -> updateAutoRoutine(startingPositionChooser.getSelected(), mode));
