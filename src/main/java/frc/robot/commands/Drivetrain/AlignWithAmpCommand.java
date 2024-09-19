@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -96,9 +95,6 @@ public class AlignWithAmpCommand extends Command {
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(-turnAmount)),
         m_isOpenLoop,
         m_isFieldRelative);
-
-    SmartDashboard.putNumber("Target Angle", 90);
-    SmartDashboard.putNumber("Current Angle", currentAngle);
 
   }
 

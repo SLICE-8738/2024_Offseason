@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,7 +25,6 @@ import java.util.Optional;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -88,8 +86,8 @@ public class AutoSelector {
     private StartingPosition storedStartingPosition = StartingPosition.AMP_SIDE;
     private Mode storedMode = Mode.SCORE_1_SPEAKER;
 
-    public SendableChooser<StartingPosition> startingPositionChooser;
-    public SendableChooser<Mode> modeChooser;
+    public final SendableChooser<StartingPosition> startingPositionChooser;
+    public final SendableChooser<Mode> modeChooser;
 
     private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
 
@@ -119,7 +117,7 @@ public class AutoSelector {
         startingPositionChooser.addOption("Source Side", StartingPosition.SOURCE_SIDE);
         startingPositionChooser.addOption("Far Source Side", StartingPosition.FAR_SOURCE_SIDE);
 
-        startingPositionChooser.onChange((position) -> updateAutoRoutine(position, modeChooser.getSelected()));
+        startingPositionChooser.onChange((position) -> updateAutoRoutine(position, storedMode));
 
         modeChooser = new SendableChooser<Mode>();
 
@@ -139,7 +137,7 @@ public class AutoSelector {
         modeChooser.addOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
         modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
 
-        modeChooser.onChange((mode) -> updateAutoRoutine(startingPositionChooser.getSelected(), mode));
+        modeChooser.onChange((mode) -> updateAutoRoutine(storedStartingPosition, mode));
 
         AutoBuilder.configureHolonomic(
             m_drivetrain::getPose,

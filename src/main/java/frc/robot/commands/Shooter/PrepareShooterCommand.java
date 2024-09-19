@@ -25,7 +25,6 @@ import frc.robot.subsystems.ShooterLimelight;
 public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
   private final Drivetrain m_drivetrain;
-  //private boolean flywheelsStopped;
 
   private boolean forceSubwoofer;
 
@@ -93,14 +92,6 @@ public class PrepareShooterCommand extends Command {
     // Sets the flywheel speed and aim angle to the appropriate values 
     //double speed = shotDetails.getFlywheelVelocity();
     //originalVelocityWidget.getEntry().setDouble(speed);
-    /*if (m_drivetrain.inShootingRange()) {
-      m_shooter.spinFlywheels(speed);
-      flywheelsStopped = false;
-    }
-    else if (!flywheelsStopped) {
-      m_shooter.spinFlywheels(0);
-      flywheelsStopped = true;
-    }*/
 
     //speed *= multiplierWidget.getEntry().getDouble(1);
     double angle = -2.3;
@@ -140,10 +131,7 @@ public class PrepareShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    if (!DriverStation.isAutonomousEnabled()) {
-      m_shooter.stopFlywheels();
-    }
+    m_shooter.stopFlywheels();
     m_shooter.slowDownAim();
     m_shooter.aimShooter(Constants.kShooter.SHOOTER_STOW_ANGLE + 0.5);
   }

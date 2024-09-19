@@ -214,7 +214,6 @@ public class Shooter extends SubsystemBase {
    */
   public boolean atTargetSpeed(double acceptableError){
     double currentSpeed = getFlywheelSpeed(); // Get the current speed of the flywheel
-    SmartDashboard.putNumber("Flywheel Speed Error", speedTarget - currentSpeed);
     if (speedTarget - currentSpeed <= acceptableError){ // Is the current speed within the acceptable error?
       return true; // if so, true.
     }

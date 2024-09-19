@@ -478,12 +478,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetFieldOrientedHeading() {
-    fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
+    fieldOrientedOffset = getHeading();
     resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
   }
 
   public void reverseFieldOrientedHeading() {
-    fieldOrientedOffset = getHeading();
+    fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
     resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
   }
 
@@ -591,7 +591,6 @@ public class Drivetrain extends SubsystemBase {
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
 
-    speeds.omegaRadiansPerSecond *= -1;
     setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
 
   }

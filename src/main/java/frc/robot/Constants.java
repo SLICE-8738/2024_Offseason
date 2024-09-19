@@ -169,7 +169,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 30;
       public static final int CANCODER_ID = 21;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.61);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.61);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -179,7 +179,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
       public static final int CANCODER_ID = 20;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.52);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(3.52);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -189,7 +189,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
       public static final int CANCODER_ID = 23;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.08);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.08);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -199,7 +199,7 @@ public final class Constants {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
       public static final int CANCODER_ID = 22;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(316.32);
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(136.32);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
@@ -234,7 +234,7 @@ public final class Constants {
     public static final int FRAME_2_PERIOD_MS = 100;
 
     /* Encoder Conversion Values */
-    public static final double FLYWHEEL_GEAR_RATIO = 0.5; // 1:2
+    public static final double FLYWHEEL_GEAR_RATIO = 1;
     public static final double AIM_GEAR_RATIO = 250; // 250:1
 
     public static final double AIM_POSITION_CONVERSION_FACTOR = 360 / AIM_GEAR_RATIO;
@@ -244,7 +244,7 @@ public final class Constants {
     public static final double FLYWHEEL_KI = 0.000000006;
     public static final double FLYWHEEL_KD = 0;
     // Feedforward for flywheel (found by collecting data and creating a linear regression)
-    public static final double FLYWHEEL_FF_KV = 0.00102129;
+    public static final double FLYWHEEL_FF_KV = 0.00204258;
     public static final double FLYWHEEL_FF_KS = 0.282459;
 
     public static final double AIM_KP = 0.5;

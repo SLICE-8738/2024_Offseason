@@ -131,9 +131,7 @@ public class LimelightTable {
    *         being received if any. Null if none is being received.
    */
   public Pose2d getCurrentBotPoseBlue() {
-      
-    SmartDashboard.putNumber("Limelight Pose X", currentBotPoseBlue[0]);
- 
+       
     if(currentBotPoseBlue != new double[6]) {
 
       return new Pose2d(currentBotPoseBlue[0], currentBotPoseBlue[1], Rotation2d.fromDegrees(currentBotPoseBlue[5]));
