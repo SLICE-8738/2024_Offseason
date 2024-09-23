@@ -18,7 +18,6 @@ import frc.robot.subsystems.Shooter;
 public class PassNoteCommand extends Command {
   /** Creates a new PassNoteCommand. */
 
-  private static SimpleWidget angleWidget = Shuffleboard.getTab("Debug Tab").add("Pass Angle", 35);
 
   private final Shooter shooter;
   private final Indexer indexer;
@@ -73,7 +72,6 @@ public class PassNoteCommand extends Command {
       ready = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
     }
 
-    SmartDashboard.putBoolean("Pass Note Read", ready);
 
     if (buttonReleased && !aim && ready) {
       aim = true;
@@ -82,7 +80,7 @@ public class PassNoteCommand extends Command {
 
 
     if (aim) {
-      shooter.aimShooter(angleWidget.getEntry().getDouble(35));
+      shooter.aimShooter(35);
       if (shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR) || !indexer.isStored()) {
         if (!timerStarted) {
           timer.start();

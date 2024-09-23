@@ -47,7 +47,6 @@ public class AlignNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putBoolean("Intaking", true);
     storeTimer.reset();
     storeTimer.stop();
 

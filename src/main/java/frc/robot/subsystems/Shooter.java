@@ -55,7 +55,6 @@ public class Shooter extends SubsystemBase {
   private double speedTarget; // Target speed of flywheel
   private double angleTarget; // Target angle of shooter
 
-  private ShuffleboardTab shooterTesting;
 
   private final ShuffleboardTab shooterTestTab;
   private final SimpleWidget currentAngleWidget;
@@ -70,8 +69,6 @@ public class Shooter extends SubsystemBase {
 
     shooterTestTab = Shuffleboard.getTab("Shooter Testing");
     currentAngleWidget = shooterTestTab.add("Current Shooter Angle", 0);
-
-    shooterTesting = Shuffleboard.getTab("Shooter Testing");
 
     // Define the above objects
     flywheelTop = new TalonFX(Constants.kShooter.FLYWHEEL_TOP_ID);
@@ -302,23 +299,13 @@ public class Shooter extends SubsystemBase {
 
     double alternateVelocity = aimAlternateEncoder.getVelocity();
     double relativeVelocity = (aimRelativeEncoderLeft.getVelocity() + aimRelativeEncoderRight.getVelocity()) / 2;
-    // if (Math.abs(alternatePosition - relativePosition) > 10) {
-    //   shooterDisabled = true;
-    //   dutyCycleAimShooter(0);
-    //   System.out.println("SHOOTER DISABLED");
-    // }
 
-    SmartDashboard.putNumber("Alternate Encoder Shooter Position", alternatePosition);
+    SmartDashboard.putNumber("Shooter Angle", alternatePosition);
     
     SmartDashboard.putBoolean("Amp Reed 1", !reedSwitchAmp1.get());
     SmartDashboard.putBoolean("Amp Reed 2", !reedSwitchAmp2.get());
     SmartDashboard.putBoolean("Stow Reed 1", !reedSwitchStow1.get());
     SmartDashboard.putBoolean("Stow Reed 2", !reedSwitchStow2.get());
-    // SmartDashboard.putNumber("Integrated Encoder Shooter Position", relativePosition);
-    // SmartDashboard.putNumber("Alternate Encoder Shooter Velocity", alternateVelocity);
-    // SmartDashboard.putNumber("Relative Encoder Shooter Velocity", relativeVelocity);
-    // SmartDashboard.putNumber("Shooter Position Error", alternatePosition - relativePosition);
-    // SmartDashboard.putNumber("Shooter Velocity Error", alternateVelocity - relativeVelocity);
 
   }
 }

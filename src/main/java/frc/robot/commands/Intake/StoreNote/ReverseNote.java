@@ -36,8 +36,6 @@ public class ReverseNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putBoolean("Intaking", true);
-
     totalTimer.restart();
   }
 

@@ -36,8 +36,6 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putBoolean("Intaking", true);
-
     outputCurrentThreshold = false;
     forceStop = false;
   }

@@ -27,29 +27,14 @@ public class PrepareShooterCommand extends Command {
   private final Drivetrain m_drivetrain;
 
   private boolean forceSubwoofer;
-
-  //private static final ShuffleboardTab shooterTestTab = Shuffleboard.getTab("Shooter Testing");
-  // private final SimpleWidget distanceWidget, desiredAngleWidget, desiredSpeedWidget, currentFlywheelSpeed, topFlywheelCurrent, bottomFlywheelCurrent, multiplierWidget, originalVelocityWidget;
-  //private static final SimpleWidget originalVelocityWidget = shooterTestTab.add("Original Flywheel Velocity", 0);
-  //private static final SimpleWidget angleWidget = shooterTestTab.add("Angle Adjustment", 0);
   
   /** Creates a new ShootCommand. */
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain) {
     m_shooter = shooter;
     m_drivetrain  = drivetrain;
 
-    // distanceWidget = shooterTestTab.add("Robot Distance", 0);
-    // desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
-    // desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
-    // topFlywheelCurrent = shooterTestTab.add("Top Flywheel Current", 0);
-    // bottomFlywheelCurrent = shooterTestTab.add("Bottom Flywheel Current", 0);
-    //multiplierWidget = shooterTestTab.add("Velocity Multiplier", 1);
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-
-    //flywheelsStopped = true;
-
     forceSubwoofer = false;
   }
 
@@ -141,4 +126,5 @@ public class PrepareShooterCommand extends Command {
   public boolean isFinished() {
     return false;
   }
+
 }
