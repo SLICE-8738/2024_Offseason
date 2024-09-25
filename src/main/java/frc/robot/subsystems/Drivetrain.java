@@ -87,7 +87,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getModulePositions(), 
-      ShooterLimelight.getTable().getLastBotPoseBlue(),
+      LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter"),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
 
@@ -479,12 +479,12 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetFieldOrientedHeading() {
     fieldOrientedOffset = getHeading();
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
   }
 
   public void reverseFieldOrientedHeading() {
     fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
-    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+    resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
   }
 
   /**
@@ -497,8 +497,8 @@ public class Drivetrain extends SubsystemBase {
 
     if (RobotBase.isReal()) {
       return Rotation2d.fromDegrees(Constants.kDrivetrain.INVERT_GYRO? 
-        MathUtil.inputModulus(-m_gyro.getYaw(), 0 , 360) 
-          : MathUtil.inputModulus(m_gyro.getYaw(), 0, 360));
+        MathUtil.inputModulus(-(m_gyro.getYaw() - 180), 0 , 360) 
+          : MathUtil.inputModulus(m_gyro.getYaw() - 180, 0, 360));
     }
     else {
       SwerveModulePosition[] modulePositions = getModulePositions();
@@ -590,6 +590,9 @@ public class Drivetrain extends SubsystemBase {
    * 
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
+
+    speeds.vxMetersPerSecond *= -1;
+    speeds.vyMetersPerSecond *= -1;
 
     setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
 

@@ -126,5 +126,4 @@ public class PrepareShooterCommand extends Command {
   public boolean isFinished() {
     return false;
   }
-
 }

@@ -49,6 +49,7 @@ public class AlignWithNoteCommand extends Command {
   public void initialize() {
 
     timer.reset();
+    LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
   }
 
@@ -84,7 +85,6 @@ public class AlignWithNoteCommand extends Command {
     power *= multiplier;
 
     m_drivetrain.swerveDrive(new Transform2d(power, 0, Rotation2d.fromDegrees(rotation)), false, false);
-    LimelightHelpers.setLEDMode_ForceOn("limelight-intake");
 
   }
 
