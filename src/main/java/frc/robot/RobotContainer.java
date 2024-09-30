@@ -75,7 +75,7 @@ public class RobotContainer {
        Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_sysIDDriveRoutine = new ProxyCommand(m_drivetrain::getSysIDDriveRoutine);
   // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  public final AlignWithSpeakerCommand m_alignWithSpeaker = new AlignWithSpeakerCommand(m_drivetrain, driverController,
+  public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController,
   false, true);
 
   /* Shooter */
@@ -202,7 +202,7 @@ public class RobotContainer {
     Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
-    Button.square1.whileTrue(m_alignWithSpeaker);
+    //Button.square1.whileTrue(m_alignAmp);
     Button.leftBumper1.whileTrue(m_alignNote);
     Button.rightBumper1.toggleOnTrue(m_sysIDDriveRoutine);
 

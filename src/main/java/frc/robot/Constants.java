@@ -290,6 +290,8 @@ public final class Constants {
     public static final int REED_SWITCH_AMP_1 = 0;
     public static final int REED_SWITCH_AMP_2 = 0;
 
+    public static final double SPEAKER_ALIGN_INITIAL_SPEED = 2;
+
   }
 
   public final class kIntake {

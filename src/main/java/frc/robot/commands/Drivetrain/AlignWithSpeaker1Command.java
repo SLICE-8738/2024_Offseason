@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 /**
  * Maintains driver control of robot translation, but automatically turns to face the speaker.
  */
-public class AlignWithSpeakerCommand extends Command {
+public class AlignWithSpeaker1Command extends Command {
 
   private final Drivetrain m_drivetrain;
 
@@ -30,10 +30,8 @@ public class AlignWithSpeakerCommand extends Command {
   private final boolean m_isOpenLoop;
   private final boolean m_isFieldRelative;
 
-  private final PIDController rotationController;
-
   /** Creates a new AlignWithSpeakerCommand for teleop. */
-  public AlignWithSpeakerCommand(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
+  public AlignWithSpeaker1Command(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
 
     this(drivetrain, isOpenLoop, isFieldRelative);
@@ -49,7 +47,7 @@ public class AlignWithSpeakerCommand extends Command {
   }
 
   /** Creates a new AlignWithSpeakerCommand for autonomous. */
-  public AlignWithSpeakerCommand(Drivetrain drivetrain, boolean isOpenLoop, boolean isFieldRelative) {
+  public AlignWithSpeaker1Command(Drivetrain drivetrain, boolean isOpenLoop, boolean isFieldRelative) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -58,9 +56,6 @@ public class AlignWithSpeakerCommand extends Command {
 
     m_isOpenLoop = isOpenLoop;
     m_isFieldRelative = isFieldRelative;
-
-    rotationController = new PIDController(Constants.kDrivetrain.kPSpeakerAlignRotation, Constants.kDrivetrain.kISpeakerAlignRotation, Constants.kDrivetrain.kDSpeakerAlignRotation);
-    rotationController.enableContinuousInput(0, 360);
 
   }
 
@@ -100,7 +95,8 @@ public class AlignWithSpeakerCommand extends Command {
     // Run PID Controller
     //double currentAngle = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : m_drivetrain.getPose().getRotation().getDegrees();
     double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
-    double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
+    double error = (targetDegrees - currentAngle);
+    double turnAmount = (error > 0 && error < 180) ? Constants.kShooter.SPEAKER_ALIGN_INITIAL_SPEED : -Constants.kShooter.SPEAKER_ALIGN_INITIAL_SPEED;
 
     m_drivetrain.swerveDrive(
         new Transform2d(new Translation2d(translationX, translationY), Rotation2d.fromDegrees(turnAmount)),

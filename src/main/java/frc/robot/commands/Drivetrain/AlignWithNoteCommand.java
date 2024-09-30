@@ -74,7 +74,7 @@ public class AlignWithNoteCommand extends Command {
       rotation = 15 * (timer.get() + 3.5) * Math.sin(5 * (timer.get() + 3.5));
     }
     double error = rotationController.getPositionError();
-    double power = (40 - Math.abs(error)) / 20.0;
+    double power = (40 - Math.abs(error)) / 10.0;
 
     double height = IntakeLimelight.getTable().getYOffset() - 18.8;
     double multiplier = (height + 20) / 15.0;

@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 import frc.robot.Constants;
-import frc.robot.commands.Drivetrain.AlignWithSpeakerCommand;
+import frc.robot.commands.Drivetrain.AlignWithSpeaker2Command;
 import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
@@ -45,7 +45,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
       new NudgeIndexer(indexer),
       new InstantCommand(drivetrain::resetToAprilTagRotation)));
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
+    AlignWithSpeaker2Command alignWithSpeaker = new AlignWithSpeaker2Command(drivetrain, driveController, true, true);
     addCommands(prepareShooter, alignWithSpeaker);
 
   }
@@ -58,7 +58,7 @@ public class ShootCommand extends ParallelDeadlineGroup {
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, true, true);
+    AlignWithSpeaker2Command alignWithSpeaker = new AlignWithSpeaker2Command(drivetrain, true, true);
     addCommands(prepareShooter, alignWithSpeaker);
   }
 
