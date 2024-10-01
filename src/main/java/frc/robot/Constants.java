@@ -161,45 +161,45 @@ public final class Constants {
     public static final boolean ANGLE_INVERT = true;
 
     /* Angle Encoder Invert */
-    public static final SensorDirectionValue CANCODER_INVERT = SensorDirectionValue.CounterClockwise_Positive;
+    public static final SensorDirectionValue CANCODER_INVERT = SensorDirectionValue.Clockwise_Positive;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public final class Mod0 {
-      public static final int DRIVE_MOTOR_ID = 2;
-      public static final int ANGLE_MOTOR_ID = 30;
-      public static final int CANCODER_ID = 21;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.61);
+      public static final int DRIVE_MOTOR_ID = 4;
+      public static final int ANGLE_MOTOR_ID = 8;
+      public static final int CANCODER_ID = 23;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(331.52);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
 
     /* Front Right Module - Module 1 */
     public final class Mod1 {
-      public static final int DRIVE_MOTOR_ID = 3;
-      public static final int ANGLE_MOTOR_ID = 7;
-      public static final int CANCODER_ID = 20;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(3.52);
+      public static final int DRIVE_MOTOR_ID = 1;
+      public static final int ANGLE_MOTOR_ID = 5;
+      public static final int CANCODER_ID = 22;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(46.67);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
 
     /* Back Right Module - Module 2 */
     public final class Mod2 {
-      public static final int DRIVE_MOTOR_ID = 4;
-      public static final int ANGLE_MOTOR_ID = 8;
-      public static final int CANCODER_ID = 23;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.08);
+      public static final int DRIVE_MOTOR_ID = 2;
+      public static final int ANGLE_MOTOR_ID = 30;
+      public static final int CANCODER_ID = 21;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(149.68);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
 
     /* Back Left Module - Module 3 */
     public final class Mod3 {
-      public static final int DRIVE_MOTOR_ID = 1;
-      public static final int ANGLE_MOTOR_ID = 5;
-      public static final int CANCODER_ID = 22;
-      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(136.32);
+      public static final int DRIVE_MOTOR_ID = 3;
+      public static final int ANGLE_MOTOR_ID = 7;
+      public static final int CANCODER_ID = 20;
+      public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(176.48);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
           CANCODER_ID, ANGLE_OFFSET);
     }
