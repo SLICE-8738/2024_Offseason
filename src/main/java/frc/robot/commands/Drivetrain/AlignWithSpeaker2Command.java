@@ -89,7 +89,6 @@ public class AlignWithSpeaker2Command extends Command {
     }
 
     // find the angle to speaker;
-    //Translation2d directionToSpeaker = ShooterLimelight.getTargetDetected()? ShooterLimelight.getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
     Translation2d directionToSpeaker = m_drivetrain.getSpeakerPosition();
     Rotation2d targetAngle = directionToSpeaker.getAngle();
     double targetDegrees = targetAngle.getDegrees() % 360;
@@ -98,7 +97,6 @@ public class AlignWithSpeaker2Command extends Command {
     }
 
     // Run PID Controller
-    //double currentAngle = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : m_drivetrain.getPose().getRotation().getDegrees();
     double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
     double turnAmount = rotationController.calculate(currentAngle, targetDegrees);
 
