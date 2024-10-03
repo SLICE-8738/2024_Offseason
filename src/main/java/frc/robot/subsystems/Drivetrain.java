@@ -591,9 +591,6 @@ public class Drivetrain extends SubsystemBase {
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
 
-    speeds.vxMetersPerSecond *= -1;
-    speeds.vyMetersPerSecond *= -1;
-
     setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
 
   }
