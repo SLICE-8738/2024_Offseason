@@ -97,7 +97,6 @@ public class RobotContainer {
   public final RunIntakeCommand m_runIntakeOut = new RunIntakeCommand(m_intake, -0.5);
   public final StoreNoteSequence m_storeNote = new StoreNoteSequence(m_indexer, m_intake);
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
-  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
 
   /* Indexer */
   // public final RunIndexerCommand m_runIndexerUp = new
@@ -106,6 +105,7 @@ public class RobotContainer {
   // public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
   // public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
+  public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
 
   public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
 
