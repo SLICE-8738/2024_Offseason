@@ -63,7 +63,7 @@ public class PassNoteCommand extends Command {
   @Override
   public void execute() {
     boolean buttonReleased = !Button.leftBumper2.getAsBoolean();
-    shooter.spinFlywheels(PASS_NOTE_TEST_MODE ? 1000 : 4000, false);
+    shooter.spinFlywheels(PASS_NOTE_TEST_MODE ? 1000 : 4500, false);
     boolean ready = false;
 
     if (PASS_NOTE_TEST_MODE) {
@@ -80,7 +80,7 @@ public class PassNoteCommand extends Command {
 
 
     if (aim) {
-      shooter.aimShooter(35);
+      shooter.aimShooter(15);
       if (shooter.detectShooterAngle(Constants.kShooter.VERTICAL_AIM_ACCEPTABLE_ERROR) || !indexer.isStored()) {
         if (!timerStarted) {
           timer.start();
