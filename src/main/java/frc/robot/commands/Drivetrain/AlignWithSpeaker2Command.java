@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Maintains driver control of robot translation, but automatically turns to face the speaker.
+ * Maintains driver control of robot translation, but automatically turns to face the speaker
+ * with PID for fine adjustments.
  */
 public class AlignWithSpeaker2Command extends Command {
 
@@ -32,7 +33,7 @@ public class AlignWithSpeaker2Command extends Command {
 
   private final PIDController rotationController;
 
-  /** Creates a new AlignWithSpeakerCommand for teleop. */
+  /** Creates a new AlignWithSpeaker2Command for teleop. */
   public AlignWithSpeaker2Command(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
 
@@ -48,7 +49,7 @@ public class AlignWithSpeaker2Command extends Command {
 
   }
 
-  /** Creates a new AlignWithSpeakerCommand for autonomous. */
+  /** Creates a new AlignWithSpeaker2Command for autonomous. */
   public AlignWithSpeaker2Command(Drivetrain drivetrain, boolean isOpenLoop, boolean isFieldRelative) {
 
     // Use addRequirements() here to declare subsystem dependencies.

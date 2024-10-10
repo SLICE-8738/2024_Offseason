@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -74,9 +75,10 @@ public class RobotContainer {
   public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 5.67, Rotation2d.fromDegrees(90)),
        Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_sysIDDriveRoutine = new ProxyCommand(m_drivetrain::getSysIDDriveRoutine);
-  // public final ResetToAprilTagPoseCommand m_resetToAprilTagPose = new ResetToAprilTagPoseCommand(m_drivetrain);
-  public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController,
-  false, true);
+  public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true);
+  /*public final SequentialCommandGroup m_alignWithSpeaker = new SequentialCommandGroup(
+      new AlignWithSpeaker1Command(m_drivetrain, driverController, false, true),
+      new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true));*/
 
   /* Shooter */
   // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
@@ -88,7 +90,6 @@ public class RobotContainer {
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
-  //public final SpinFlywheelCommand m_reverseFlywheels = new SpinFlywheelCommand(m_shooter, -500);
   public final SubwooferShotCommand m_subwooferShotCommand = new SubwooferShotCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final PassNoteCommand m_pass = new PassNoteCommand(m_shooter, m_indexer);
 

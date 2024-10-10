@@ -10,7 +10,6 @@ import frc.robot.subsystems.ShooterLimelight;
 import frc.slicelibs.PolarJoystickFilter;
 import frc.slicelibs.util.config.JoystickFilterConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,7 +17,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Maintains driver control of robot translation, but automatically turns to face the speaker.
+ * Maintains driver control of robot translation, but automatically turns to face the speaker
+ * with no PID for higher speed.
  */
 public class AlignWithSpeaker1Command extends Command {
 
@@ -30,7 +30,9 @@ public class AlignWithSpeaker1Command extends Command {
   private final boolean m_isOpenLoop;
   private final boolean m_isFieldRelative;
 
-  /** Creates a new AlignWithSpeakerCommand for teleop. */
+  private double error;
+
+  /** Creates a new AlignWithSpeaker1Command for teleop. */
   public AlignWithSpeaker1Command(Drivetrain drivetrain, GenericHID driverController, boolean isOpenLoop,
       boolean isFieldRelative) {
 
@@ -46,7 +48,7 @@ public class AlignWithSpeaker1Command extends Command {
 
   }
 
-  /** Creates a new AlignWithSpeakerCommand for autonomous. */
+  /** Creates a new AlignWithSpeaker1Command for autonomous. */
   public AlignWithSpeaker1Command(Drivetrain drivetrain, boolean isOpenLoop, boolean isFieldRelative) {
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -63,6 +65,7 @@ public class AlignWithSpeaker1Command extends Command {
   @Override
   public void initialize() {
 
+    System.out.println("Running");
     m_drivetrain.setPercentOutput(0, 0);
 
   }
@@ -95,7 +98,7 @@ public class AlignWithSpeaker1Command extends Command {
     // Run PID Controller
     //double currentAngle = ShooterLimelight.getTable().getTargetDetected()? ShooterLimelight.getTable().getLastBotPoseBlue().getRotation().getDegrees() : m_drivetrain.getPose().getRotation().getDegrees();
     double currentAngle = m_drivetrain.getPose().getRotation().getDegrees();
-    double error = (targetDegrees - currentAngle);
+    error = (targetDegrees - currentAngle);
     double turnAmount = (error > 0 && error < 180) ? Constants.kShooter.SPEAKER_ALIGN_INITIAL_SPEED : -Constants.kShooter.SPEAKER_ALIGN_INITIAL_SPEED;
 
     m_drivetrain.swerveDrive(
@@ -120,7 +123,7 @@ public class AlignWithSpeaker1Command extends Command {
   @Override
   public boolean isFinished() {
 
-    return false;
+    return Math.abs(error) <= 10;
 
   }
 

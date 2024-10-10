@@ -31,8 +31,7 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
   public SubwooferShotCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
     super(new SequentialCommandGroup(new WaitCommand(0.1), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), new NudgeIndexer(indexer)));
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain, true);
-    //AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
-    addCommands(prepareShooter/*, alignWithSpeakerCommand*/);
+    addCommands(prepareShooter);
 
   }
 
@@ -44,8 +43,7 @@ public class SubwooferShotCommand extends ParallelDeadlineGroup {
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain, true);
-    //AlignWithSpeakerCommand alignWithSpeakerCommand = new AlignWithSpeakerCommand(drivetrain, true, true);
-    addCommands(prepareShooter/*, alignWithSpeakerCommand*/);
+    addCommands(prepareShooter);
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
