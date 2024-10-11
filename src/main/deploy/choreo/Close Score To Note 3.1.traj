@@ -253,5 +253,15 @@
       "timestamp": 0.8093948353720014
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 0.43,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Note Align"
+        }
+      }
+    }
+  ]
 }
