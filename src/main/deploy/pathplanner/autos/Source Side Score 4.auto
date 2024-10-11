@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.53
+      "x": 0.75,
+      "y": 4.34
     },
-    "rotation": 180.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 1"
+                        "pathName": "Souce Side Subwoofer To Note 1"
                       }
                     },
                     {
@@ -58,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -69,6 +69,12 @@
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Close Score To Note 2"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
@@ -96,7 +102,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -110,7 +116,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Close Score To Note 3"
+                        "pathName": "Middle Subwoofer To Note 3"
                       }
                     },
                     {
@@ -140,12 +146,18 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Subwoofer To Note 5"
           }
         }
       ]
     }
   },
-  "folder": "Score 4 Speaker",
+  "folder": "Score 4",
   "choreoAuto": false
 }

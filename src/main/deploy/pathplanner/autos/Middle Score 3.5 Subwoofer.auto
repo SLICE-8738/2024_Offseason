@@ -26,6 +26,44 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Score Note 2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "Middle Subwoofer To Note 3"
@@ -58,45 +96,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Note Align"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Score Note 2"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Store Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -110,19 +110,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Close Score To Note 1"
+                        "pathName": "Middle Close Score To Note 6"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
                         "name": "Note Align"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Score Note 1"
                       }
                     }
                   ]
@@ -135,61 +129,11 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Note Subwoofer"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Middle Close Score To Note 5"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Note Align"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Middle Score Note 5 Close"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Store Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Note Subwoofer"
           }
         }
       ]
     }
   },
-  "folder": "Score 5 Speaker",
+  "folder": null,
   "choreoAuto": false
 }

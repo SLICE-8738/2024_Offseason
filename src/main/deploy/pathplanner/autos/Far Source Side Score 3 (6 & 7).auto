@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.53
+      "x": 1.41,
+      "y": 1.61
     },
     "rotation": 180.0
   },
@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Score Preload Far"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -28,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 1"
+                        "pathName": "Middle Far Score To Note 6"
                       }
                     },
                     {
@@ -40,7 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 1"
+                        "pathName": "Middle Score Note 6 Far"
                       }
                     }
                   ]
@@ -70,6 +76,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Middle Far Score To Note 7"
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "Note Align"
@@ -78,7 +90,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 2"
+                        "pathName": "Middle Score Note 7 Far"
                       }
                     }
                   ]
@@ -102,6 +114,6 @@
       ]
     }
   },
-  "folder": "Score 3 Speaker",
+  "folder": "Score 3",
   "choreoAuto": false
 }

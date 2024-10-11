@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Souce Side Subwoofer To Note 1"
+                        "pathName": "Source Side Subwoofer To Note 8"
                       }
                     },
                     {
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 1"
+                        "pathName": "Source Side Score Note 8 Subwoofer"
                       }
                     }
                   ]
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Close Score To Note 2"
+                        "pathName": "Source Side Subwoofer To Note 7"
                       }
                     },
                     {
@@ -84,7 +84,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 2"
+                        "pathName": "Source Side Score Note 7 Subwoofer"
                       }
                     }
                   ]
@@ -103,61 +103,11 @@
           "type": "named",
           "data": {
             "name": "Shoot Note"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Close Score To Note 3"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Note Align"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Score Note 3"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Store Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle Close Score To Note 5"
           }
         }
       ]
     }
   },
-  "folder": "Score 4 Speaker",
+  "folder": "Score 3",
   "choreoAuto": false
 }
