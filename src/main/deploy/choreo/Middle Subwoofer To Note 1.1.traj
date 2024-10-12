@@ -406,7 +406,7 @@
       "command": {
         "type": "named",
         "data": {
-          "name": "Note Align"
+          "name": "Cancel Path"
         }
       }
     }
