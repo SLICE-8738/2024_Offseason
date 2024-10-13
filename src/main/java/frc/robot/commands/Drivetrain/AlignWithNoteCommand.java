@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.IntakeLimelight;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 public class AlignWithNoteCommand extends Command {
@@ -58,8 +57,8 @@ public class AlignWithNoteCommand extends Command {
 
     double rotation;
 
-    if (IntakeLimelight.getTable().getTargetDetected()) {
-      rotation = rotationController.calculate(IntakeLimelight.getTable().getXOffset());
+    if (LimelightHelpers.getTV("limelight-intake")) {
+      rotation = rotationController.calculate(LimelightHelpers.getTX("limelight-intake"));
       if (timerOn) {
         timer.reset();
         timerOn = false;
@@ -75,11 +74,11 @@ public class AlignWithNoteCommand extends Command {
     double error = rotationController.getPositionError();
     double power = (40 - Math.abs(error)) / 20.0;
 
-    double height = IntakeLimelight.getTable().getYOffset() - 18.8;
+    double height = LimelightHelpers.getTY("limelight-intake") - 18.8;
     double multiplier = (height + 20) / 15.0;
     multiplier = MathUtil.clamp(multiplier, 0.45, 2);
 
-    multiplier = IntakeLimelight.getTable().getTargetDetected() ? multiplier : 0.3;
+    multiplier = LimelightHelpers.getTV("limelight-intake") ? multiplier : 0.3;
 
     power *= multiplier;
 

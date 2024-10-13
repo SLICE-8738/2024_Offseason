@@ -53,8 +53,6 @@ public class RobotContainer {
   public final Shooter m_shooter;
   public final Intake m_intake;
   public final Indexer m_indexer;
-  public final ShooterLimelight m_shooterLimelight;
-  public final IntakeLimelight m_intakeLimelight;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -156,8 +154,6 @@ public class RobotContainer {
     m_shooter = new Shooter();
     m_intake = new Intake();
     m_indexer = new Indexer();
-    m_shooterLimelight = new ShooterLimelight();
-    m_intakeLimelight = new IntakeLimelight();
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);

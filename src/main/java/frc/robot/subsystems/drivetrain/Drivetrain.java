@@ -5,7 +5,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import frc.robot.*;
-import frc.robot.subsystems.ShooterLimelight;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,8 +26,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -54,7 +51,6 @@ public class Drivetrain extends SubsystemBase {
   private final AHRS m_gyro;
   public final Field2d m_field2d;
   private static final Lock odometryLock = new ReentrantLock();
-  private static final CyclicBarrier threadBarrier = new CyclicBarrier(2);
 
   private Rotation2d fieldOrientedOffset;
 
@@ -92,7 +88,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getModulePositions(), 
-      ShooterLimelight.getTable().getLastBotPoseBlue(),
+      LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter", false),
       VecBuilder.fill(0.1, 0.1, 0.1),
       VecBuilder.fill(0.1, 0.1, 0.1));
 
@@ -206,30 +202,21 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Drives the robot at either given field-relative X, Y, and rotational
-   * velocities or given
-   * robot-relative forward, sideways, and rotational velocities.
+   * velocities or given robot-relative forward, sideways, and rotational 
+   * velocities.
    * 
    * <p>
    * If using robot-relative velocities, the X component of the Translation2d
    * object should be the forward velocity
    * and the Y component should be the sideways velocity.
    * 
-   * @param transform       A Transform2d object representing either the desired
-   *                        field-relative velocities in meters/second for the
-   *                        robot to move at along the X and Y axes of the
-   *                        field(forwards/backwards from driver POV), or the
-   *                        desired robot-relative forward
-   *                        and sideways velocities in meters/second for the robot
-   *                        to move at, as well as the desired velocity in
-   *                        radians/second for the
-   *                        robot to rotate at.
-   * 
-   * @param isOpenLoop      Whether the accordingly generated states for the given
+   * @param transform       A Transform2d object representing the desired velocities
+   *                        for the robot to move at.
+   * @param isOpenLoop      Whether the states generated for the given
    *                        velocities should be set using open loop control for
    *                        the drive motors
    *                        of the swerve modules.
-   * @param isFieldRelative Whether the given velocities are relative to the field
-   *                        or not.
+   * @param isFieldRelative Whether the given velocities are relative to the field.
    */
   public void drive(Transform2d transform, boolean isOpenLoop, boolean isFieldRelative) {
 
@@ -242,20 +229,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     SwerveModuleState[] states = Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(
-        isFieldRelative
-            ? ChassisSpeeds.discretize(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                  transform.getX(),
-                  transform.getY(),
-                  transform.getRotation().getRadians(),
-                  rotationWithOffset),
-                0.02)
-            : ChassisSpeeds.discretize(
-                new ChassisSpeeds(
-                  transform.getX(), 
-                  transform.getY(),
-                  transform.getRotation().getRadians()),
-                0.02));
+      ChassisSpeeds.discretize(
+        isFieldRelative ? 
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+            transform.getX(),
+            transform.getY(),
+            transform.getRotation().getRadians(),
+            rotationWithOffset)
+          : new ChassisSpeeds(
+              transform.getX(), 
+              transform.getY(),
+              transform.getRotation().getRadians()),
+        0.02));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
@@ -279,15 +264,12 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
-    Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
+    Pose2d visionPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter", true);
 
-    if (visionPose != null && ShooterLimelight.getTable().getTargetDetected()) {
+    //TODO: Determine if needs to be changed to camera pose in target space
+    if (visionPose != null && LimelightHelpers.getTargetPose3d_CameraSpace("limelight-shooter", false).getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
       
-      if (ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 3.5 && !DriverStation.isAutonomousEnabled()) {
-
-        m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
-
-      }
+      m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
       
     }
 
@@ -310,21 +292,6 @@ public class Drivetrain extends SubsystemBase {
   public static void unlockOdometry() {
 
     odometryLock.unlock();
-
-  }
-
-  /**
-   * Waits for the other of the two odometry threads to get to a
-   * common barrier point.
-   */
-  public static void awaitThread() {
-
-    try {
-      threadBarrier.await();
-    }
-    catch (InterruptedException | BrokenBarrierException e) {
-      Thread.currentThread().interrupt();
-    }
 
   }
 
@@ -353,15 +320,6 @@ public class Drivetrain extends SubsystemBase {
     : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
 
     return difference;
-
-  }
-
-  /**
-   * @return The current distance of the robot from the primary in-view AprilTag
-   */
-  public double getAprilTagDistance() {
-
-    return Constants.kFieldPositions.APRILTAG_POSITIONS[(int) ShooterLimelight.getTable().getAprilTagID() - 1].getDistance(getPose().getTranslation());
 
   }
 
@@ -538,7 +496,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetToAprilTagRotation() {
 
-    resetRotation(ShooterLimelight.getTable().getLastBotPoseBlue().getRotation());
+    resetRotation(LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter", false).getRotation());
 
   }
 

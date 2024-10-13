@@ -23,7 +23,6 @@ import frc.robot.commands.drivetrain.AlignWithSpeakerCommand;
 import frc.robot.commands.indexer.NudgeIndexer;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterLimelight;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /**
@@ -39,27 +38,27 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
-    super(new SequentialCommandGroup(
-      new WaitCommand(0.15), 
-      new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), 
-      new NudgeIndexer(indexer),
-      new InstantCommand(drivetrain::resetToAprilTagRotation)));
-    PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, driveController, true, true);
-    addCommands(prepareShooter, alignWithSpeaker);
-
+    super(
+      new SequentialCommandGroup(
+        new WaitCommand(0.15), 
+        new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain)), 
+        new NudgeIndexer(indexer),
+        new InstantCommand(drivetrain::resetToAprilTagRotation)),
+      new PrepareShooterCommand(shooter, drivetrain),
+      new AlignWithSpeakerCommand(drivetrain, driveController, false, true)
+    );
   }
 
   /** Creates a new ShootCommand for autonomous. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     super(
-      new SequentialCommandGroup(new WaitCommand(0.15),
-      new ParallelRaceGroup(new WaitCommand(3), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
-      new NudgeIndexer(indexer))
+      new SequentialCommandGroup(
+        new WaitCommand(0.15),
+        new ParallelRaceGroup(new WaitCommand(3), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+        new NudgeIndexer(indexer)),
+      new PrepareShooterCommand(shooter, drivetrain),
+      new AlignWithSpeakerCommand(drivetrain, false, true)
     );
-    PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
-    AlignWithSpeakerCommand alignWithSpeaker = new AlignWithSpeakerCommand(drivetrain, true, true);
-    addCommands(prepareShooter, alignWithSpeaker);
   }
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {

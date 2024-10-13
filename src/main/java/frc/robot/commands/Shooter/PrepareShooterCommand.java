@@ -5,6 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -14,9 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 //import frc.robot.Button;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.ShooterMath;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterLimelight;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /**
@@ -25,7 +26,6 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class PrepareShooterCommand extends Command {
   private final Shooter m_shooter;
   private final Drivetrain m_drivetrain;
-  //private boolean flywheelsStopped;
 
   private boolean forceSubwoofer;
 
@@ -39,6 +39,8 @@ public class PrepareShooterCommand extends Command {
     m_shooter = shooter;
     m_drivetrain  = drivetrain;
 
+    forceSubwoofer = false;
+
     // distanceWidget = shooterTestTab.add("Robot Distance", 0);
     // desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     // desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
@@ -48,16 +50,14 @@ public class PrepareShooterCommand extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-
-    //flywheelsStopped = true;
-
-    forceSubwoofer = false;
   }
 
   public PrepareShooterCommand(Shooter shooter, Drivetrain drivetrain, boolean forceSubwoofer) {
     m_shooter = shooter;
     m_drivetrain  = drivetrain;
 
+    this.forceSubwoofer = forceSubwoofer;
+
     // distanceWidget = shooterTestTab.add("Robot Distance", 0);
     // desiredAngleWidget = shooterTestTab.add("Desired Shooter Angle", 0);
     // desiredSpeedWidget = shooterTestTab.add("Desired Flywheel Speed", 0); 
@@ -67,10 +67,6 @@ public class PrepareShooterCommand extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-
-    //flywheelsStopped = true;
-
-    this.forceSubwoofer = forceSubwoofer;
   }
 
   // Called when the command is initially scheduled.
@@ -84,45 +80,16 @@ public class PrepareShooterCommand extends Command {
   @Override
   public void execute() {
     // Determines distance to the speaker
-    Translation2d distanceTranslation = DriverStation.isAutonomousEnabled()? ShooterLimelight.getTable().getSpeakerPosition() : m_drivetrain.getSpeakerPosition();
-    double distanceToSpeaker = Math.hypot(distanceTranslation.getX(), distanceTranslation.getY());
+    double distanceToSpeaker = DriverStation.isAutonomousEnabled() ? 
+      //TODO: Determine if needs to be changed to target pose in camera space
+      LimelightHelpers.getCameraPose3d_TargetSpace("limelight-shooter", false).getTranslation().getDistance(new Translation3d()) 
+      : m_drivetrain.getSpeakerPosition().getDistance(new Translation2d());
 
-    // distanceWidget.getEntry().setDouble(distanceToSpeaker);
-    // Uses distance info the calculate optimal shot
-    //ShotDetails shotDetails = ShooterMath.getShot(distanceToSpeaker);
-    // Sets the flywheel speed and aim angle to the appropriate values 
-    //double speed = shotDetails.getFlywheelVelocity();
-    //originalVelocityWidget.getEntry().setDouble(speed);
-    /*if (m_drivetrain.inShootingRange()) {
-      m_shooter.spinFlywheels(speed);
-      flywheelsStopped = false;
-    }
-    else if (!flywheelsStopped) {
-      m_shooter.spinFlywheels(0);
-      flywheelsStopped = true;
-    }*/
+    double angle = !forceSubwoofer && LimelightHelpers.getTV("limelight-shooter") ? 
+      ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker)
+      : -2.3;
 
-    //speed *= multiplierWidget.getEntry().getDouble(1);
-    double angle = -2.3;
-
-    if(!forceSubwoofer && ShooterLimelight.getTable().getTargetDetected()){
-      angle = ShooterMath.getDistanceBasedShooterAngle(distanceToSpeaker);
-    }
-
-    // double optionalAngleAdjust = Button.leftBumper2.getAsBoolean() ? 0 : -3.5;
-
-    // double angleAdjust = distanceToSpeaker > 1.6 ? optionalAngleAdjust : 0;
-
-    // angle += angleAdjust;
-
-    //double angleAdjust = angleWidget.getEntry().getDouble(0);
-    //angle += angleAdjust;
-
-    double speed = distanceToSpeaker < 1.303 ? 3500 : 4500;
-
-    if (forceSubwoofer) {
-      speed = 3500;
-    }
+    double speed = distanceToSpeaker < 1.303 || forceSubwoofer ? 3500 : 4500;
 
     m_shooter.spinFlywheels(speed, false);
     m_shooter.aimShooter(angle);
