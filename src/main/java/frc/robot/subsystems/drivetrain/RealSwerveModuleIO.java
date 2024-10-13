@@ -16,6 +16,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import frc.robot.Constants;
@@ -32,6 +33,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
   private final CANSparkMax angleMotor;
   private final CANcoder angleEncoder;
   private final RelativeEncoder integratedAngleEncoder;
+  private final SimpleMotorFeedforward driveFeedforward;
   private final SparkPIDController angleFeedback;
 
   private final Queue<Double> timestampQueue;
@@ -52,6 +54,8 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
     angleMotor = SparkMaxFactory.createSparkMax(moduleConstants.angleMotorID, REVConfigs.angleSparkMaxConfig);
     angleEncoder = new CANcoder(moduleConstants.cancoderID);
     integratedAngleEncoder = angleMotor.getEncoder();
+    driveFeedforward = new SimpleMotorFeedforward(
+          Constants.kDrivetrain.DRIVE_KS, Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA);
     angleFeedback = angleMotor.getPIDController();
 
     driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
@@ -83,7 +87,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         driveVelocity,
         driveAppliedVolts,
         driveCurrent);
-    //riveMotor.optimizeBusUtilization();
+    //driveMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -131,8 +135,8 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
   }
 
   @Override
-  public void setDriveVelocity(double velocity, double feedforward) {
-    driveMotor.setControl(new VelocityVoltage(velocity).withFeedForward(feedforward));
+  public void setDriveVelocity(double velocity) {
+    driveMotor.setControl(new VelocityVoltage(velocity).withFeedForward(driveFeedforward.calculate(velocity)));
   }
 
   @Override

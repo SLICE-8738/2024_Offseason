@@ -33,10 +33,9 @@ public interface SwerveModuleIO {
   public default void setDriveVoltage(double volts) {}
 
   /** 
-   * Set the given drive motor velocity in meters/second as a PID setpoint along with
-   * a feedforward voltage. 
+   * Set the given drive motor velocity in meters/second as a PID setpoint.
    */
-  public default void setDriveVelocity(double velocity, double feedforward) {}
+  public default void setDriveVelocity(double velocity) {}
 
   /** Run the angle motor at the specified duty cycle percent output. */
   public default void setAngleDutyCycle(double percentOutput) {}
