@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -205,7 +205,7 @@ public class RobotContainer {
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     //Button.square1.whileTrue(m_alignAmp);
     Button.leftBumper1.whileTrue(m_alignNote);
-    Button.rightBumper1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
 
     /* Intake */
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));

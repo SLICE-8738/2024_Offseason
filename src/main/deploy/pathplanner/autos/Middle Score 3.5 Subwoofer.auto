@@ -26,12 +26,6 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Middle Speaker To Note 1"
-                      }
-                    },
-                    {
                       "type": "named",
                       "data": {
                         "name": "Note Align"
@@ -40,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 1"
+                        "pathName": "Score Note 2"
                       }
                     }
                   ]
@@ -70,6 +64,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Middle Subwoofer To Note 3"
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "Note Align"
@@ -78,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Score Note 2"
+                        "pathName": "Score Note 3"
                       }
                     }
                   ]
@@ -98,10 +98,42 @@
           "data": {
             "name": "Shoot Note"
           }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Middle Close Score To Note 6"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
-  "folder": "Score 3 Speaker",
+  "folder": null,
   "choreoAuto": false
 }

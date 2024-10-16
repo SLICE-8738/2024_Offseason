@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Souce Side Speaker To Note 1"
+                        "pathName": "Souce Side Subwoofer To Note 1"
                       }
                     },
                     {
@@ -116,7 +116,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Close Score To Note 3"
+                        "pathName": "Middle Subwoofer To Note 3"
                       }
                     },
                     {
@@ -152,12 +152,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Close Score To Note 5"
+            "pathName": "Middle Subwoofer To Note 5"
           }
         }
       ]
     }
   },
-  "folder": "Score 4 Speaker",
+  "folder": "Score 4",
   "choreoAuto": false
 }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 6.76
+      "x": 0.75,
+      "y": 4.34
     },
-    "rotation": -120.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Speaker To Note 1"
+                        "pathName": "Source Side Subwoofer To Note 7"
                       }
                     },
                     {
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Score Note 1"
+                        "pathName": "Source Side Score Note 7 Subwoofer"
                       }
                     }
                   ]
@@ -58,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Close Score To Note 4"
+                        "pathName": "Source Side Subwoofer To Note 8"
                       }
                     },
                     {
@@ -84,7 +84,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side Score Note 4 Speaker"
+                        "pathName": "Source Side Score Note 8 Subwoofer"
                       }
                     }
                   ]
@@ -102,12 +102,12 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         }
       ]
     }
   },
-  "folder": "Score 3 Speaker",
+  "folder": "Score 3",
   "choreoAuto": false
 }

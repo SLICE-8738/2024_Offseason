@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Speaker To Note 1"
+                        "pathName": "Middle Subwoofer To Note 1"
                       }
                     },
                     {
@@ -110,7 +110,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Close Score To Note 3"
+                        "pathName": "Middle Subwoofer To Note 3"
                       }
                     },
                     {
@@ -154,7 +154,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Close Score To Note 4"
+                        "pathName": "Middle Subwoofer To Note 4"
                       }
                     },
                     {
@@ -198,7 +198,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Close Score To Note 5"
+                        "pathName": "Middle Subwoofer To Note 5"
                       }
                     },
                     {
@@ -210,7 +210,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Score Note 5 Close"
+                        "pathName": "Middle Score Note 5 Subwoofer"
                       }
                     }
                   ]
@@ -242,7 +242,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Close Score To Note 6"
+                        "pathName": "Middle Subwoofer To Note 6"
                       }
                     },
                     {
@@ -278,6 +278,6 @@
       ]
     }
   },
-  "folder": "Score 7 Speaker",
+  "folder": "Score 7",
   "choreoAuto": false
 }

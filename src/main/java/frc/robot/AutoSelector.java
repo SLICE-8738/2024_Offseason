@@ -9,6 +9,9 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
 import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 import frc.robot.commands.Shooter.EjectNoteCommand;
@@ -55,18 +58,19 @@ public class AutoSelector {
 
     public enum Mode {
 
-        SCORE_7_SPEAKER("Score 7 Speaker", true),
-        SCORE_5_SPEAKER_1("Score 5 Speaker (1, 2, 3, 5)", true),
-        SCORE_5_SPEAKER_2("Score 5 Speaker (3, 2, 1, 5)", true),
-        SCORE_5_SPEAKER_3("Score 5 Speaker (2, 3, 1, 5)", true),
-        SCORE_4_SPEAKER("Score 4 Speaker", true),
-        SCORE_3_AND_A_HALF_SPEAKER("Score 3.5 Speaker", true),
-        SCORE_3_SPEAKER_1("Score 3 Speaker (1 & 2)", true),
-        SCORE_3_SPEAKER_2("Score 3 Speaker (7 & 8)", true),
-        SCORE_3_SPEAKER_3("Score 3 Speaker (8 & 7)", true),
-        SCORE_3_SPEAKER_4("Score 3 Speaker (6 & 7)", true),
-        SCORE_2_SPEAKER("Score 2 Speaker", true),
-        SCORE_1_SPEAKER("Score 1 Speaker", false),
+        SCORE_7("Score 7", true),
+        SCORE_5_VARIANT_1("Score 5 (1, 2, 3, 5)", true),
+        SCORE_5_VARIANT_2("Score 5 (3, 2, 1, 5)", true),
+        SCORE_5_VARIANT_3("Score 5 (2, 3, 1, 5)", true),
+        CHOREO_SCORE_4("Choreo Score 4", true),
+        SCORE_4("Score 4", true),
+        SCORE_3_AND_A_HALF("Score 3.5", true),
+        SCORE_3_VARIANT_1("Score 3 (1 & 2)", true),
+        SCORE_3_VARIANT_2("Score 3 (7 & 8)", true),
+        SCORE_3_VARIANT_3("Score 3 (8 & 7)", true),
+        SCORE_3_VARIANT_4("Score 3 (6 & 7)", true),
+        SCORE_2("Score 2", true),
+        SCORE_1("Score 1", false),
         CHOREO_TEST_AUTO("Choreo Test Auto", false),
         CHOREO_TEST_PATH("Choreo Test Path", false),
         TEST_PATH("Test Path", false);
@@ -84,12 +88,12 @@ public class AutoSelector {
     }
 
     private StartingPosition storedStartingPosition = StartingPosition.AMP_SIDE;
-    private Mode storedMode = Mode.SCORE_1_SPEAKER;
+    private Mode storedMode = Mode.SCORE_1;
 
     public final SendableChooser<StartingPosition> startingPositionChooser;
     public final SendableChooser<Mode> modeChooser;
 
-    private Optional<PathPlannerAuto> autoRoutine = Optional.empty();
+    private Optional<Command> autoRoutine = Optional.empty();
 
     private Pose2d initialAutoPose;
 
@@ -121,18 +125,20 @@ public class AutoSelector {
 
         modeChooser = new SendableChooser<Mode>();
 
-        modeChooser.setDefaultOption(Mode.SCORE_1_SPEAKER.value, Mode.SCORE_1_SPEAKER);
+        modeChooser.setDefaultOption(Mode.SCORE_1.value, Mode.SCORE_1);
 
-        modeChooser.addOption(Mode.SCORE_7_SPEAKER.value, Mode.SCORE_7_SPEAKER);
-        modeChooser.addOption(Mode.SCORE_5_SPEAKER_2.value, Mode.SCORE_5_SPEAKER_2);
-        modeChooser.addOption(Mode.SCORE_5_SPEAKER_3.value, Mode.SCORE_5_SPEAKER_3);
-        modeChooser.addOption(Mode.SCORE_4_SPEAKER.value, Mode.SCORE_4_SPEAKER);
-        modeChooser.addOption(Mode.SCORE_3_AND_A_HALF_SPEAKER.value, Mode.SCORE_3_AND_A_HALF_SPEAKER);
-        modeChooser.addOption(Mode.SCORE_3_SPEAKER_1.value, Mode.SCORE_3_SPEAKER_1);
-        modeChooser.addOption(Mode.SCORE_3_SPEAKER_2.value, Mode.SCORE_3_SPEAKER_2);
-        modeChooser.addOption(Mode.SCORE_3_SPEAKER_3.value, Mode.SCORE_3_SPEAKER_3);
-        modeChooser.addOption(Mode.SCORE_3_SPEAKER_4.value, Mode.SCORE_3_SPEAKER_4);
-        modeChooser.addOption(Mode.SCORE_2_SPEAKER.value, Mode.SCORE_2_SPEAKER);
+        modeChooser.addOption(Mode.SCORE_7.value, Mode.SCORE_7);
+        modeChooser.addOption(Mode.SCORE_5_VARIANT_1.value, Mode.SCORE_5_VARIANT_1);
+        modeChooser.addOption(Mode.SCORE_5_VARIANT_2.value, Mode.SCORE_5_VARIANT_2);
+        modeChooser.addOption(Mode.SCORE_5_VARIANT_3.value, Mode.SCORE_5_VARIANT_3);
+        modeChooser.addOption(Mode.CHOREO_SCORE_4.value, Mode.CHOREO_SCORE_4);
+        modeChooser.addOption(Mode.SCORE_4.value, Mode.SCORE_4);
+        modeChooser.addOption(Mode.SCORE_3_AND_A_HALF.value, Mode.SCORE_3_AND_A_HALF);
+        modeChooser.addOption(Mode.SCORE_3_VARIANT_1.value, Mode.SCORE_3_VARIANT_1);
+        modeChooser.addOption(Mode.SCORE_3_VARIANT_2.value, Mode.SCORE_3_VARIANT_2);
+        modeChooser.addOption(Mode.SCORE_3_VARIANT_3.value, Mode.SCORE_3_VARIANT_3);
+        modeChooser.addOption(Mode.SCORE_3_VARIANT_4.value, Mode.SCORE_3_VARIANT_4);
+        modeChooser.addOption(Mode.SCORE_2.value, Mode.SCORE_2);
         modeChooser.addOption(Mode.CHOREO_TEST_AUTO.value, Mode.CHOREO_TEST_AUTO);
         modeChooser.addOption(Mode.CHOREO_TEST_PATH.value, Mode.CHOREO_TEST_PATH);
         modeChooser.addOption(Mode.TEST_PATH.value, Mode.TEST_PATH);
@@ -159,6 +165,7 @@ public class AutoSelector {
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));
         NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).withTimeout(5));
         NamedCommands.registerCommand("Eject Note", new EjectNoteCommand(m_shooter, m_indexer));
+        NamedCommands.registerCommand("Cancel Path", new InstantCommand(() -> {}, m_drivetrain));
 
     }
 
@@ -213,7 +220,7 @@ public class AutoSelector {
 
     }
 
-    public PathPlannerAuto getAutoRoutine() {
+    public Command getAutoRoutine() {
 
         return autoRoutine.get();
 
