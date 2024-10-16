@@ -1111,21 +1111,7 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Cancel Path",
-                    "target": 1,
-                    "trajTargetIndex": 1,
-                    "targetTimestamp": 0.4762090298597749,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "Cancel Path"
-                        }
-                    }
-                }
-            ],
+            "eventMarkers": [],
             "isTrajectoryStale": false
         },
         "Score Note 1": {
@@ -2189,21 +2175,7 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Cancel Path",
-                    "target": 1,
-                    "trajTargetIndex": 1,
-                    "targetTimestamp": 0.43555169899544044,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "Cancel Path"
-                        }
-                    }
-                }
-            ],
+            "eventMarkers": [],
             "isTrajectoryStale": false
         },
         "Score Note 3": {
@@ -3220,21 +3192,7 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Cancel Path",
-                    "target": 1,
-                    "trajTargetIndex": 1,
-                    "targetTimestamp": 1.2503090938432027,
-                    "offset": 0.15,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "Cancel Path"
-                        }
-                    }
-                }
-            ],
+            "eventMarkers": [],
             "isTrajectoryStale": false
         },
         "Score Note 6": {

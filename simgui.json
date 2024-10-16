@@ -30,6 +30,7 @@
       "/Shuffleboard/Debug Tab/Drive Motor PID/Update": "Command",
       "/Shuffleboard/Debug Tab/Drivetrain Max Velocities/Update": "Command",
       "/Shuffleboard/Debug Tab/Field": "Field2d",
+      "/Shuffleboard/Debug Tab/SysID Routine": "String Chooser",
       "/Shuffleboard/Teleop Tab/LED Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
@@ -62,7 +63,10 @@
         "left": 150,
         "right": 2961,
         "top": 79,
-        "width": 16.541748046875
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
       }
     }
   },

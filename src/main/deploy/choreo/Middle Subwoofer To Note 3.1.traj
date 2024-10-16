@@ -358,15 +358,5 @@
       "timestamp": 0.8678551211049192
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0.43555169899544044,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Cancel Path"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

@@ -26,9 +26,22 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "deadline",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 1"
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.47
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Middle Subwoofer To Note 1"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -108,9 +121,22 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "deadline",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 3"
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.43
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Middle Subwoofer To Note 3"
+                            }
+                          }
+                        ]
                       }
                     },
                     {

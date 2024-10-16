@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.Drivetrain.AlignWithNoteCommand;
 import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
@@ -165,7 +164,6 @@ public class AutoSelector {
         NamedCommands.registerCommand("Spin Flywheels", new SpinFlywheelsCommand(m_shooter, 3500));
         NamedCommands.registerCommand("Note Align", new AlignWithNoteCommand(m_drivetrain, m_indexer).withTimeout(5));
         NamedCommands.registerCommand("Eject Note", new EjectNoteCommand(m_shooter, m_indexer));
-        NamedCommands.registerCommand("Cancel Path", new InstantCommand(() -> {}, m_drivetrain));
 
     }
 
@@ -174,7 +172,7 @@ public class AutoSelector {
         storedStartingPosition = position;
         storedMode = mode;
 
-        /*try {
+        try {
 
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
                 + ", Mode: " + mode.value);
@@ -183,15 +181,10 @@ public class AutoSelector {
         }
         catch (Exception e) {
 
-            DriverStation.reportError("Selected auto routine '" + (mode.useStartingPosition? position.value + " " + mode.value : mode.value)
-                + "' does not exist", false);            
+            DriverStation.reportError(e.getMessage(), true);            
             autoRoutine = Optional.empty();
 
-        }*/
-
-        System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
-                + ", Mode: " + mode.value);
-            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
+        }
 
     }
 
