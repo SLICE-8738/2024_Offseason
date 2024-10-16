@@ -37,9 +37,9 @@ public class FlashingOrangeLEDs extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_Intake.getRampOutputCurrent() == 0 && LimelightHelpers.getTV(getName("Limelight-Intake")) ){
+    /*if(m_Intake.getRampOutputCurrent() == 0 && LimelightHelpers.getTV(getName("Limelight-Intake")) ){
       m_LEDs.
-    }
+    }*/
   }
 
   // Called once the command ends or is interrupted.

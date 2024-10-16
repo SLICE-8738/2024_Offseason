@@ -174,7 +174,7 @@ public class AutoSelector {
         storedStartingPosition = position;
         storedMode = mode;
 
-        try {
+        /*try {
 
             System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
                 + ", Mode: " + mode.value);
@@ -187,7 +187,11 @@ public class AutoSelector {
                 + "' does not exist", false);            
             autoRoutine = Optional.empty();
 
-        }
+        }*/
+
+        System.out.println("Auto selection changed, updating creator; Starting Position: " + position.value
+                + ", Mode: " + mode.value);
+            autoRoutine = Optional.of(new PathPlannerAuto(mode.useStartingPosition? position.value + " " + mode.value : mode.value));
 
     }
 
