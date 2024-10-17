@@ -58,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -96,7 +96,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -140,7 +140,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         },
         {
@@ -154,7 +154,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 5"
+                        "pathName": "Middle Subwoofer To Note 4"
                       }
                     },
                     {
@@ -166,7 +166,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Score Note 5 Subwoofer"
+                        "pathName": "Middle Score Note 4 Subwoofer"
                       }
                     }
                   ]
@@ -184,7 +184,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Note Subwoofer"
+            "name": "Shoot Note"
           }
         }
       ]

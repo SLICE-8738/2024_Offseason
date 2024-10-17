@@ -110,6 +110,50 @@
                     {
                       "type": "path",
                       "data": {
+                        "pathName": "Middle Subwoofer To Note 4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Note Align"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Middle Score Note 4 Subwoofer"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Store Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
                         "pathName": "Middle Subwoofer To Note 3"
                       }
                     },
@@ -146,6 +190,6 @@
       ]
     }
   },
-  "folder": "Score 4",
+  "folder": "Score 5",
   "choreoAuto": false
 }

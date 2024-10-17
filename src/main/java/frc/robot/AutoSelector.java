@@ -58,9 +58,10 @@ public class AutoSelector {
     public enum Mode {
 
         SCORE_7("Score 7", true),
-        SCORE_5_VARIANT_1("Score 5 (1, 2, 3, 5)", true),
-        SCORE_5_VARIANT_2("Score 5 (3, 2, 1, 5)", true),
-        SCORE_5_VARIANT_3("Score 5 (2, 3, 1, 5)", true),
+        SCORE_5_VARIANT_1("Score 5 (1, 2, 3, 4)", true),
+        SCORE_5_VARIANT_2("Score 5 (3, 2, 1, 4)", true),
+        SCORE_5_VARIANT_3("Score 5 (2, 3, 1, 4)", true),
+        SCORE_5_VARIANT_4("Score 5 (1, 2, 4, 3)", true),
         CHOREO_SCORE_4("Choreo Score 4", true),
         SCORE_4("Score 4", true),
         SCORE_3_AND_A_HALF("Score 3.5", true),
@@ -130,6 +131,7 @@ public class AutoSelector {
         modeChooser.addOption(Mode.SCORE_5_VARIANT_1.value, Mode.SCORE_5_VARIANT_1);
         modeChooser.addOption(Mode.SCORE_5_VARIANT_2.value, Mode.SCORE_5_VARIANT_2);
         modeChooser.addOption(Mode.SCORE_5_VARIANT_3.value, Mode.SCORE_5_VARIANT_3);
+        modeChooser.addOption(Mode.SCORE_5_VARIANT_4.value, Mode.SCORE_5_VARIANT_4);
         modeChooser.addOption(Mode.CHOREO_SCORE_4.value, Mode.CHOREO_SCORE_4);
         modeChooser.addOption(Mode.SCORE_4.value, Mode.SCORE_4);
         modeChooser.addOption(Mode.SCORE_3_AND_A_HALF.value, Mode.SCORE_3_AND_A_HALF);

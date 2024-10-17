@@ -6,8 +6,9 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
+//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -24,7 +25,7 @@ import frc.robot.commands.Indexer.NudgeIndexer;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterLimelight;
+//import frc.robot.subsystems.ShooterLimelight;
 
 /**
  * Prepares the shooter for shooting, aligns the robot with the speaker (while maintaining driver control of translation) and then fires when everything is ready
@@ -36,6 +37,8 @@ public class ShootCommand extends ParallelDeadlineGroup {
   private static final SimpleWidget verticallyAimedWidget =  shootDebugTab.add("Vertically Aimed", false);
   private static final SimpleWidget horizontallyAimedWidget = shootDebugTab.add("Horizontally Aimed", false);
   private static final SimpleWidget stoppedWidget = shootDebugTab.add("Stopped", false);
+
+  private static final Timer m_timer = new Timer();
 
   /** Creates a new ShootCommand for teleop. */
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain, GenericHID driveController) {
@@ -54,7 +57,10 @@ public class ShootCommand extends ParallelDeadlineGroup {
   public ShootCommand(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
     super(
       new SequentialCommandGroup(new WaitCommand(0.15),
-      new ParallelRaceGroup(new WaitCommand(3), new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
+      new InstantCommand(m_timer::restart),
+      new ParallelRaceGroup(
+        new WaitCommand(3), 
+        new WaitUntilCommand(() -> ready(shooter, indexer, drivetrain))),
       new NudgeIndexer(indexer))
     );
     PrepareShooterCommand prepareShooter = new PrepareShooterCommand(shooter, drivetrain);
@@ -64,9 +70,9 @@ public class ShootCommand extends ParallelDeadlineGroup {
 
   private static boolean ready(Shooter shooter, Indexer indexer, Drivetrain drivetrain) {
 
-    if (DriverStation.isAutonomousEnabled() && DriverStation.getMatchTime() < 2) {
+    /*if (DriverStation.isAutonomousEnabled() && DriverStation.getMatchTime() < 2) {
       return true;
-    }
+    }*/
 
     // Check if the flywheels are spinning fast enough
     boolean atSpeed = shooter.atTargetSpeed(Constants.kShooter.FLYWHEEL_RPM_ACCEPTABLE_ERROR);
@@ -97,6 +103,6 @@ public class ShootCommand extends ParallelDeadlineGroup {
     horizontallyAimedWidget.getEntry().setBoolean(horizontallyAimed);
     stoppedWidget.getEntry().setBoolean(stopped);
 
-    return atSpeed && verticallyAimed && horizontallyAimed && stopped;
+    return atSpeed && verticallyAimed && horizontallyAimed && stopped && m_timer.hasElapsed(0.4);
   }
 }

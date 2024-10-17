@@ -140,7 +140,7 @@ public final class Constants {
     public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(3.5, 2.5, Math.PI * 2, Math.PI * 2);
 
     public static final double TRANSLATION_KP = 4.5;
-    public static final double ROTATION_KP = 2.0;
+    public static final double ROTATION_KP = 1.0;
 
     /* Speaker Alignment Values */
     public static final double kPSpeakerAlignRotation = 3.2; //2.9
