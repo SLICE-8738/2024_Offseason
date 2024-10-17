@@ -3,13 +3,11 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.LEDs.LEDMode;
 
 public class SolidRedLEDs extends Command {
   private final LEDs leds;
   private final Intake intake;
 
-  private int m_soildRedFirstPixelHue;
   /** Creates a new SolidOrangeLEDS. */
   public SolidRedLEDs(LEDs leds, Intake intake) {
     this.leds = leds;
