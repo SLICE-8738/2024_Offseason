@@ -6,6 +6,7 @@ package frc.robot.commands.LEDs;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Intake;
@@ -30,16 +31,18 @@ public class FlashingOrangeLEDs extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.restart();
+    timer.reset();
     timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*if(m_Intake.getRampOutputCurrent() == 0 && LimelightHelpers.getTV(getName("Limelight-Intake")) ){
-      m_LEDs.
-    }*/
+    if (timer.get() % 2 == 0) {
+      m_LEDs.setAllHSV(175, 255, 128);
+    }else if (timer.get() % 2 != 0) {
+      m_LEDs.setAll(Color.kBlack);
+    }
   }
 
   // Called once the command ends or is interrupted.
