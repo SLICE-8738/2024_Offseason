@@ -103,6 +103,6 @@ public class ShootCommand extends ParallelDeadlineGroup {
     horizontallyAimedWidget.getEntry().setBoolean(horizontallyAimed);
     stoppedWidget.getEntry().setBoolean(stopped);
 
-    return atSpeed && verticallyAimed && horizontallyAimed && stopped && m_timer.hasElapsed(0.4);
+    return atSpeed && verticallyAimed && horizontallyAimed && stopped;
   }
 }

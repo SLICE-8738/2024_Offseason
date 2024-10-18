@@ -282,7 +282,7 @@ public final class Constants {
     public static final double HORIZONTAL_AIM_ACCEPTABLE_ERROR = 4; // The maximum error allowed in the shooter angle
                                                                     // horizontally (controlled by drivetrain). in
                                                                     // degrees
-    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.1; // The maximum speed that the drivetrain can
+    public static final double MAXIMUM_SHOOTING_DRIVETRAIN_SPEED = 0.2; // The maximum speed that the drivetrain can
                                                                         // move at and shoot
 
     public static final int REED_SWITCH_STOW_1 = 0;

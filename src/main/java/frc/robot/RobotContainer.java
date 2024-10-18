@@ -111,7 +111,7 @@ public class RobotContainer {
   public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
 
   /* LEDs */
-  public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer);
+  public final SignalStoreNote m_signalStoreNote = new SignalStoreNote(m_leds, m_indexer, m_intake);
 
   /* Tests */
   public final FlywheelTest m_flywheelTest = new FlywheelTest(m_shooter);

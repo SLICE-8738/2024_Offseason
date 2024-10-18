@@ -74,12 +74,6 @@
                       "data": {
                         "name": "Note Align"
                       }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Score Note 2"
-                      }
                     }
                   ]
                 }
@@ -110,7 +104,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Middle Subwoofer To Note 4"
+                        "pathName": "Note 2 To Note 4"
                       }
                     },
                     {

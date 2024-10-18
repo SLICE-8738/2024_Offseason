@@ -41,11 +41,11 @@ public class SignalStoreNote extends Command {
             final int hue = ((((int)m_rainbowFirstPixelHue + (4 * i * range / Constants.kLEDs.LED_LENGTH )) % range) + color) % 180;
             if (strobing) {
               leds.setLEDhsv(i, hue, 255, ((strobingCounter + i) % 32) >= 16 ? 128 : 0);
-            } else if(intake.getRampOutputCurrent() > 0){
-              leds.setLEDhsv(i, 0, 100, 100);
-            } else if(LimelightHelpers.getTV("Limelight-Intake") == true && indexer.isStored() == false){
-              leds.setLEDhsv(i, 45, 100 , (strobingCounter +i) % 32 >= 16 ? 128 : 0);
-            }
+            } //else if(intake.getRampOutputCurrent() > 0){
+              //leds.setLEDhsv(i, 0, 100, 100);
+            //} else if(LimelightHelpers.getTV("Limelight-Intake") == true && indexer.isStored() == false){
+              //leds.setLEDhsv(i, 45, 100 , (strobingCounter +i) % 32 >= 16 ? 128 : 0);
+            //}
             else {
               leds.setLEDhsv(i, hue, 255, 128);
             }
