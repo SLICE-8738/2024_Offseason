@@ -3,24 +3,29 @@ package frc.robot.commands.LEDs;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 
 public class SignalStoreNote extends Command {
     private final LEDs leds;
+    private final Intake intake;
     private final Indexer indexer;
     private double m_rainbowFirstPixelHue = 0;
     private int range = 9;
     private int color;
     private boolean strobing;
     private int strobingCounter;
+
     
-    public SignalStoreNote(LEDs leds, Indexer indexer) {
+    public SignalStoreNote(LEDs leds, Indexer indexer, Intake intake) {
       this.leds = leds;
       this.indexer = indexer;
+      this.intake = intake;
 
       // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(leds);
+      addRequirements(leds);
     }
 
     @Override
@@ -36,7 +41,12 @@ public class SignalStoreNote extends Command {
             final int hue = ((((int)m_rainbowFirstPixelHue + (4 * i * range / Constants.kLEDs.LED_LENGTH )) % range) + color) % 180;
             if (strobing) {
               leds.setLEDhsv(i, hue, 255, ((strobingCounter + i) % 32) >= 16 ? 128 : 0);
-            }else {
+            } else if(intake.getRampOutputCurrent() > 0){
+              leds.setLEDhsv(i, 0, 100, 100);
+            } else if(LimelightHelpers.getTV("Limelight-Intake") == true && indexer.isStored() == false){
+              leds.setLEDhsv(i, 45, 100 , (strobingCounter +i) % 32 >= 16 ? 128 : 0);
+            }
+            else {
               leds.setLEDhsv(i, hue, 255, 128);
             }
         }
