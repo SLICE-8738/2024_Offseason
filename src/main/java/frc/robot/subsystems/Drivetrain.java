@@ -31,6 +31,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -110,9 +111,9 @@ public class Drivetrain extends SubsystemBase {
     sysIDDriveRoutine = new SysIdRoutine(
       new Config(), 
       new Mechanism(
-        (volts) -> {
+        (voltage) -> {
           for (SwerveModule mod : swerveMods) {
-            mod.setVolts(volts.in(Volts), 0);
+            mod.setVolts(voltage.in(Volts), 0);
           }
         },
         null,
@@ -120,10 +121,14 @@ public class Drivetrain extends SubsystemBase {
 
     sysIDChooser = new SendableChooser<Command>();
 
-    sysIDChooser.setDefaultOption("Quasistatic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward));
-    sysIDChooser.addOption("Quasistatic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse));
-    sysIDChooser.addOption("Dynamic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward));
-    sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse));
+    sysIDChooser.setDefaultOption("Quasistatic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward)
+      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
+    sysIDChooser.addOption("Quasistatic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse)
+      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
+    sysIDChooser.addOption("Dynamic Forward", sysIDDriveRoutine.quasistatic(Direction.kForward)
+      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
+    sysIDChooser.addOption("Dynamic Reverse", sysIDDriveRoutine.quasistatic(Direction.kReverse)
+      .beforeStarting(SignalLogger::start).andThen(SignalLogger::stop));
 
   }
 
@@ -306,7 +311,7 @@ public class Drivetrain extends SubsystemBase {
 
     Translation2d difference = DriverStation.getAlliance().get() == Alliance.Blue? 
       Constants.kFieldPositions.BLUE_SPEAKER_POSITION.minus(getPose().getTranslation())
-        : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
+      : Constants.kFieldPositions.RED_SPEAKER_POSITION.minus(getPose().getTranslation());
 
     return difference;
 
@@ -650,20 +655,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     return currents;
-  }
-
-  /**
-   * Sets all drivetrain swerve modules to states with speeds of 0 and the current
-   * angles of the modules.
-   */
-  public void stopDrive() {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setDesiredState(new SwerveModuleState(), false);
-
-    }
-
   }
 
   public Command getSysIDDriveRoutine() {

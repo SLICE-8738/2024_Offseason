@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Mid Field Note Intake",
+    "Path Finding",
     "Note Score",
     "Wing Note Intake"
   ],

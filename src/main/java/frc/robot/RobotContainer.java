@@ -5,9 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -72,8 +71,8 @@ public class RobotContainer {
   public final ResetFieldOrientedHeading m_resetFieldOrientedHeading = new ResetFieldOrientedHeading(m_drivetrain);
   // public final Command m_pathfindToSource = AutoBuilder
   //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
-  public final Command m_pathfindToAmp = AutoBuilder.pathfindToPose(new Pose2d(1.84, 5.67, Rotation2d.fromDegrees(90)),
-       Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToAmp = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Align With Amp"),
+    Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_sysIDDriveRoutine = new ProxyCommand(m_drivetrain::getSysIDDriveRoutine);
   public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true);
   /*public final SequentialCommandGroup m_alignWithSpeaker = new SequentialCommandGroup(
