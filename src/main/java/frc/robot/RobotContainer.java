@@ -15,15 +15,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-//import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
-import frc.robot.commands.Drivetrain.*;
-import frc.robot.commands.Indexer.*;
-import frc.robot.commands.Intake.*;
-import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
 //import frc.robot.commands.LEDs.RainbowLEDs;
 import frc.robot.commands.LEDs.SignalStoreNote;
-import frc.robot.commands.Shooter.*;
+import frc.robot.commands.drivetrain.*;
+import frc.robot.commands.indexer.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.intake.StoreNote.StoreNoteSequence;
+import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.RealSwerveModuleIO;
@@ -55,8 +53,6 @@ public class RobotContainer {
   public final Shooter m_shooter;
   public final Intake m_intake;
   public final Indexer m_indexer;
-  public final ShooterLimelight m_shooterLimelight;
-  public final IntakeLimelight m_intakeLimelight;
   public final LEDs m_leds;
 
   public final AutoSelector m_autoSelector;
@@ -158,8 +154,6 @@ public class RobotContainer {
     m_shooter = new Shooter();
     m_intake = new Intake();
     m_indexer = new Indexer();
-    m_shooterLimelight = new ShooterLimelight();
-    m_intakeLimelight = new IntakeLimelight();
     m_leds = new LEDs();
 
     m_autoSelector = new AutoSelector(m_drivetrain, m_shooter, m_intake, m_indexer);

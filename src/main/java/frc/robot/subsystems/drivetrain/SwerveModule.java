@@ -1,11 +1,8 @@
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotBase;
 
 import frc.robot.Constants;
 import frc.slicelibs.util.math.OnboardModuleState;
@@ -18,50 +15,14 @@ public class SwerveModule {
   private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
   public final int moduleNumber;
 
-  private final SimpleMotorFeedforward driveFeedforward;
-  private final PIDController driveFeedback;
-  private final PIDController angleFeedback;
+  private Double velocitySetpoint = null; // Setpoint for closed loop control, null for open loop
   private Rotation2d angleSetpoint = null; // Setpoint for closed loop control, null for open loop
   private Rotation2d lastAngle;
-  private Double velocitySetpoint = null; // Setpoint for closed loop control, null for open loop
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
-
-  private final boolean isReal;
 
   public SwerveModule(SwerveModuleIO io, int moduleNumber) {
     this.io = io;
     this.moduleNumber = moduleNumber;
-
-    isReal = RobotBase.isReal();
-
-    // Switch constants based on mode (the physics simulator is treated as a
-    // separate robot with different tuning)
-    switch (Constants.CURRENT_MODE) {
-      case REAL:
-        driveFeedforward = new SimpleMotorFeedforward(
-          Constants.kDrivetrain.DRIVE_KS, Constants.kDrivetrain.DRIVE_KV, Constants.kDrivetrain.DRIVE_KA);
-        driveFeedback = new PIDController(0.0, 0.0, 0.0);
-        angleFeedback = new PIDController(0.0, 0.0, 0.0);
-        break;
-      case REPLAY:
-        driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
-        driveFeedback = new PIDController(0.05, 0.0, 0.0);
-        angleFeedback = new PIDController(7.0, 0.0, 0.0);
-        angleFeedback.enableContinuousInput(-180, 180);
-        break;
-      case SIM:
-        driveFeedforward = new SimpleMotorFeedforward(0.0, 2.0);
-        driveFeedback = new PIDController(0.1, 0.0, 0.0);
-        angleFeedback = new PIDController(0.5, 0.0, 0.0);
-        angleFeedback.enableContinuousInput(-180, 180);
-        break;
-      default:
-        driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-        driveFeedback = new PIDController(0.0, 0.0, 0.0);
-        angleFeedback = new PIDController(0.0, 0.0, 0.0);
-        break;
-    }
-
     lastAngle = getAngle();
   }
 
@@ -77,22 +38,11 @@ public class SwerveModule {
     Logger.processInputs("Drivetrain/Module" + Integer.toString(moduleNumber), inputs);
 
     if (velocitySetpoint != null) {
-      if (isReal) {
-        io.setDriveVelocity(velocitySetpoint, driveFeedforward.calculate(velocitySetpoint));
-      }
-      else {
-        io.setDriveVoltage(driveFeedback.calculate(inputs.driveVelocityMetersPerSec, velocitySetpoint) +
-          driveFeedforward.calculate(velocitySetpoint));
-      }
+      io.setDriveVelocity(velocitySetpoint);
     }
 
     if (angleSetpoint != null) {
-      if (isReal) {
-        io.setAnglePosition(angleSetpoint.getDegrees());
-      }
-      else {
-        io.setAngleVoltage(angleFeedback.calculate(inputs.anglePosition.getDegrees(), angleSetpoint.getDegrees()));
-      }
+      io.setAnglePosition(angleSetpoint.getDegrees());
     }
 
     // Calculate positions for odometry
@@ -119,7 +69,7 @@ public class SwerveModule {
     lastAngle = angleSetpoint;
 
     if (isOpenLoop) {
-      io.setDriveVoltage(optimizedState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
+      io.setDriveDutyCycle(optimizedState.speedMetersPerSecond / Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
       velocitySetpoint = null;
     }
     else {
