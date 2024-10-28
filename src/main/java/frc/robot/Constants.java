@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort.Port;
-
+import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 
 /**
@@ -35,6 +35,7 @@ import frc.slicelibs.util.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final Mode CURRENT_MODE = Mode.SIM;
+  public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -84,10 +85,10 @@ public final class Constants {
     public static final double MAX_VOLTAGE = 12.0;
 
     /* Swerve Current Limiting */
-    public static final int DRIVE_CURRENT_LIMIT = 40;
-    public static final int DRIVE_CURRENT_THRESHOLD = 60;
-    public static final double DRIVE_CURRENT_THRESHOLD_TIME = 0.1;
-    public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+    public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+    public static final int DRIVE_SUPPLY_CURRENT_LIMIT = 40;
+    public static final int DRIVE_SUPPLY_CURRENT_THRESHOLD = 60;
+    public static final double DRIVE_SUPPLY_CURRENT_THRESHOLD_TIME = 0.1;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
     public static final double DRIVE_STATOR_CURRENT_LIMIT = 55;
@@ -160,48 +161,48 @@ public final class Constants {
     public static final InvertedValue DRIVE_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final boolean ANGLE_INVERT = true;
 
-    /* Angle Encoder Invert */
-    public static final SensorDirectionValue CANCODER_INVERT = SensorDirectionValue.CounterClockwise_Positive;
+    /* Absolute Angle Encoder Invert */
+    public static final boolean ABSOLUTE_ENCODER_INVERT = true; //TODO: Determine whether to invert
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public final class Mod0 {
       public static final int DRIVE_MOTOR_ID = 2;
       public static final int ANGLE_MOTOR_ID = 30;
-      public static final int CANCODER_ID = 21;
+      public static final int ABSOLUTE_ENCODER_CHANNEL = 21;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(212.61);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          CANCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_CHANNEL, ANGLE_OFFSET);
     }
 
     /* Front Right Module - Module 1 */
     public final class Mod1 {
       public static final int DRIVE_MOTOR_ID = 3;
       public static final int ANGLE_MOTOR_ID = 7;
-      public static final int CANCODER_ID = 20;
+      public static final int ABSOLUTE_ENCODER_CHANNEL = 20;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(183.52);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          CANCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_CHANNEL, ANGLE_OFFSET);
     }
 
     /* Back Right Module - Module 2 */
     public final class Mod2 {
       public static final int DRIVE_MOTOR_ID = 4;
       public static final int ANGLE_MOTOR_ID = 8;
-      public static final int CANCODER_ID = 23;
+      public static final int ABSOLUTE_ENCODER_CHANNEL = 23;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(32.08);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          CANCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_CHANNEL, ANGLE_OFFSET);
     }
 
     /* Back Left Module - Module 3 */
     public final class Mod3 {
       public static final int DRIVE_MOTOR_ID = 1;
       public static final int ANGLE_MOTOR_ID = 5;
-      public static final int CANCODER_ID = 22;
+      public static final int ABSOLUTE_ENCODER_CHANNEL = 22;
       public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(316.32);
       public static final SwerveModuleConstants CONSTANTS = new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID,
-          CANCODER_ID, ANGLE_OFFSET);
+          ABSOLUTE_ENCODER_CHANNEL, ANGLE_OFFSET);
     }
 
   }

@@ -7,7 +7,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
@@ -17,9 +16,9 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.slicelibs.util.config.REVConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 import frc.slicelibs.util.factories.SparkMaxFactory;
@@ -30,7 +29,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
   private final TalonFX driveMotor;
   private final CANSparkMax angleMotor;
-  private final CANcoder angleEncoder;
+  private final AnalogEncoder angleEncoder;
   private final RelativeEncoder integratedAngleEncoder;
   private final SparkPIDController angleFeedback;
 
@@ -42,7 +41,6 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
   private final StatusSignal<Double> driveAppliedVolts;
   private final StatusSignal<Double> driveCurrent;
 
-  private final StatusSignal<Double> angleAbsolutePosition;
   private final Queue<Double> anglePositionQueue;
 
   public RealSwerveModuleIO(SwerveModuleConstants moduleConstants) {
@@ -50,14 +48,14 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
     driveMotor = new TalonFX(moduleConstants.driveMotorID);
     angleMotor = SparkMaxFactory.createSparkMax(moduleConstants.angleMotorID, REVConfigs.angleSparkMaxConfig);
-    angleEncoder = new CANcoder(moduleConstants.cancoderID);
+    angleEncoder = new AnalogEncoder(moduleConstants.absoluteEncoderID);
     integratedAngleEncoder = angleMotor.getEncoder();
     angleFeedback = angleMotor.getPIDController();
 
-    driveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
+    driveMotor.getConfigurator().apply(Constants.CTRE_CONFIGS.swerveDriveFXConfig);
     driveMotor.getConfigurator().setPosition(0);
 
-    angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
+    angleEncoder.setDistancePerRotation(Constants.kDrivetrain.ABSOLUTE_ENCODER_INVERT? -360 : 360);
 
     integratedAngleEncoder.setPositionConversionFactor(Constants.kDrivetrain.ANGLE_POSITION_CONVERSION_FACTOR_DEGREES);
     integratedAngleEncoder.setVelocityConversionFactor(Constants.kDrivetrain.ANGLE_VELOCITY_CONVERSION_FACTOR_DEGREES);
@@ -72,7 +70,6 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
     driveAppliedVolts = driveMotor.getMotorVoltage();
     driveCurrent = driveMotor.getSupplyCurrent();
 
-    angleAbsolutePosition = angleEncoder.getAbsolutePosition();
     anglePositionQueue =
         OdometryThread.getInstance().registerSignal(() -> OptionalDouble.of(integratedAngleEncoder.getPosition()));
 
@@ -83,7 +80,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
         driveVelocity,
         driveAppliedVolts,
         driveCurrent);
-    //riveMotor.optimizeBusUtilization();
+    //driveMotor.optimizeBusUtilization();
   }
 
   @Override
@@ -102,7 +99,7 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
     inputs.driveCurrentAmps = new double[] {driveCurrent.getValueAsDouble()};
 
     inputs.angleAbsolutePosition =
-        Rotation2d.fromRotations(angleAbsolutePosition.getValueAsDouble());
+        Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
     inputs.anglePosition =
         Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     inputs.angleVelocityDegreesPerSec =
@@ -157,6 +154,6 @@ public class RealSwerveModuleIO implements SwerveModuleIO {
 
   @Override
   public void resetToAbsolute() {
-    integratedAngleEncoder.setPosition(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees());
+    integratedAngleEncoder.setPosition(angleEncoder.getAbsolutePosition() - angleOffset.getDegrees());
   }
 }

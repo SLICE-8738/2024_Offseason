@@ -2,7 +2,6 @@ package frc.slicelibs.util.config;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import frc.robot.Constants;
 
@@ -23,10 +22,10 @@ public final class CTREConfigs {
 
         /* Current Limiting */
         var driveCurrentLimits = swerveDriveFXConfig.CurrentLimits;
-        driveCurrentLimits.SupplyCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_CURRENT_LIMIT;
-        driveCurrentLimits.SupplyCurrentLimit = Constants.kDrivetrain.DRIVE_CURRENT_LIMIT;
-        driveCurrentLimits.SupplyCurrentThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD;
-        driveCurrentLimits.SupplyTimeThreshold = Constants.kDrivetrain.DRIVE_CURRENT_THRESHOLD_TIME;
+        driveCurrentLimits.SupplyCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT;
+        driveCurrentLimits.SupplyCurrentLimit = Constants.kDrivetrain.DRIVE_SUPPLY_CURRENT_LIMIT;
+        driveCurrentLimits.SupplyCurrentThreshold = Constants.kDrivetrain.DRIVE_SUPPLY_CURRENT_THRESHOLD;
+        driveCurrentLimits.SupplyTimeThreshold = Constants.kDrivetrain.DRIVE_SUPPLY_CURRENT_THRESHOLD_TIME;
 
         driveCurrentLimits.StatorCurrentLimit = Constants.kDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
         driveCurrentLimits.StatorCurrentLimitEnable = Constants.kDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMIT;
@@ -43,13 +42,6 @@ public final class CTREConfigs {
 
         swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
         swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
-
-        // ================================
-        // Swerve CANcoder Configuration
-        // ================================   
-
-        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.kDrivetrain.CANCODER_INVERT;
-        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
         // ================================
         // Flywheel Motor Configuration
