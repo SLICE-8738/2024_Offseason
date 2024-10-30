@@ -24,6 +24,15 @@
           "open": true
         },
         "open": true
+      },
+      "limelight-shooter": {
+        "double[]##v_/limelight-shooter/botpose_orb_wpiblue": {
+          "open": true
+        },
+        "double[]##v_/limelight-shooter/botpose_wpiblue": {
+          "open": true
+        },
+        "open": true
       }
     },
     "types": {
@@ -34,6 +43,7 @@
       "/Shuffleboard/Debug Tab/Drive Motor PID/Update": "Command",
       "/Shuffleboard/Debug Tab/Drivetrain Max Velocities/Update": "Command",
       "/Shuffleboard/Debug Tab/Field": "Field2d",
+      "/Shuffleboard/Debug Tab/SysID Routine": "String Chooser",
       "/Shuffleboard/Teleop Tab/LED Mode": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
@@ -53,8 +63,19 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   },
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
