@@ -7,13 +7,14 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -21,7 +22,6 @@ import frc.robot.commands.Drivetrain.*;
 import frc.robot.commands.Indexer.*;
 import frc.robot.commands.Intake.*;
 import frc.robot.commands.Intake.StoreNote.StoreNoteSequence;
-//import frc.robot.commands.LEDs.RainbowLEDs;
 import frc.robot.commands.LEDs.SignalStoreNote;
 import frc.robot.commands.Shooter.*;
 import frc.robot.subsystems.*;
@@ -73,6 +73,7 @@ public class RobotContainer {
   //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_pathfindToAmp = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Align With Amp"),
     Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToStage = AutoBuilder.pathfindToPoseFlipped(new Pose2d(4.85, 4.09, Rotation2d.fromDegrees(180)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_sysIDDriveRoutine = new ProxyCommand(m_drivetrain::getSysIDDriveRoutine);
   public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true);
   /*public final SequentialCommandGroup m_alignWithSpeaker = new SequentialCommandGroup(
@@ -80,7 +81,6 @@ public class RobotContainer {
       new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true));*/
 
   /* Shooter */
-  // public final PrepareShooterCommand m_prepareShooter = new PrepareShooterCommand(m_shooter, m_drivetrain);
   public final ManualShooterCommand m_manualShooter = new ManualShooterCommand(m_shooter, m_drivetrain, m_indexer, operatorController);
   public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
@@ -99,12 +99,7 @@ public class RobotContainer {
   public final ReverseWhileNoteStoredCommand m_reverseWhileNoteStored = new ReverseWhileNoteStoredCommand(m_intake, m_indexer, operatorController);
 
   /* Indexer */
-  // public final RunIndexerCommand m_runIndexerUp = new
-  // RunIndexerCommand(m_indexer, 0.3); // Manual Stow
-  // public final StoreNote m_runIndexerUp = new StoreNote(m_indexer, m_intake); // Auto stow
-  // public final RunIndexerCommand m_runIndexerDown = new RunIndexerCommand(m_indexer, -0.3);
   public final ManualIndexerCommand m_manualIndexer = new ManualIndexerCommand(m_indexer, operatorController);
-  // public final NudgeIndexer m_nudgeIndexer = new NudgeIndexer(m_indexer);
   public final AlignWithNoteCommand m_alignNote = new AlignWithNoteCommand(m_drivetrain, m_indexer);
 
   public final RecordFFDataCommand m_ffData = new RecordFFDataCommand(m_shooter);
@@ -202,7 +197,7 @@ public class RobotContainer {
     Button.leftTrigger1.or(Button.rightBumper2).onTrue(m_stow);
     Button.cross1.toggleOnTrue(m_toAmpAngle);
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
-    //Button.square1.whileTrue(m_alignAmp);
+    Button.square1.whileTrue(m_pathfindToStage);
     Button.leftBumper1.whileTrue(m_alignNote);
     Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
 

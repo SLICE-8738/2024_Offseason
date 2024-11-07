@@ -438,6 +438,8 @@ public class LimelightHelpers {
      */
     static boolean profileJSON = false;
 
+    private static double[] standardDevs;
+
     static final String sanitizeName(String name) {
         if (name == "" || name == null) {
             return "limelight";
@@ -681,6 +683,15 @@ public class LimelightHelpers {
 
     public static double[] getTargetColor(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "tc");
+    }
+
+    /**
+     * @return The standard deviations of the MegaTag1 measurements in the form
+     * [x, y, theta]
+     */
+    public static double[] getStandardDevs(String limelightName) {
+        standardDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
+        return new double[] {standardDevs[0], standardDevs[1], Units.degreesToRadians(standardDevs[5])};
     }
 
     public static double getFiducialID(String limelightName) {

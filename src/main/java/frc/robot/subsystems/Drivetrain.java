@@ -272,16 +272,18 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
+    if (ShooterLimelight.getTable().getTargetDetected()) {
 
-    if(visionPose != null && ShooterLimelight.getTable().getTargetDetected()) {
+      Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
+      double[] visionStandardDevs = LimelightHelpers.getStandardDevs("limelight-shooters");
+
+      if(visionPose != null && ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 4.5 
+      && !DriverStation.isAutonomousEnabled()) {
       
-      if(ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 4.5 && !DriverStation.isAutonomousEnabled()) {
-
-        m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
-
+      m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(visionStandardDevs[0], visionStandardDevs[1], visionStandardDevs[2]));
+      m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
+      
       }
-      
     }
 
     return m_odometry.getEstimatedPosition();
@@ -483,13 +485,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetFieldOrientedHeading() {
-    fieldOrientedOffset = getHeading();
+
+    fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
     resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 180 : 0));
+
   }
 
   public void reverseFieldOrientedHeading() {
-    fieldOrientedOffset = getHeading().minus(Rotation2d.fromDegrees(180));
+
+    fieldOrientedOffset = getHeading();
     resetRotation(Rotation2d.fromDegrees(DriverStation.getAlliance().get() == Alliance.Blue? 0 : 180));
+
   }
 
   /**
