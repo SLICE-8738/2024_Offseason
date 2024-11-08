@@ -691,7 +691,7 @@ public class LimelightHelpers {
      */
     public static double[] getStandardDevs(String limelightName) {
         standardDevs = getLimelightNTDoubleArray(limelightName, "stddevs");
-        return new double[] {standardDevs[0], standardDevs[1], Units.degreesToRadians(standardDevs[5])};
+        return standardDevs.length == 0? new double[0] : new double[] {standardDevs[0], standardDevs[1], Units.degreesToRadians(standardDevs[5])};
     }
 
     public static double getFiducialID(String limelightName) {

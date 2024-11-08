@@ -277,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
       Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
       double[] visionStandardDevs = LimelightHelpers.getStandardDevs("limelight-shooters");
 
-      if(visionPose != null && ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 4.5 
+      if(visionPose != null && visionStandardDevs.length != 0 && ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 4.5 
       && !DriverStation.isAutonomousEnabled()) {
       
       m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(visionStandardDevs[0], visionStandardDevs[1], visionStandardDevs[2]));

@@ -85,12 +85,12 @@ public final class Constants {
 
     /* Swerve Current Limiting */
     public static final int DRIVE_CURRENT_LIMIT = 40;
-    public static final int DRIVE_CURRENT_THRESHOLD = 60;
+    public static final int DRIVE_CURRENT_THRESHOLD = 65;
     public static final double DRIVE_CURRENT_THRESHOLD_TIME = 0.1;
     public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
 
     public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT = true;
-    public static final double DRIVE_STATOR_CURRENT_LIMIT = 55;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 65;
 
     public static final double OPEN_LOOP_RAMP = 0.25;
     public static final double CLOSED_LOOP_RAMP = 0.0;
