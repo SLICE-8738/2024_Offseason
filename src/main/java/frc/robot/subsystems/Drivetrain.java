@@ -88,9 +88,9 @@ public class Drivetrain extends SubsystemBase {
       Constants.kDrivetrain.kSwerveKinematics, 
       getHeading(), 
       getModulePositions(), 
-      new Pose2d(),
+      LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter"),
       VecBuilder.fill(0.1, 0.1, 0.1),
-      VecBuilder.fill(0.1, 0.1, 0.1));
+      VecBuilder.fill(0.1, 0.1, 9999999));
 
     fieldOrientedOffset = new Rotation2d();
 
@@ -272,18 +272,23 @@ public class Drivetrain extends SubsystemBase {
 
     m_odometry.update(getHeading(), getModulePositions());
 
-    if (ShooterLimelight.getTable().getTargetDetected()) {
+    if (!DriverStation.isAutonomousEnabled()) {
 
-      Pose2d visionPose = ShooterLimelight.getTable().getCurrentBotPoseBlue();
-      double[] visionStandardDevs = LimelightHelpers.getStandardDevs("limelight-shooters");
+      LimelightHelpers.SetRobotOrientation("limelight-shooter", getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+      LimelightHelpers.PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shooter");
 
-      if(visionPose != null && visionStandardDevs.length != 0 && ShooterLimelight.getTable().getTargetCameraSpacePose().getZ() <= 4.5 
-      && !DriverStation.isAutonomousEnabled()) {
-      
-      m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(visionStandardDevs[0], visionStandardDevs[1], visionStandardDevs[2]));
-      m_odometry.addVisionMeasurement(new Pose2d(visionPose.getX(), visionPose.getY(), getPose().getRotation()), Timer.getFPGATimestamp());
-      
+      if (estimate.tagCount >= 2) {
+
+        Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_CameraSpace("limelight-shooter").getTranslation();
+
+        if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
+        
+          m_odometry.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+        
+        }
+
       }
+
     }
 
     return m_odometry.getEstimatedPosition();

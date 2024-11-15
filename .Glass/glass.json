@@ -22,16 +22,9 @@
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       },
       "limelight-shooter": {
-        "double[]##v_/limelight-shooter/botpose_orb_wpiblue": {
-          "open": true
-        },
-        "double[]##v_/limelight-shooter/botpose_wpiblue": {
-          "open": true
-        },
         "open": true
       }
     },
@@ -50,8 +43,8 @@
     "windows": {
       "/Shuffleboard/Debug Tab/Field": {
         "Robot": {
-          "length": 0.9143999814987183,
-          "width": 0.9143999814987183
+          "length": 0.9139999747276306,
+          "width": 0.9139999747276306
         },
         "bottom": 1476,
         "height": 8.210550308227539,
