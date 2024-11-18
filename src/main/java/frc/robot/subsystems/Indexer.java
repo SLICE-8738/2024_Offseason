@@ -32,7 +32,7 @@ public class Indexer extends SubsystemBase {
 
     encoder = highIndexMotor.getEncoder();
     lowLaser = new LaserCan(20); // creates new laserCan
-    highLaser = new LaserCan(19); // TODO: find ID
+    highLaser = new LaserCan(19);
 
     lowLaserOnline = true;
     highLaserOnline = true;

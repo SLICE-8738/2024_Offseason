@@ -97,8 +97,7 @@ public final class Constants {
 
     /* Status Frame Rates/Periods */
     // TODO: Tune status frames
-    public static final int DRIVE_VELOCITY_FRAME_RATE_HZ = 22;
-    public static final int DRIVE_POSITION_FRAME_RATE_HZ = 22;
+    public static final int DEFAULT_DRIVE_FREQUENCY_HZ = 22;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
     public static final int ANGLE_FRAME_2_PERIOD_MS = 300;
 

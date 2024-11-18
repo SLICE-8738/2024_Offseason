@@ -37,61 +37,61 @@ public class ShuffleboardData {
         public DrivetrainData(Drivetrain drivetrain, Shooter shooter) {
 
             //Displays the current velocity in meters per second of the left front swerve module on Shuffleboard
-            modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getStates()[0].speedMetersPerSecond).
+            modulesTab.addDouble("Left Front Velocity", () -> drivetrain.getModuleStates()[0].speedMetersPerSecond).
             withPosition(0, 0).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getStates()[1].speedMetersPerSecond).
+            modulesTab.addDouble("Right Front Velocity", () -> drivetrain.getModuleStates()[1].speedMetersPerSecond).
             withPosition(7, 0).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getStates()[2].speedMetersPerSecond).
+            modulesTab.addDouble("Right Back Velocity", () -> drivetrain.getModuleStates()[2].speedMetersPerSecond).
             withPosition(7, 3).
             withSize(2, 1);
             //Displays the current velocity in meters per second of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getStates()[3].speedMetersPerSecond).
+            modulesTab.addDouble("Left Back Velocity", () -> drivetrain.getModuleStates()[3].speedMetersPerSecond).
             withPosition(0, 3).
             withSize(2, 1);
         
             //Displays the current CANCoder angle in degrees with no offset of the left front swerve module on Shuffleboard
-            modulesTab.addDouble("Left Front CANCoder Angle", () -> drivetrain.getCANCoderAngles()[0]).
+            modulesTab.addDouble("Left Front CANCoder Angle", () -> drivetrain.getAbsoluteAngles()[0]).
             withWidget(BuiltInWidgets.kDial).
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(0, 1).
             withSize(2, 1);
             //Displays the current CANCoder angle in degrees with no offset of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front CANCoder Angle", () -> drivetrain.getCANCoderAngles()[1]).
+            modulesTab.addDouble("Right Front CANCoder Angle", () -> drivetrain.getAbsoluteAngles()[1]).
             withWidget(BuiltInWidgets.kDial).
             withProperties(Map.of("Min", 0,"Max", 360)).
             withPosition(7, 1).
             withSize(2, 1);
             //Displays the current CANCoder angle in degrees with no offset of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back CANCoder Angle", () -> drivetrain.getCANCoderAngles()[2]).
+            modulesTab.addDouble("Right Back CANCoder Angle", () -> drivetrain.getAbsoluteAngles()[2]).
             withWidget(BuiltInWidgets.kDial).
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(7, 2).
             withSize(2, 1);
             //Displays the current CANCoder angle in degrees with no offset of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back CANCoder Angle", () -> drivetrain.getCANCoderAngles()[3]).
+            modulesTab.addDouble("Left Back CANCoder Angle", () -> drivetrain.getAbsoluteAngles()[3]).
             withWidget(BuiltInWidgets.kDial).
             withProperties(Map.of("Min", 0, "Max", 360)).
             withPosition(0, 2).
             withSize(2, 1);
         
             //Displays the current integrated encoder angle in degrees of the left front swerve module on Shuffleboard
-            modulesTab.addDouble("Left Front Integrated Angle", () -> drivetrain.getStates()[0].angle.getDegrees()).
+            modulesTab.addDouble("Left Front Integrated Angle", () -> drivetrain.getModuleStates()[0].angle.getDegrees()).
             withPosition(2, 0).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the right front swerve module on Shuffleboard
-            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getStates()[1].angle.getDegrees()).
+            modulesTab.addDouble("Right Front Integrated Angle", () -> drivetrain.getModuleStates()[1].angle.getDegrees()).
             withPosition(5, 0).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the right back swerve module on Shuffleboard
-            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getStates()[2].angle.getDegrees()).
+            modulesTab.addDouble("Right Back Integrated Angle", () -> drivetrain.getModuleStates()[2].angle.getDegrees()).
             withPosition(5, 3).
             withSize(2, 1);
             //Displays the current integrated encoder angle in degrees of the left back swerve module on Shuffleboard
-            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getStates()[3].angle.getDegrees()).
+            modulesTab.addDouble("Left Back Integrated Angle", () -> drivetrain.getModuleStates()[3].angle.getDegrees()).
             withPosition(2, 3).
             withSize(2, 1);
         

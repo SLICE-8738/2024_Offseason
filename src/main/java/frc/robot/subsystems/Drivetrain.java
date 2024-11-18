@@ -383,7 +383,7 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return The current states of all drivetrain swerve modules.
    */
-  public SwerveModuleState[] getStates() {
+  public SwerveModuleState[] getModuleStates() {
 
     SwerveModuleState[] states = new SwerveModuleState[4];
 
@@ -421,18 +421,19 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Obtains and returns the current absolute angle readings
-   * in degrees from the CANCoders of all swerve modules without offsets.
+   * in degrees from the absolute encoders of all swerve modules 
+   * without offsets.
    * 
    * @return The current absolute angle readings in degrees from the CANCoders
    *         of all swerve modules without offsets.
    */
-  public double[] getCANCoderAngles() {
+  public double[] getAbsoluteAngles() {
 
     double[] angles = new double[4];
 
     for(SwerveModule mod : swerveMods) {
 
-      angles[mod.moduleNumber] = mod.getCANcoderAngle().getDegrees();
+      angles[mod.moduleNumber] = mod.getAbsoluteAngle().getDegrees();
 
     }
 
@@ -594,7 +595,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public ChassisSpeeds getChassisSpeeds() {
 
-    return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getStates());
+    return Constants.kDrivetrain.kSwerveKinematics.toChassisSpeeds(getModuleStates());
 
   }
 
