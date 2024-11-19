@@ -136,8 +136,13 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    updateOdometry();
+    for (SwerveModule mod : swerveMods) {
 
+      mod.updateInputs();
+
+    }
+
+    updateOdometry();
     m_field2d.setRobotPose(getPose());
 
   }

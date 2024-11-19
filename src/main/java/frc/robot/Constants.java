@@ -71,8 +71,8 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
-    public static final double DRIVE_GEAR_RATIO = (5.9 / 1.0); // 5.9:1
-    public static final double ANGLE_GEAR_RATIO = ((150.0 / 7.0) / 1.0); // (150/7):1
+    public static final double DRIVE_GEAR_RATIO = (5.14 / 1.0); // 5.14:1
+    public static final double ANGLE_GEAR_RATIO = (25.0 / 1.0); // 25:1
 
     public static final SwerveDriveKinematics kSwerveKinematics = new SwerveDriveKinematics(
         new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0), // Front left module 
@@ -96,7 +96,7 @@ public final class Constants {
     public static final double CLOSED_LOOP_RAMP = 0.0;
 
     /* Status Frame Rates/Periods */
-    // TODO: Tune status frames
+    // TODO: Tune signal frequencies/status frame periods
     public static final int DEFAULT_DRIVE_FREQUENCY_HZ = 22;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
     public static final int ANGLE_FRAME_2_PERIOD_MS = 300;
@@ -114,7 +114,7 @@ public final class Constants {
     public static final double DRIVE_KFF = 0.0;
 
     /* Drive Motor Characterization Values */
-    public static final double DRIVE_KS = 0.0; // TODO: Possibly tune feedforward gains
+    public static final double DRIVE_KS = 0.0; // TODO: Find feedforward gains from characterization
     public static final double DRIVE_KV = 2.4103;
     public static final double DRIVE_KA = 0.0;
 
