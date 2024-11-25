@@ -282,7 +282,7 @@ public class Drivetrain extends SubsystemBase {
         Translation3d aprilTagPosition = LimelightHelpers.getTargetPose3d_CameraSpace("limelight-shooter").getTranslation();
 
         if (Math.hypot(aprilTagPosition.getX(), aprilTagPosition.getZ()) <= 4.5) {
-        
+
           m_odometry.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
         
         }

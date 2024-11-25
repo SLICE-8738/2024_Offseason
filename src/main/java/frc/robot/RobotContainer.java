@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -72,8 +73,10 @@ public class RobotContainer {
   // public final Command m_pathfindToSource = AutoBuilder
   //     .pathfindToPose(new Pose2d(1.32, 1.32, Rotation2d.fromDegrees(-120)), Constants.kDrivetrain.PATH_CONSTRAINTS);
   public final Command m_pathfindToAmp = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Align With Amp"),
-    Constants.kDrivetrain.PATH_CONSTRAINTS);
+    new PathConstraints(2, 2, Math.PI, Math.PI));
   public final Command m_pathfindToStage = AutoBuilder.pathfindToPoseFlipped(new Pose2d(4.85, 4.09, Rotation2d.fromDegrees(180)), Constants.kDrivetrain.PATH_CONSTRAINTS);
+  public final Command m_pathfindToSubwoofer = AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Align With Subwoofer"),
+    new PathConstraints(2, 2, Math.PI, Math.PI));
   public final Command m_sysIDDriveRoutine = new ProxyCommand(m_drivetrain::getSysIDDriveRoutine);
   public final AlignWithSpeaker2Command m_alignWithSpeaker = new AlignWithSpeaker2Command(m_drivetrain, driverController, false, true);
   /*public final SequentialCommandGroup m_alignWithSpeaker = new SequentialCommandGroup(
@@ -85,7 +88,6 @@ public class RobotContainer {
   public final ResetAlternateAngleCommand m_resetAlternateAngle = new ResetAlternateAngleCommand(m_shooter);
   public final StowShooterCommand m_stow = new StowShooterCommand(m_shooter);
   public final ToAmpPositionCommand m_toAmpAngle = new ToAmpPositionCommand(m_shooter, operatorController);
-  public final AlignWithAmpCommand m_alignAmp = new AlignWithAmpCommand(m_drivetrain, driverController, false, true);
   public final ToClimbPositionCommand m_ToClimbPositionCommand = new ToClimbPositionCommand(m_shooter);
   public final ShootCommand m_shoot = new ShootCommand(m_shooter, m_indexer, m_drivetrain, driverController);
   public final ClimbLockCommand m_lockClimber = new ClimbLockCommand(m_shooter, operatorController);
@@ -199,7 +201,8 @@ public class RobotContainer {
     Button.triangle1.onTrue(m_resetFieldOrientedHeading);
     Button.square1.whileTrue(m_pathfindToStage);
     Button.leftBumper1.whileTrue(m_alignNote);
-    Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    //Button.controlPadLeft1.toggleOnTrue(m_sysIDDriveRoutine);
+    Button.controlPadLeft1.whileTrue(m_pathfindToSubwoofer);
 
     /* Intake */
     Button.controlPadUp1.onTrue(new InstantCommand(() -> Constants.kIntake.INTAKE_SPEED += 0.1));

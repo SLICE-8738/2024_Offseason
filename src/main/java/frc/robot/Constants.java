@@ -68,7 +68,7 @@ public final class Constants {
     public static final double TRACK_WIDTH = Units.inchesToMeters(23.729);
     public static final double WHEEL_BASE = Units.inchesToMeters(18.299);
     public static final double DRIVE_BASE_RADIUS = Math.hypot(WHEEL_BASE / 2, TRACK_WIDTH / 2);
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.95);
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
     public static final double DRIVE_GEAR_RATIO = (5.9 / 1.0); // 5.9:1
