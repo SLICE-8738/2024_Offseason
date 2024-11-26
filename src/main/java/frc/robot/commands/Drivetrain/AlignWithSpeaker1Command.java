@@ -66,7 +66,7 @@ public class AlignWithSpeaker1Command extends Command {
   public void initialize() {
 
     System.out.println("Running");
-    m_drivetrain.setPercentOutput(0, 0);
+    m_drivetrain.runDutyCycle(0, 0);
 
   }
 

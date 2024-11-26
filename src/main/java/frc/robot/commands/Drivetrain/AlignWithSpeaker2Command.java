@@ -69,7 +69,7 @@ public class AlignWithSpeaker2Command extends Command {
   @Override
   public void initialize() {
 
-    m_drivetrain.setPercentOutput(0, 0);
+    m_drivetrain.runDutyCycle(0, 0);
 
   }
 

@@ -35,7 +35,7 @@ public class DrivetrainTest extends Command{
   @Override
   public void execute() {
     if(timer.get() < 2){
-      driveTrain.setPercentOutput(0.0, 0.5);
+      driveTrain.runDutyCycle(0.0, 0.5);
       currents = driveTrain.driveOutputCurents();
       swivelExecutes += 1;
       for(int i = 0; i < 4; i++){
@@ -52,7 +52,7 @@ public class DrivetrainTest extends Command{
       }
     }
     if(timer.get() >= 2){
-      driveTrain.setPercentOutput(0.5, 0.0);
+      driveTrain.runDutyCycle(0.5, 0.0);
       while(timer.get() < 4){
         currents = driveTrain.driveOutputCurents();
         driveExecutes += 1;
@@ -75,7 +75,7 @@ public class DrivetrainTest extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.setPercentOutput(0, 0);
+    driveTrain.runDutyCycle(0, 0);
     for(int i = 0; i < 4; i++){
       swivelAverageCurrent[i] /= swivelExecutes;
       swivelAverageSpeed[i] /= swivelExecutes;

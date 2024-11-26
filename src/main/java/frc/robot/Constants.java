@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -17,7 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SerialPort.Port;
-
+import frc.slicelibs.util.config.CTREConfigs;
 import frc.slicelibs.util.config.SwerveModuleConstants;
 
 /**
@@ -35,6 +34,7 @@ import frc.slicelibs.util.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final Mode ADVANTAGE_KIT_MODE = Mode.SIM;
+  public static final CTREConfigs CTRE_CONFIGS = new CTREConfigs();
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -97,7 +97,8 @@ public final class Constants {
 
     /* Status Frame Rates/Periods */
     // TODO: Tune signal frequencies/status frame periods
-    public static final int DEFAULT_DRIVE_FREQUENCY_HZ = 22;
+    public static final int DRIVE_DEFAULT_FREQUENCY_HZ = 22;
+    public static final int DRIVE_POSITION_FREQUENCY_HZ = 100;
     public static final int ANGLE_FRAME_1_PERIOD_MS = 1500;
     public static final int ANGLE_FRAME_2_PERIOD_MS = 300;
 
@@ -159,8 +160,8 @@ public final class Constants {
     public static final InvertedValue DRIVE_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final boolean ANGLE_INVERT = true;
 
-    /* Angle Encoder Invert */
-    public static final SensorDirectionValue CANCODER_INVERT = SensorDirectionValue.CounterClockwise_Positive;
+    /* Absolute Angle Encoder Invert */
+    public static final boolean ABSOLUTE_ENCODER_INVERT = false; //TODO: Determine whether to invert
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */

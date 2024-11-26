@@ -30,8 +30,6 @@ import frc.slicelibs.util.factories.SparkMaxFactory;
  * project.
  */
 public class Robot extends LoggedRobot {
-  public static CTREConfigs ctreConfigs = new CTREConfigs();
-
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;

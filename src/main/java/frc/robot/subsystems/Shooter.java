@@ -83,8 +83,8 @@ public class Shooter extends SubsystemBase {
     aimPID = new PIDController(Constants.kShooter.AIM_KP, Constants.kShooter.AIM_KI, Constants.kShooter.AIM_KD);
     flyFeedforward = new SimpleMotorFeedforward(kShooter.FLYWHEEL_FF_KS, kShooter.FLYWHEEL_FF_KV);
 
-    flywheelTop.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
-    flywheelBottom.getConfigurator().apply(Robot.ctreConfigs.flywheelFXConfig);
+    flywheelTop.getConfigurator().apply(Constants.CTRE_CONFIGS.flywheelFXConfig);
+    flywheelBottom.getConfigurator().apply(Constants.CTRE_CONFIGS.flywheelFXConfig);
 
     aimRelativeEncoderLeft.setPositionConversionFactor(Constants.kShooter.AIM_POSITION_CONVERSION_FACTOR);
     aimRelativeEncoderLeft.setVelocityConversionFactor(Constants.kShooter.AIM_VELOCITY_CONVERSION_FACTOR);

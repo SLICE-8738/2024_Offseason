@@ -2,7 +2,6 @@ package frc.slicelibs.util.config;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import frc.robot.Constants;
 
@@ -40,10 +39,6 @@ public final class CTREConfigs {
 
         swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
         swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.kDrivetrain.CLOSED_LOOP_RAMP;
-
-        /** Swerve CANCoder Configuration */
-        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.kDrivetrain.CANCODER_INVERT;
-        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
         /** Flywheel Motor Configuration */
         var flywheelMotorOutput = flywheelFXConfig.MotorOutput;

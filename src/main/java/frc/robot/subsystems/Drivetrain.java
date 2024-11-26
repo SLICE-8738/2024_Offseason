@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import frc.robot.*;
+import frc.robot.subsystems.drivetrain.SwerveModule;
+import frc.robot.subsystems.drivetrain.SwerveModuleIO;
 
-import static edu.wpi.first.units.Units.*;
+import edu.wpi.first.units.Units;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -64,13 +66,13 @@ public class Drivetrain extends SubsystemBase {
   public final SendableChooser<Command> sysIDChooser;
 
   /** Creates a new Drivetrain. */
-  public Drivetrain() {
+  public Drivetrain(SwerveModuleIO mod0IO, SwerveModuleIO mod1IO, SwerveModuleIO mod2IO, SwerveModuleIO mod3IO) {
 
     swerveMods = new SwerveModule[] {
-      new SwerveModule(0, Constants.kDrivetrain.Mod0.CONSTANTS),
-      new SwerveModule(1, Constants.kDrivetrain.Mod1.CONSTANTS),
-      new SwerveModule(2, Constants.kDrivetrain.Mod2.CONSTANTS),
-      new SwerveModule(3, Constants.kDrivetrain.Mod3.CONSTANTS)
+      new SwerveModule(mod0IO, 0),
+      new SwerveModule(mod1IO, 1),
+      new SwerveModule(mod2IO, 2),
+      new SwerveModule(mod3IO, 3)
     };
 
     m_gyro = new AHRS(Constants.kDrivetrain.NAVX_PORT);
@@ -113,7 +115,7 @@ public class Drivetrain extends SubsystemBase {
       new Mechanism(
         (voltage) -> {
           for (SwerveModule mod : swerveMods) {
-            mod.setVolts(voltage.in(Volts), 0);
+            mod.runCharacterization(voltage.in(Units.Volts));
           }
         },
         null,
@@ -150,62 +152,6 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-  }
-
-  /**
-   * Sets the idle mode of all drive motors to either brake mode or coast mode.
-   * 
-   * @param enableBrakeMode Whether or not the idle mode of all
-   *                        drive motors should be set to brake mode(false to set
-   *                        to coast mode).
-   * 
-   */
-  public void setDriveIdleMode(boolean enableBrakeMode) {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setDriveIdleMode(enableBrakeMode);
-
-    }
-
-  }
-
-  /**
-   * Sets the idle mode of all angle motors to either brake mode or coast mode.
-   * 
-   * @param enableBrakeMode Whether or not the idle mode of all
-   *                        angle motors should be set to brake mode(false to set
-   *                        to coast mode).
-   * 
-   */
-  public void setAngleIdleMode(boolean enableBrakeMode) {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setAngleIdleMode(enableBrakeMode);
-
-    }
-
-  }
-
-  public void setDrivePID(double kP, double kI, double kD) {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setDrivePID(kP, kI, kD);
-
-    }
-
-  }
-
-  public void setAnglePIDF(double kP, double kI, double kD, double kFF) {
-
-    for(SwerveModule mod : swerveMods) {
-
-      mod.setAnglePIDF(kP, kI, kD, kFF);
-
-    }
-
   }
 
   /**
@@ -263,7 +209,7 @@ public class Drivetrain extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
-    setModuleStates(states, isOpenLoop);
+    runSetpoints(states, isOpenLoop);
 
   }
 
@@ -613,29 +559,26 @@ public class Drivetrain extends SubsystemBase {
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
 
-    setModuleStates(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
+    runSetpoints(Constants.kDrivetrain.kSwerveKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(speeds, 0.02)), false);
 
   }
 
   /**
-   * Sets the desired states of all drivetrain swerve modules to a specified
-   * arrary of states using
-   * closed loop control for the drive motors of the swerve modules.
+   * Runs the drivetrain swerve modules with the given setpoint states.
    * 
    * @param states The desired states for all drivetrain swerve modules to be set
    *               to.
    * @param isOpenLoop Whether the accordingly generated states for the given
    *                   velocities should be set using open loop control for
-   *                   the drive motors
-   *                   of the swerve modules.
+   *                   the drive motors of the swerve modules.
    */
-  public void setModuleStates(SwerveModuleState[] states, boolean isOpenLoop) {
+  public void runSetpoints(SwerveModuleState[] states, boolean isOpenLoop) {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kDrivetrain.MAX_LINEAR_VELOCITY);
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setDesiredState(states[mod.moduleNumber], isOpenLoop);
+      mod.runSetpoint(states[mod.moduleNumber], isOpenLoop);
 
     }
 
@@ -651,11 +594,11 @@ public class Drivetrain extends SubsystemBase {
    * @param anglePercentOutput The percent output between -1 and 1 to set all
    *                           angle motors to.
    */
-  public void setPercentOutput(double drivePercentOutput, double anglePercentOutput) {
+  public void runDutyCycle(double drivePercentOutput, double anglePercentOutput) {
 
     for(SwerveModule mod : swerveMods) {
 
-      mod.setPercentOutput(drivePercentOutput, anglePercentOutput);
+      mod.runDutyCycle(drivePercentOutput, anglePercentOutput);
 
     }
 
